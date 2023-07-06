@@ -102,21 +102,6 @@ const AddShelf = (props) => {
 
       payload: data.value,
     });
-
-    if (data.id === "sellPrice") {
-      if (data.value > 0) {
-        d["sellDate"] = new Date();
-      } else {
-        d["sellDate"] = null;
-      }
-
-      newShelfDispatch({
-        type: "HANDLE INPUT TEXT",
-        field: "sellDate",
-
-        payload: data.value > 0 ? new Date() : null,
-      });
-    }
   };
 
   let [newShelf, newShelfDispatch] = useReducer(formReducer, initShelf);

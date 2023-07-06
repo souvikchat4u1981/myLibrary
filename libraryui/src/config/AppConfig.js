@@ -6,6 +6,7 @@ export const RouterLinks = {
   ShelfDetails: "/shelfDetails",
   ChildShelf: "/childShelf",
   AddBook: "/addBook",
+  AddBookToLibrary: "/addBookToLibrary",
 };
 
 export const menuList = [

@@ -15,26 +15,6 @@ const AddBook = (props, { route }) => {
   sessionStorage.setItem("AddBookUnder", JSON.stringify(location.state.shelf));
   const [bookList, setBookList] = useState(null);
 
-  const initBook = {
-    author: null,
-    bookId: null,
-    bookName: null,
-    description: null,
-    detailsURL: null,
-    format: null,
-    genere: null,
-    image: null,
-    isbn: null,
-    language: null,
-    price: null,
-    publicastion: null,
-    publishigYear: null,
-    shelfId: null,
-    userId: null,
-  };
-
-  let [newBook, newBookDispatch] = useReducer(formReducer, initBook);
-
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   const [searchBook, setSearchBook] = useState("");

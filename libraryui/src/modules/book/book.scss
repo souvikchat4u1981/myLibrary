@@ -19,3 +19,11 @@
     border-color: themed("golden") !important;
   }
 }
+
+.add-book {
+  @include themify($themes) {
+    border: 1px solid themed("golden");
+    // height: 15%;
+    border-radius: 8px;
+  }
+}

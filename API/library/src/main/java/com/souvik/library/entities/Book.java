@@ -3,6 +3,7 @@ package com.souvik.library.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -35,4 +36,6 @@ public class Book {
     private double price;
     @Column(name = "genere")
     private String genere;
+    @Column(name="purchase_date")
+    private Timestamp purchaseDate;
 }

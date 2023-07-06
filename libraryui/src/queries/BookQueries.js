@@ -69,3 +69,27 @@ export const GET_ONLINE_BOOKS = gql`
     }
   }
 `;
+
+export const GET_ONLINE_BOOK_DETAILS = gql`
+  query BookDetails($book: InitialSearchModelInput) {
+    bookDetails(book: $book) {
+      author
+      bookId
+      bookName
+      description
+      detailsURL
+      failure
+      format
+      genere
+      image
+      isbn
+      language
+      message
+      price
+      publicastion
+      publishigYear
+      shelfId
+      userId
+    }
+  }
+`;

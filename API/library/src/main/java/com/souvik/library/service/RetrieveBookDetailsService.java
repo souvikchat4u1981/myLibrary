@@ -93,7 +93,7 @@ public class RetrieveBookDetailsService {
             if (bengaiHeading != null) {
                 model.setBookName(bengaiHeading.html());
             }
-
+            model.setPrice(Double.parseDouble(doc.select(".price").first().html().replace("₹","").toString()));
             //Get Description
             Element desc = doc.select(".product.attribute.description").first();
             if (desc != null) {
