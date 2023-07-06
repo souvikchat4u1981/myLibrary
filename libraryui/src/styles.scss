@@ -1,0 +1,436 @@
+@import "./styles/theme-variables.scss";
+
+@font-face {
+  font-family: "Arboria-Medium";
+  // src: url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.eot");
+  // src: url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.eot?#iefix")
+  //     format("embedded-opentype"),
+  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.woff2")
+  //     format("woff2"),
+  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.woff")
+  //     format("woff"),
+  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.ttf")
+  //     format("truetype"),
+  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.svg#Arboria-Medium")
+  //     format("svg");
+  src: url("./../public/assets/fontFamily/Arboria-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Arboria-Book";
+  // src: url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.eot");
+  // src: url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.eot?#iefix") format("embedded-opentype"),
+  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.woff2") format("woff2"),
+  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.woff") format("woff"),
+  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.ttf") format("truetype"),
+  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.svg#Arboria-Book") format("svg");
+  src: url("./../public/assets/fontFamily/Arboria-Book.ttf");
+}
+
+@font-face {
+  font-family: "Arboria-Light";
+  // src: url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.eot");
+  // src: url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.eot?#iefix") format("embedded-opentype"),
+  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.woff2") format("woff2"),
+  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.woff") format("woff"),
+  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.ttf") format("truetype"),
+  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.svg#Arboria-Light") format("svg");
+  src: url("./../public/assets/fontFamily/Arboria-Light.ttf");
+}
+
+@font-face {
+  font-family: "Arboria-Black";
+  // src: url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.eot");
+  // src: url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.eot?#iefix") format("embedded-opentype"),
+  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.woff2") format("woff2"),
+  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.woff") format("woff"),
+  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.ttf") format("truetype"),
+  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.svg#Arboria-Black") format("svg");
+  src: url("./../public/assets/fontFamily/Arboria-Black.ttf");
+}
+
+@font-face {
+  font-family: "Arboria-Bold";
+  // src: url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.eot");
+  // src: url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.eot?#iefix") format("embedded-opentype"),
+  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.woff2") format("woff2"),
+  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.woff") format("woff"),
+  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.ttf") format("truetype"),
+  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.svg#Arboria-Bold") format("svg");
+  src: url("./../public/assets/fontFamily/Arboria-Bold.ttf");
+}
+
+body {
+  @include themify($themes) {
+    background-color: themed("backGroundColor") !important;
+    height: 100%;
+    margin: 0;
+    font-family: arboria, sans-serif !important;
+
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+}
+
+.app {
+  @include themify($themes) {
+    background-color: themed("backGroundColor");
+    height: 100%;
+  }
+}
+
+.login-background {
+  @include themify($themes) {
+    background: themed("backGroundColor");
+  }
+}
+
+.form-control,
+.form-select {
+  @include themify($themes) {
+    background: themed("backGroundColor");
+    color: themed("colorText") !important;
+    border-color: themed("golden");
+  }
+}
+
+.form-control-sm,
+.form-select-sm {
+  border-radius: 0.5rem !important;
+  font-family: "Arboria-Book";
+}
+
+.form-select {
+  @include themify($themes) {
+    background-image: themed("dropDownArrow") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+  }
+}
+
+input::-webkit-input-placeholder {
+  @include themify($themes) {
+    color: themed("colorText") !important;
+  }
+}
+
+input:-moz-placeholder {
+  @include themify($themes) {
+    color: themed("colorText") !important;
+  }
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+select:focus,
+.uneditable-input:focus {
+  @include themify($themes) {
+    border-color: themed("golden");
+    box-shadow: none;
+    /* box-shadow:  0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #e8b43d; */
+    outline: 0 none;
+  }
+}
+
+.hand {
+  cursor: pointer;
+}
+
+.card-header {
+  @include themify($themes) {
+    border: 1px solid themed("golden") !important;
+    background: themed("gradient");
+    font-family: "Arboria-Medium";
+    color: themed("color2");
+  }
+}
+
+.card-body {
+  @include themify($themes) {
+    border: 1px solid themed("golden") !important;
+    border-top: none !important;
+    background-color: themed("backGroundColor");
+    color: themed("colorText");
+    font-family: "Arboria-Book";
+  }
+}
+
+.danger-back {
+  @include themify($themes) {
+    background-color: themed("colorRed");
+  }
+}
+
+.success-back {
+  @include themify($themes) {
+    background-color: themed("colorGreen");
+  }
+}
+
+.loss {
+  @include themify($themes) {
+    color: themed("colorRed") !important;
+  }
+}
+
+.profit {
+  @include themify($themes) {
+    color: themed("colorGreen") !important;
+  }
+}
+
+.profit-dark {
+  color: #046404;
+}
+
+.loss-dark {
+  color: #bd0707;
+}
+
+.running {
+  @include themify($themes) {
+    color: themed("colorBlue");
+  }
+}
+
+.header-profit {
+  font-family: "Arboria-Medium";
+  font-size: 14px;
+}
+
+.table {
+  @include themify($themes) {
+    --bs-table-bg: transparent !important;
+
+    thead {
+      font-family: "Arboria-Medium";
+      font-size: 14px;
+      background: themed("gradient");
+
+      tr {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+    }
+
+    tbody {
+      font-family: "Arboria-Book";
+      font-size: 14px;
+    }
+  }
+}
+
+.rdt_TableHeadRow {
+  @include themify($themes) {
+    font-family: "Arboria-Medium";
+    font-size: 14px;
+    background: themed("gradient") !important;
+  }
+}
+
+.rdt_TableCol,
+.rdt_TableHead,
+.rdt_TableRow,
+.rdt_TableCell {
+  height: 25px !important;
+  min-height: 25px !important;
+}
+
+.link {
+  @include themify($themes) {
+    color: themed("colorBlue");
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: "Arboria-Medium";
+    font-size: 12px;
+  }
+}
+
+.error-label {
+  font-size: 12px;
+  margin-top: -18px;
+  position: absolute;
+  margin-left: 5px;
+  color: #bd0707;
+}
+
+.golden-border-color {
+  @include themify($themes) {
+    border-color: themed("golden") !important;
+  }
+}
+
+.golden-tooltip {
+  @include themify($themes) {
+    background-color: themed("golden") !important;
+    color: #000;
+  }
+}
+
+.golden-text {
+  @include themify($themes) {
+    color: themed("golden") !important;
+  }
+}
+
+.form-border {
+  @include themify($themes) {
+    border: 1px solid themed("golden");
+    // height: 15%;
+    border-radius: 8px;
+  }
+}
+
+@media only screen and (min-width: 721px) {
+  body {
+    font-size: 8px;
+  }
+
+  .purchase-details {
+    font-size: 8px !important;
+  }
+  .media-font {
+    font-size: 0.75em;
+  }
+
+  .symbol {
+    font-size: 8px;
+  }
+  .small-text {
+    font-size: 8px;
+  }
+  .extra-small-text {
+    font-size: 7px;
+  }
+  .header-text {
+    font-size: 10px;
+    font-family: "Arboria-Bold";
+  }
+
+  .heading-font-size {
+    font-size: 8px;
+  }
+}
+@media only screen and (min-width: 961px) {
+  body {
+    font-size: 12px;
+  }
+
+  .purchase-details {
+    font-size: 10px !important;
+  }
+  .media-font {
+    font-size: 0.75em;
+  }
+  .symbol {
+    font-size: 10px;
+  }
+  .small-text {
+    font-size: 12px;
+  }
+  .extra-small-text {
+    font-size: 10px;
+  }
+  .header-text {
+    font-size: 14px;
+    font-family: "Arboria-Bold";
+  }
+  .heading-font-size {
+    font-size: 8px;
+  }
+}
+
+@media only screen and (min-width: 1124px) {
+  .media-font {
+    font-size: 0.95em;
+  }
+  .small-text {
+    font-size: 12px;
+  }
+
+  .extra-small-text {
+    font-size: 11px;
+  }
+
+  .header-text {
+    font-size: 14px;
+    font-family: "Arboria-Bold";
+  }
+}
+
+@media only screen and (min-width: 1281px) {
+  body {
+    font-size: 14px;
+  }
+
+  .purchase-details {
+    font-size: 0.75em !important;
+  }
+
+  .media-font {
+    font-size: 1.2em;
+  }
+  .symbol {
+    font-size: 14px;
+  }
+
+  .small-text {
+    font-size: 15px;
+  }
+  .extra-small-text {
+    font-size: 13px;
+  }
+  .header-text {
+    font-size: 17px;
+    font-family: "Arboria-Bold";
+  }
+  .heading-font-size {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (min-width: 1921px) {
+  body {
+    font-size: 14px;
+  }
+
+  .purchase-details {
+    font-size: 14px !important;
+  }
+
+  .media-font {
+    font-size: 1em;
+  }
+  .symbol {
+    font-size: 14px;
+  }
+  .small-text {
+    font-size: 15px;
+  }
+
+  .extra-small-text {
+    font-size: 13px;
+  }
+
+  .header-text {
+    font-size: 17px;
+    font-family: "Arboria-Bold";
+  }
+
+  .heading-font-size {
+    font-size: 14px;
+  }
+}

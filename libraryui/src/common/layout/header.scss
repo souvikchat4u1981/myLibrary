@@ -1,0 +1,48 @@
+@import "../../styles/theme-variables.scss";
+
+.nav-back {
+  @include themify($themes) {
+    background: themed("backGroundColor");
+    border-bottom: 1px solid themed("invertedBackground");
+  }
+}
+
+.nav-link {
+  @include themify($themes) {
+    color: themed("colorText") !important;
+    font-family: "Arboria-Medium";
+
+    &.active {
+      color: themed("navActive") !important;
+      border-bottom: 1px solid themed("colorText") !important;
+    }
+  }
+}
+
+.navbar-brand {
+  @include themify($themes) {
+    color: themed("navActive") !important;
+  }
+}
+
+.headerTextColor {
+  @include themify($themes) {
+    color: themed("colorText") !important;
+
+    &:hover {
+      background-color: themed("colorHover");
+    }
+  }
+}
+
+.user-panel {
+  @include themify($themes) {
+    color: themed("colorText") !important;
+  }
+}
+
+.dropdown-menu-theme {
+  @include themify($themes) {
+    background-color: themed("colorBackground") !important;
+  }
+}

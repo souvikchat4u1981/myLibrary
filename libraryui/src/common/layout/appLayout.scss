@@ -1,0 +1,8 @@
+@import '../../styles/theme-variables.scss';
+
+.body-font {
+    @include themify($themes) {
+        font-family: "Arboria-Medium";
+        color: themed('colorText')
+    }
+}

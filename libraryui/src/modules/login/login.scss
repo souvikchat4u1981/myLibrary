@@ -1,0 +1,26 @@
+@import '../../styles/theme-variables.scss';
+
+.login-div {
+    @include themify($themes) {
+        width: 400px;
+        // height: 300px;
+        // border: 2px solid themed('golden');
+        border-radius: 8px;
+    }
+}
+
+.login-header {
+    @include themify($themes) {
+        font-family: "Arboria-Bold";
+        font-size: 25px;
+        color: themed('golden');
+        border-bottom: 1px solid themed('golden');
+        padding: 0px;
+    }
+}
+
+.back {
+    @include themify($themes) {
+        background: themed('backgroundImage')
+    }
+}

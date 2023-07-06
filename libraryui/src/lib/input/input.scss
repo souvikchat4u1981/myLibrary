@@ -1,0 +1,22 @@
+@import '../../styles/theme-variables.scss';
+
+.group-box {
+  @include themify($themes) {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-left: none;
+  }
+}
+
+.text-addon {
+  @include themify($themes) {
+    background-color: themed('backGroundColor');
+    border-right: none;
+    border-radius: 0.5rem !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    height: 31px;
+    border-color: themed('golden');
+    color: themed('colorText') !important;
+  }
+}

@@ -1,0 +1,100 @@
+@import "../../styles/theme-variables.scss";
+
+.createButtonColor {
+  @include themify($themes) {
+    background: themed("golden") !important;
+    color: themed("textWhite") !important;
+    border-color: transparent !important;
+    border-radius: 10px;
+  }
+}
+
+.createButtonColor:hover {
+  @include themify($themes) {
+    background: themed("createButtonHover") !important;
+    border-color: transparent !important;
+  }
+}
+
+.createButtonColor:disabled {
+  @include themify($themes) {
+    background: #c0c0c0c0 !important;
+    border-color: transparent !important;
+  }
+}
+
+.createButtonColor:active {
+  @include themify($themes) {
+    background: themed("blue") !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+.stopLossButtonColor {
+  @include themify($themes) {
+    border-radius: 8px;
+    padding: 0.5rem;
+
+    font-size: 0.7rem;
+    padding: 0.2rem 1rem;
+    font-family: "Arboria-Bold";
+    box-shadow: themed("orangeGradient") !important;
+    border: solid 3px transparent;
+    background-image: themed("orangeGradient"), themed("orangeGradient");
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px themed("backGroundColor") inset !important;
+    color: themed("invertedBackground");
+  }
+}
+
+.stopLossButtonColor:hover {
+  @include themify($themes) {
+    box-shadow: none !important;
+
+    color: themed("backGroundColor");
+  }
+}
+
+.stopLossButtonColor.button-active {
+  @include themify($themes) {
+    box-shadow: none !important;
+
+    color: themed("backGroundColor");
+  }
+}
+
+.lossButtonColor {
+  @include themify($themes) {
+    border-radius: 8px;
+    padding: 0.5rem;
+
+    font-size: 0.7rem;
+    padding: 0.2rem 1rem;
+    font-family: "Arboria-Bold";
+    box-shadow: themed("redGradient") !important;
+    border: solid 3px transparent;
+    background-image: themed("redGradient"), themed("redGradient");
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px themed("backGroundColor") inset !important;
+    color: themed("invertedBackground");
+  }
+}
+
+.lossButtonColor:hover {
+  @include themify($themes) {
+    box-shadow: none !important;
+
+    color: themed("backGroundColor");
+  }
+}
+
+.lossButtonColor.button-active {
+  @include themify($themes) {
+    box-shadow: none !important;
+
+    color: themed("backGroundColor");
+  }
+}

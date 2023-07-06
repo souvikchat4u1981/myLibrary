@@ -1,0 +1,46 @@
+@import "../../styles/theme-variables.scss";
+ul.options {
+  @include themify($themes) {
+    display: block;
+    list-style: none;
+    width: 30rem;
+    transition: width 0.3s;
+    margin: auto;
+    position: absolute;
+    z-index: 20;
+    background: themed("backGroundColor");
+    border: 1px solid themed("golden");
+    border-radius: 8px;
+    padding: 0px;
+  }
+}
+
+ul.options li {
+  @include themify($themes) {
+    display: block;
+    background: themed("backGroundColor");
+    margin: 5px auto;
+    padding: 0px;
+    padding-left: 10px;
+    width: 100%;
+    border-radius: 2px;
+  }
+}
+
+ul.options li:hover {
+  @include themify($themes) {
+    font-weight: bold;
+    color: themed("invertedBackground");
+    // background: themed("invertedBackground");
+    cursor: pointer;
+    transition: 0.3s all;
+  }
+}
+
+ul.options li.option-active {
+  @include themify($themes) {
+    background: themed("invertedBackground");
+
+    color: themed("backGroundColor");
+  }
+}

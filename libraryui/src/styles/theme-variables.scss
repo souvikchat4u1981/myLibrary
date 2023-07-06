@@ -1,0 +1,136 @@
+$themes: (
+  light: (
+    backGroundColor: #fff,
+    textWhite: #fff,
+    colorText: #000033,
+    colorBackground: #fff,
+    invertedBackground: #737373,
+    shadow: #78787b,
+    colorGreen: #01c302,
+    colorRed: #fe0000,
+    colorBlue: #0d59e8,
+    dropDownArrow:
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' ><path fill='none' d='M0 0h24v24H0V0z'/><path fill='rgb(36, 36, 37)' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
+    // "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23242425' stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M0 0h24v24H0V0z'/></svg>"),
+    orangeGradient:
+      linear-gradient(
+        90deg,
+        rgba(185, 107, 169, 1) 0%,
+        rgba(231, 135, 211, 1) 25%,
+        rgba(251, 149, 230, 1) 64%
+      ),
+    redGradient:
+      linear-gradient(
+        90deg,
+        rgba(254, 0, 0, 1) 0%,
+        rgba(247, 65, 65, 1) 25%,
+        rgba(247, 162, 162, 1) 64%
+      ),
+    greenGradient:
+      linear-gradient(
+        90deg,
+        rgba(58, 184, 111, 1) 0%,
+        rgba(73, 232, 140, 1) 25%,
+        rgba(128, 240, 175, 1) 64%
+      ),
+    colorHover: #c9cbd0,
+    backgroundImage: url("../../public/assets/images/backGround.jpg"),
+    settingBackground: #737373,
+    golden: #ee0e0e,
+    color2: #000033,
+    createButtonHover: #f09850,
+    gradient: linear-gradient(90deg, #ee0e0e, #d0801f) 0% 0% no-repeat
+      padding-box,
+    accessDenied:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        #6f7376 80px,
+        #aaa7a7 100px
+      ),
+    accessDeniedBack: radial-gradient(at top center, #eead0e 0%, #ecc35b 100%),
+    accessDeniedBack2: linear-gradient(to top, #eead0e 0%, #ecc35b 100%),
+    navActive: #000033,
+  ),
+  dark: (
+    backGroundColor: #242425,
+    textWhite: #fff,
+    colorText: #ffffff,
+    colorBackground: #222736,
+    invertedBackground: #fff,
+    shadow: #dcdce2,
+    colorGreen: #01c302,
+    colorRed: #fe0000,
+    colorBlue: #0d59e8,
+    dropDownArrow:
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z'/><path fill='rgb(255, 255, 255)' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
+    // "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M2 5l6 6 6-6'/></svg>"),
+    orangeGradient:
+      linear-gradient(
+        90deg,
+        rgba(185, 107, 169, 1) 0%,
+        rgba(231, 135, 211, 1) 25%,
+        rgba(251, 149, 230, 1) 64%
+      ),
+    redGradient:
+      linear-gradient(
+        90deg,
+        rgba(254, 0, 0, 1) 0%,
+        rgba(247, 65, 65, 1) 25%,
+        rgba(247, 162, 162, 1) 64%
+      ),
+    greenGradient:
+      linear-gradient(
+        90deg,
+        rgba(58, 184, 111, 1) 0%,
+        rgba(73, 232, 140, 1) 25%,
+        rgba(128, 240, 175, 1) 64%
+      ),
+    colorHover: #5a5b5e,
+    backgroundImage: url("../../public/assets/images/backGroundDark.jpg"),
+    settingBackground: #ffffff,
+    golden: #ee0e0e,
+    color2: #000033,
+    createButtonHover: #f09850,
+    gradient: linear-gradient(90deg, #ee0e0e, #d0801f) 0% 0% no-repeat
+      padding-box,
+    accessDenied:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        #6f7376 80px,
+        #181617 100px
+      ),
+    accessDeniedBack: radial-gradient(at top center, #eead0e 0%, #ecc35b 100%),
+    accessDeniedBack2:
+      linear-gradient(to top, rgba(0, 0, 0, 0.1) 0%, rgba(53, 53, 53, 0.6) 100%),
+    navActive: #fff,
+  ),
+);
+
+@mixin themify($themes) {
+  @each $theme, $map in $themes {
+    .theme-#{$theme} & {
+      $theme-map: () !global;
+
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}

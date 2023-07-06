@@ -1,0 +1,21 @@
+@import "../../styles/theme-variables.scss";
+
+.shelf {
+  @include themify($themes) {
+    border: 1px solid themed("golden");
+    // height: 15%;
+    border-radius: 8px;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 3px 3px themed("shadow");
+      border-width: 2px;
+      border-color: #198754;
+    }
+  }
+}
+
+.border-golden {
+  @include themify($themes) {
+    border-color: themed("golden") !important;
+  }
+}
