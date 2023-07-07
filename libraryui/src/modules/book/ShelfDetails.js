@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
-import { GET_CHILD_SHELF } from "../../queries/BookQueries";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { GET_CHILD_SHELF, LOAD_BOOK_BY_SHELF } from "../../queries/BookQueries";
 import ParentShelf from "./ParentShelf";
+import DisplayBook from "./DisplayBook";
 
 const ShelfDetails = (props) => {
   const navigate = useNavigate();
@@ -21,6 +22,28 @@ const ShelfDetails = (props) => {
       if (!data.getChildBookShelfs.failure) {
         if (data.getChildBookShelfs.bookShelfs.length > 0) {
           setChildSelfs(data.getChildBookShelfs.bookShelfs);
+        }
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [books, setBooks] = useState(null);
+
+  useQuery(LOAD_BOOK_BY_SHELF, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      shelfId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      setBooks(null);
+      if (!data.loadBookByShelf.failure) {
+        if (data.loadBookByShelf.bookList.length > 0) {
+          setBooks(data.loadBookByShelf.bookList);
         }
       }
     },
@@ -76,6 +99,12 @@ const ShelfDetails = (props) => {
               />
             );
           })}
+        <div className="row mt-2">
+          {books &&
+            books.map((m) => {
+              return <DisplayBook key={m.bookId} data={m} />;
+            })}
+        </div>
       </div>
     </Fragment>
   );

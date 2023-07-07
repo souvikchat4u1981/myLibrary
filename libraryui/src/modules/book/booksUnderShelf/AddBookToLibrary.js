@@ -3,30 +3,37 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomLoader from "../../../lib/customLoader/CustomLoader";
 import "../book.scss";
-import { useLazyQuery } from "@apollo/client";
-import { GET_ONLINE_BOOK_DETAILS } from "../../../queries/BookQueries";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+  GET_ONLINE_BOOK_DETAILS,
+  SAVE_BOOK,
+} from "../../../queries/BookQueries";
 import Input from "../../../lib/input/Input";
 import formReducer from "../../../lib/formReducer/FormReducer";
 import Button from "../../../lib/button/Button";
+import {
+  ErrorMessage,
+  SuccessMessage,
+} from "../../../lib/toastMessage/Toastmessage";
 
 const AddBookToLibrary = (props) => {
   const location = useLocation();
   const [book, setBook] = useState({
-    author: null,
+    author: "",
     bookId: 0,
-    bookName: null,
-    description: null,
-    detailsURL: null,
-    format: null,
-    genere: null,
-    image: null,
-    isbn: null,
-    language: null,
-    price: null,
-    publicastion: null,
-    publishigYear: null,
-    shelfId: null,
-    userId: null,
+    bookName: "",
+    description: "",
+    detailsURL: "",
+    format: "",
+    genere: "",
+    image: "",
+    isbn: "",
+    language: "",
+    price: 0,
+    publicastion: "",
+    publishigYear: "",
+    shelfId: 0,
+    userId: 0,
     purchaseDate: null,
   });
 
@@ -36,7 +43,27 @@ const AddBookToLibrary = (props) => {
 
   useEffect(() => {
     if (location.state) {
-      setBook(location.state.book);
+      if (typeof location.state.edit !== "undefined") {
+        if (location.state.edit) {
+          setLodedBook(location.state.book);
+          newBookDispatch({
+            type: "SET INITIAL VALUE",
+
+            payload: location.state.book,
+          });
+        } else {
+          setLodedBook(book);
+        }
+      } else {
+        setBook(location.state.book);
+      }
+    } else {
+      newBookDispatch({
+        type: "SET INITIAL VALUE",
+
+        payload: book,
+      });
+      setLodedBook(book);
     }
   }, []);
 
@@ -87,6 +114,44 @@ const AddBookToLibrary = (props) => {
       payload: data.value,
     });
   };
+
+  const [addBook] = useMutation(SAVE_BOOK, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.saveBook.failure) {
+        SuccessMessage("Book added successfully");
+        navigate(-1);
+      } else {
+        ErrorMessage(data.saveBook.message);
+      }
+      setLoad(false);
+    },
+
+    onError: (data) => {
+      console.log(data);
+      setLoad(false);
+    },
+  });
+
+  const onSaveClick = (e) => {
+    e.preventDefault();
+    console.log(loadedBook);
+    if (loadedBook.bookName !== "") {
+      let b = { ...loadedBook };
+      delete b.detailsURL;
+      delete b.failure;
+      delete b.message;
+      delete b.userId;
+      if (b.shelfId === 0)
+        b.shelfId = JSON.parse(sessionStorage.getItem("AddBookUnder")).shelfId;
+
+      b["purchaseDate"] = null;
+      setLoad(true);
+      addBook({ variables: { book: { userId: loadedBook.userId, book: b } } });
+    }
+  };
+
   return (
     <Fragment>
       {load && <CustomLoader />}
@@ -103,11 +168,38 @@ const AddBookToLibrary = (props) => {
           {loadedBook && (
             <div className="col-sm-8 add-book row">
               <div className="p-2 border-end col-sm-6">
-                <img
-                  src={loadedBook.image}
-                  alt={loadedBook.image}
-                  width={"90%"}
-                />
+                <div className="mb-2">
+                  <Input
+                    id="image"
+                    value={newBook.image}
+                    inputType="text"
+                    placeholder={"Image URL"}
+                    label="Image URL"
+                    icon={<i className="fa fa-user-circle"></i>}
+                    events={{ onChange: (data) => onInputChange(data) }}
+                    classes={{
+                      contClass: "",
+                      errorClass: "error-label",
+                      fieldClass: "form-control form-control-sm",
+                      labelClass: "large-text-header",
+                    }}
+                  />
+                </div>
+
+                {!location.state.edit && (
+                  <img
+                    src={loadedBook.image}
+                    alt={loadedBook.image}
+                    width={"90%"}
+                  />
+                )}
+                {location.state.edit && (
+                  <img
+                    src={`${process.env.PUBLIC_URL}/assets/bookImages/${loadedBook.image}`}
+                    alt={loadedBook.image}
+                    width={"90%"}
+                  />
+                )}
               </div>
               <div className="col-sm-6 p-2 ">
                 <div className="row">
@@ -270,7 +362,9 @@ const AddBookToLibrary = (props) => {
                   </div>
                 </div>
                 <div className="row mt-2 p-2 text-center d-flex justify-content-center">
-                  <Button extraClass={"col-sm-6"}>Save</Button>
+                  <Button extraClass={"col-sm-6"} onClick={onSaveClick}>
+                    Save
+                  </Button>
                 </div>
               </div>
             </div>

@@ -10,6 +10,7 @@ export const GET_ALL_PARENT_BOOKSHELFS = gql`
         shelfId
         shelfName
         userId
+        shelfImage
       }
     }
   }
@@ -36,6 +37,7 @@ export const GET_CHILD_SHELF = gql`
         shelfName
         parentShelfId
         userId
+        shelfImage
       }
     }
   }
@@ -90,6 +92,42 @@ export const GET_ONLINE_BOOK_DETAILS = gql`
       publishigYear
       shelfId
       userId
+    }
+  }
+`;
+
+export const SAVE_BOOK = gql`
+  mutation SaveBook($book: BookModelInput) {
+    saveBook(book: $book) {
+      failure
+      message
+      userId
+    }
+  }
+`;
+
+export const LOAD_BOOK_BY_SHELF = gql`
+  query LoadBookByShelf($shelfId: Int!) {
+    loadBookByShelf(shelfId: $shelfId) {
+      failure
+      message
+      userId
+      bookList {
+        author
+        bookId
+        bookName
+        description
+        format
+        genere
+        image
+        isbn
+        language
+        price
+        publicastion
+        publishigYear
+        purchaseDate
+        shelfId
+      }
     }
   }
 `;

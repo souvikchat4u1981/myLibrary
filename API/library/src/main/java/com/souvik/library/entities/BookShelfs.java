@@ -26,4 +26,6 @@ public class BookShelfs {
 
     @Column(name = "user_id")
     private Integer userId;
+    @Column(name="shelf_image")
+    private String shelfImage;
 }

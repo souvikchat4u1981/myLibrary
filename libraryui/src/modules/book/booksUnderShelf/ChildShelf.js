@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import DisplayBooks from "../DisplayBooks";
 
 const ChildShelf = (props) => {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ const ChildShelf = (props) => {
         </div>
         <div className="col-sm-12 text-center fs-2">
           {JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName}
+        </div>
+        <div className="row mt-2 p-2">
+          <DisplayBooks />
         </div>
       </div>
     </Fragment>

@@ -79,7 +79,7 @@ const AddShelf = (props) => {
           payload: initShelf,
         });
         setShelf(initShelf);
-        SuccessMessage("Book added successfully");
+        SuccessMessage("Shelf added successfully");
       } else {
         ErrorMessage(data.addBookShelf.message);
       }
@@ -109,8 +109,10 @@ const AddShelf = (props) => {
   const onSaveClick = (e) => {
     e.preventDefault();
     console.log(shelf);
-    setLoad(true);
-    addBookShelf({ variables: { bookShelf: { bookShelfs: shelf } } });
+    if (shelf.shelfName !== "") {
+      setLoad(true);
+      addBookShelf({ variables: { bookShelf: { bookShelfs: shelf } } });
+    }
   };
 
   const [load, setLoad] = useState(false);

@@ -68,7 +68,7 @@ const Header = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light nav-back fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand">
+        <a className="navbar-brand" onClick={() => navigate("/")}>
           <img
             src={`${process.env.PUBLIC_URL}/assets/images/Books.png`}
             alt="library"

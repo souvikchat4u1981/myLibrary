@@ -16,28 +16,32 @@ const ParentShelf = (props) => {
   const [imageName, setImageName] = useState("shelf1.png");
 
   useEffect(() => {
-    let min = 1;
-    let max = 6;
-    const rand = min + Math.random() * (max - min);
-    let r = Math.round(rand);
-    if (sessionStorage.getItem("prevRand")) {
-      if (r === +sessionStorage.getItem("prevRand")) {
-        r = r + 1;
-        if (r > max) {
-          r = 1;
+    if (props.data.shelfImage === null) {
+      let min = 1;
+      let max = 6;
+      const rand = min + Math.random() * (max - min);
+      let r = Math.round(rand);
+      if (sessionStorage.getItem("prevRand")) {
+        if (r === +sessionStorage.getItem("prevRand")) {
+          r = r + 1;
+          if (r > max) {
+            r = 1;
+          }
         }
       }
-    }
-    sessionStorage.setItem("prevRand", r);
+      sessionStorage.setItem("prevRand", r);
 
-    console.log(r);
-    setImageName("shelf" + r + ".png");
+      console.log(r);
+      setImageName("shelf" + r + ".png");
+    } else {
+      setImageName(props.data.shelfImage);
+    }
   }, []);
 
   const navigate = useNavigate();
   const onShelfClickHandle = () => {
     console.log(props.data.shelfId);
-
+    sessionStorage.setItem("shelfId", props.data.shelfId);
     if (props.fromChildPage) {
       sessionStorage.setItem("currentChildShelf", JSON.stringify(props.data));
       navigate("/childShelf");
@@ -54,6 +58,7 @@ const ParentShelf = (props) => {
           <i
             className="fa fa-edit text-success float-end"
             title="Edit Shelf"
+            style={{ position: "relative", top: "-5px" }}
             onClick={() =>
               navigate("/addShelf", {
                 state: {
@@ -64,7 +69,7 @@ const ParentShelf = (props) => {
           ></i>
         </div>
         <img
-          src={`${process.env.PUBLIC_URL}/assets/images/${imageName}`}
+          src={`${process.env.PUBLIC_URL}/assets/authorImage/${imageName}`}
           alt="library"
           width={"100%"}
           className="me-2"

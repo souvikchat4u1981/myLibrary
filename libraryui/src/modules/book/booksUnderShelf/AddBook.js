@@ -70,7 +70,13 @@ const AddBook = (props, { route }) => {
           ></i>
           <i
             className="fa fa-pen-nib fa-2x hand text-success ms-2"
-            onClick={() => navigate(-1)}
+            onClick={() =>
+              navigate("/addBookToLibrary", {
+                state: {
+                  edit: false,
+                },
+              })
+            }
             title="Add Manual"
           ></i>
         </div>
