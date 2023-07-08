@@ -35,14 +35,13 @@ public class BookService {
     private final UtilityService utilityService;
 
     @GraphQLQuery(name = "loadBookByShelf")
-    public BookListModel loadBookByShelf(@GraphQLArgument(name = "shelfId") int shelfId){
+    public BookListModel loadBookByShelf(@GraphQLArgument(name = "shelfId") int shelfId) {
         BookListModel model = new BookListModel();
-        try{
+        try {
             model.setBookList(bookRepository.findByShelfIdOrderByBookName(shelfId));
             model.setFailure(false);
             model.setMessage("SUCCESS");
-        }catch(Exception ex)
-        {
+        } catch (Exception ex) {
             model.setFailure(true);
             model.setMessage(ex.getMessage());
             ex.printStackTrace();
@@ -51,6 +50,42 @@ public class BookService {
         return model;
     }
 
+    @GraphQLQuery(name = "loadBookByShelfAndFilter")
+    public BookListModel loadBookByShelfAndFilter(@GraphQLArgument(name = "shelfId") int shelfId, @GraphQLArgument(name = "filterParam") String filterParam) {
+        BookListModel model = new BookListModel();
+        try {
+            model.setBookList(bookRepository.getBookByShelfAndFilter(shelfId, "%"+filterParam+"%"));
+            model.setFailure(false);
+            model.setMessage("SUCCESS");
+        } catch (Exception ex) {
+            model.setFailure(true);
+            model.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return model;
+    }
+
+    @GraphQLQuery(name = "loadBookByParentShelfAndFilter")
+    public BookListModel loadBookByParentShelfAndFilter(@GraphQLArgument(name = "shelfId") int shelfId, @GraphQLArgument(name = "filterParam") String filterParam) {
+        BookListModel model = new BookListModel();
+        try {
+            model.setBookList(bookRepository.getBookByParentShelfAndFilter(shelfId, "%"+filterParam+"%"));
+            model.setFailure(false);
+            model.setMessage("SUCCESS");
+        } catch (Exception ex) {
+            model.setFailure(true);
+            model.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return model;
+    }
+
+    @GraphQLQuery(name="totalBookCount")
+    public int totalBookCount(){
+        return (int) bookRepository.count();
+    }
 
 
     @GraphQLMutation(name = "saveBook")
@@ -59,38 +94,43 @@ public class BookService {
         try {
             Book b = book.getBook();
             //Download File if present
-            if (b.getImage() != "" || b.getImage() != null ) {
+            if (b.getImage() != "" || b.getImage() != null) {
 
-                if(b.getImage().contains("http")){
+                if (b.getImage().contains("http")) {
 
                     String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
                     String fileName = b.getImage();
                     String extension = fileName.substring(fileName.lastIndexOf("."));
                     fileName = filePath + "\\" + utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension;
-                    boolean saved = utilityService.DownloadImage(fileName,book.getBook().getImage());
-                    if(!saved){
+                    boolean saved = utilityService.DownloadImage(fileName, book.getBook().getImage());
+                    if (!saved) {
                         b.setImage("");
-                    }else{
+                    } else {
                         b.setImage(utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension);
                     }
-                }else if(b.getImage().contains("tmp")){
-                    String tempPath = configurationsRepository.findByConfigName("tempFilePath").getConfigValue()+"\\"+b.getImage();
+                } else if (b.getImage().contains("tmp")) {
+                    String tempPath = configurationsRepository.findByConfigName("tempFilePath").getConfigValue() + "\\" + b.getImage();
                     String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
                     String fileName = b.getImage();
                     String extension = fileName.substring(fileName.lastIndexOf("."));
-                    String fileNameOnly = utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension;
+                    String time = new Timestamp(System.currentTimeMillis()).toString();
+                    time = time.replace(" ", "").replace(":", "").replace(":", "").replace(".", "");
+
+                    String fileNameOnly = utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + time + extension;
                     fileName = filePath + "\\" + fileNameOnly;
 
-                    utilityService.deletePhysicalFile(fileName);
+                    String oldFileName = bookRepository.getById(b.getBookId()).getImage();
+                    if (oldFileName != "") {
+                        oldFileName = filePath + "\\" + oldFileName;
+                    }
+
+
+                    utilityService.deletePhysicalFile(oldFileName);
                     Files.move
                             (Paths.get(tempPath),
                                     Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
                     b.setImage(fileNameOnly);
                 }
-
-
-
-
 
 
                 bookRepository.save(b);

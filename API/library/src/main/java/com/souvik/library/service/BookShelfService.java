@@ -149,6 +149,39 @@ public class BookShelfService {
 
         return  model;
     }
+
+    @GraphQLQuery(name = "filterShelfByAuthorOrBook")
+    public BookShelfsListModel filterShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam){
+        BookShelfsListModel model = new BookShelfsListModel();
+        try {
+            model.setBookShelfs(bookShelfs.getAllByFilerParam("%" + searchparam + "%","%" + searchparam + "%"));
+            model.setFailure(false);
+            model.setMessage("SUCCESS");
+
+        }catch (Exception ex){
+            model.setFailure(true);
+            model.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return model;
+    }
+
+    @GraphQLQuery(name = "filterChildShelfByAuthorOrBook")
+    public BookShelfsListModel filterChildShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam, @GraphQLArgument(name = "parentId") int parentId){
+        BookShelfsListModel model = new BookShelfsListModel();
+        try {
+            model.setBookShelfs(bookShelfs.getChildBookShelfsByFilterparam("%" + searchparam + "%","%" + searchparam + "%",parentId));
+            model.setFailure(false);
+            model.setMessage("SUCCESS");
+
+        }catch (Exception ex){
+            model.setFailure(true);
+            model.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return model;
+    }
+
 }
 
 

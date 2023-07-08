@@ -294,6 +294,16 @@ select:focus,
   }
 }
 
+.input-group-text {
+  @include themify($themes) {
+    border: 1px solid themed("golden");
+    // height: 15%;
+    border-radius: 8px;
+    background-color: themed("golden");
+    color: #fff;
+  }
+}
+
 @media only screen and (min-width: 721px) {
   body {
     font-size: 8px;

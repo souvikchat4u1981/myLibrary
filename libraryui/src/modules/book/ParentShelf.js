@@ -69,7 +69,9 @@ const ParentShelf = (props) => {
           ></i>
         </div>
         <img
-          src={`${process.env.PUBLIC_URL}/assets/authorImage/${imageName}`}
+          src={`${process.env.PUBLIC_URL}/assets/authorImage/${
+            imageName !== "" ? imageName : "author.png"
+          }`}
           alt="library"
           width={"100%"}
           className="me-2"

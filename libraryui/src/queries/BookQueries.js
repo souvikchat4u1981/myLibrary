@@ -163,3 +163,101 @@ export const GET_SHELF_BY_ID = gql`
     }
   }
 `;
+
+export const TOTAL_BOOKS_COUNT = gql`
+  query TotalBookCount {
+    totalBookCount
+  }
+`;
+
+export const FILTER_BOOK_SHELFS = gql`
+  query FilterShelfByAuthorOrBook($searchParam: String) {
+    filterShelfByAuthorOrBook(searchParam: $searchParam) {
+      failure
+      message
+      userId
+      bookShelfs {
+        parentShelfId
+        shelfId
+        shelfImage
+        shelfName
+        userId
+      }
+    }
+  }
+`;
+
+export const FILTER_CHILD_BOOK_SHELFS = gql`
+  query FilterChildShelfByAuthorOrBook($searchParam: String, $parentId: Int!) {
+    filterChildShelfByAuthorOrBook(
+      searchParam: $searchParam
+      parentId: $parentId
+    ) {
+      failure
+      message
+      userId
+      bookShelfs {
+        parentShelfId
+        shelfId
+        shelfImage
+        shelfName
+        userId
+      }
+    }
+  }
+`;
+
+export const FILTER_BOOK_BY_PARENT_SHELF = gql`
+  query LoadBookByParentShelfAndFilter($shelfId: Int!, $filterParam: String) {
+    loadBookByParentShelfAndFilter(
+      shelfId: $shelfId
+      filterParam: $filterParam
+    ) {
+      failure
+      message
+      userId
+      bookList {
+        author
+        bookId
+        bookName
+        description
+        format
+        genere
+        image
+        isbn
+        language
+        price
+        publicastion
+        publishigYear
+        purchaseDate
+        shelfId
+      }
+    }
+  }
+`;
+
+export const FILTER_BOOK_BY_SHELF = gql`
+  query LoadBookByShelfAndFilter($shelfId: Int!, $filterParam: String) {
+    loadBookByShelfAndFilter(shelfId: $shelfId, filterParam: $filterParam) {
+      failure
+      message
+      userId
+      bookList {
+        author
+        bookId
+        bookName
+        description
+        format
+        genere
+        image
+        isbn
+        language
+        price
+        publicastion
+        publishigYear
+        purchaseDate
+        shelfId
+      }
+    }
+  }
+`;

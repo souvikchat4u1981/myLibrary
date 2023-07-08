@@ -137,6 +137,7 @@ const DisplayBook = (props) => {
                 alt="library"
                 width={"50%"}
                 className="img-fluid rounded"
+                key={Math.random()}
 
                 //   onClick={onShelfClickHandle}
               />
