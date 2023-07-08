@@ -25,7 +25,7 @@ const OnlineBook = (props) => {
   const navigate = useNavigate();
 
   const onDivClick = () => {
-    console.log(props.data);
+    // console.log(props.data);
     let b = { ...book };
     let currentShelf = JSON.parse(sessionStorage.getItem("AddBookUnder"));
     b.shelfId = currentShelf.shelfId;

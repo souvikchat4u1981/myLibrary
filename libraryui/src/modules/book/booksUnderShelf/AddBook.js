@@ -46,7 +46,7 @@ const AddBook = (props, { route }) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      console.log(searchBook);
+      // console.log(searchBook);
       if (searchBook !== "") {
         setLoad(true);
         getBooks({ variables: { queryString: searchBook } });

@@ -131,3 +131,35 @@ export const LOAD_BOOK_BY_SHELF = gql`
     }
   }
 `;
+
+export const GET_ALL_SHELF_WITH_RELATION = gql`
+  query GetAllShelfWithRelation {
+    getAllShelfWithRelation {
+      failure
+      message
+      userId
+      shelfRelationModelList {
+        parentShelfName
+        shelfId
+        shelfName
+      }
+    }
+  }
+`;
+
+export const GET_SHELF_BY_ID = gql`
+  query GetShelfById($id: Int!) {
+    getShelfById(id: $id) {
+      failure
+      message
+      userId
+      bookShelfs {
+        parentShelfId
+        shelfId
+        shelfImage
+        shelfName
+        userId
+      }
+    }
+  }
+`;

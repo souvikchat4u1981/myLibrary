@@ -7,6 +7,7 @@ import com.souvik.library.models.book.BookListModel;
 import com.souvik.library.models.book.BookModel;
 import com.souvik.library.repositiries.IBookRepository;
 import com.souvik.library.repositiries.IConfigurationsRepository;
+import com.souvik.library.utility.UtilityService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -18,6 +19,11 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,7 @@ public class BookService {
 
     private final IConfigurationsRepository configurationsRepository;
     private final IBookRepository bookRepository;
+    private final UtilityService utilityService;
 
     @GraphQLQuery(name = "loadBookByShelf")
     public BookListModel loadBookByShelf(@GraphQLArgument(name = "shelfId") int shelfId){
@@ -44,32 +51,47 @@ public class BookService {
         return model;
     }
 
+
+
     @GraphQLMutation(name = "saveBook")
     public RestStatus saveBook(@GraphQLArgument(name = "book") BookModel book) {
         RestStatus status = new RestStatus();
         try {
             Book b = book.getBook();
             //Download File if present
-            if (b.getImage() != "" || b.getImage() != null) {
-                String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
-                String fileName = b.getImage();
-                String extension = fileName.substring(fileName.lastIndexOf("."));
+            if (b.getImage() != "" || b.getImage() != null ) {
 
+                if(b.getImage().contains("http")){
 
-                fileName = filePath + "\\" + b.getBookName() + b.getShelfId() + extension;
-                try (BufferedInputStream in = new BufferedInputStream(new URL(book.getBook().getImage()).openStream());
-                     FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
-                    byte dataBuffer[] = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                        fileOutputStream.write(dataBuffer, 0, bytesRead);
+                    String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
+                    String fileName = b.getImage();
+                    String extension = fileName.substring(fileName.lastIndexOf("."));
+                    fileName = filePath + "\\" + utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension;
+                    boolean saved = utilityService.DownloadImage(fileName,book.getBook().getImage());
+                    if(!saved){
+                        b.setImage("");
+                    }else{
+                        b.setImage(utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension);
                     }
-                    b.setImage(b.getBookName() + b.getShelfId() + extension);
+                }else if(b.getImage().contains("tmp")){
+                    String tempPath = configurationsRepository.findByConfigName("tempFilePath").getConfigValue()+"\\"+b.getImage();
+                    String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
+                    String fileName = b.getImage();
+                    String extension = fileName.substring(fileName.lastIndexOf("."));
+                    String fileNameOnly = utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension;
+                    fileName = filePath + "\\" + fileNameOnly;
 
-                } catch (IOException e) {
-                    // handle exception
-                    b.setImage("");
+                    utilityService.deletePhysicalFile(fileName);
+                    Files.move
+                            (Paths.get(tempPath),
+                                    Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+                    b.setImage(fileNameOnly);
                 }
+
+
+
+
+
 
                 bookRepository.save(b);
             }

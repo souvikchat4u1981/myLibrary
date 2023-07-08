@@ -31,7 +31,7 @@ const ParentShelf = (props) => {
       }
       sessionStorage.setItem("prevRand", r);
 
-      console.log(r);
+      // console.log(r);
       setImageName("shelf" + r + ".png");
     } else {
       setImageName(props.data.shelfImage);
@@ -40,7 +40,7 @@ const ParentShelf = (props) => {
 
   const navigate = useNavigate();
   const onShelfClickHandle = () => {
-    console.log(props.data.shelfId);
+    // console.log(props.data.shelfId);
     sessionStorage.setItem("shelfId", props.data.shelfId);
     if (props.fromChildPage) {
       sessionStorage.setItem("currentChildShelf", JSON.stringify(props.data));

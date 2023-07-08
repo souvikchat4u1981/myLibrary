@@ -24,6 +24,7 @@ const AddShelf = (props) => {
     shelfId: 0,
     shelfName: "",
     userId: null,
+    shelfImage: "",
   };
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const AddShelf = (props) => {
       let existingData = location.state.shelf;
       shelf.shelfId = existingData.shelfId;
       shelf.shelfName = existingData.shelfName;
+      shelf.shelfImage = existingData.shelfImage;
       shelf.parentShelfId = existingData.parentShelfId
         ? existingData.parentShelfId
         : 0;
@@ -55,7 +57,7 @@ const AddShelf = (props) => {
 
   const [shelf, setShelf] = useState(initShelf);
 
-  const { refetch } = useQuery(GET_ALL_PARENT_BOOKSHELFS, {
+  useQuery(GET_ALL_PARENT_BOOKSHELFS, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
     onCompleted: (data) => {
@@ -108,7 +110,7 @@ const AddShelf = (props) => {
 
   const onSaveClick = (e) => {
     e.preventDefault();
-    console.log(shelf);
+    // console.log(shelf);
     if (shelf.shelfName !== "") {
       setLoad(true);
       addBookShelf({ variables: { bookShelf: { bookShelfs: shelf } } });
@@ -173,6 +175,41 @@ const AddShelf = (props) => {
                   labelClass: "large-text-header",
                 }}
               />
+            </div>
+            <div className="row mt-2">
+              <div className="col-sm-8">
+                <Input
+                  id="shelfImage"
+                  value={newShelf.shelfImage}
+                  inputType="text"
+                  placeholder={"Image URL"}
+                  label="Image URL"
+                  icon={<i className="fa fa-user-circle"></i>}
+                  events={{ onChange: (data) => onInputChange(data) }}
+                  classes={{
+                    contClass: "",
+                    errorClass: "error-label",
+                    fieldClass: "form-control form-control-sm",
+                    labelClass: "large-text-header",
+                  }}
+                />
+              </div>
+              <div className="col-sm-4">
+                {newShelf.shelfImage.includes("http") && (
+                  <img
+                    src={newShelf.shelfImage}
+                    alt={newShelf.shelfImage}
+                    width={"90%"}
+                  />
+                )}
+                {!newShelf.shelfImage.includes("http") && (
+                  <img
+                    src={`${process.env.PUBLIC_URL}/assets/authorImage/${newShelf.shelfImage}`}
+                    alt={newShelf.shelfImage}
+                    width={"90%"}
+                  />
+                )}
+              </div>
             </div>
             <div className="row mt-2 p-2">
               <Button type="submit" onClick={onSaveClick}>

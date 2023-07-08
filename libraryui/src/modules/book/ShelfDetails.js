@@ -2,7 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_CHILD_SHELF, LOAD_BOOK_BY_SHELF } from "../../queries/BookQueries";
+import {
+  GET_ALL_SHELF_WITH_RELATION,
+  GET_CHILD_SHELF,
+  LOAD_BOOK_BY_SHELF,
+} from "../../queries/BookQueries";
 import ParentShelf from "./ParentShelf";
 import DisplayBook from "./DisplayBook";
 
@@ -10,8 +14,32 @@ const ShelfDetails = (props) => {
   const navigate = useNavigate();
   const [childShelfs, setChildSelfs] = useState(null);
   const [currentShelf, setCurrentShelf] = useState(null);
-  const { productSlug } = useParams();
-  const [getChildShelfs, { refetch }] = useLazyQuery(GET_CHILD_SHELF, {
+  const [allShelfs, setAllShelfs] = useState(null);
+  const refresh = () => window.location.reload(true);
+  sessionStorage.setItem(
+    "CurrentPage",
+    "Shelf" + JSON.parse(sessionStorage.getItem("currentShelf")).shelfName
+  );
+  useQuery(GET_ALL_SHELF_WITH_RELATION, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      setBooks(null);
+      if (!data.getAllShelfWithRelation.failure) {
+        if (data.getAllShelfWithRelation.shelfRelationModelList.length > 0) {
+          setAllShelfs(data.getAllShelfWithRelation.shelfRelationModelList);
+        }
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [currentShelfId, setCurrentShelfId] = useState(0);
+
+  const [getChildShelfs] = useLazyQuery(GET_CHILD_SHELF, {
     notifyOnNetworkStatusChange: true,
     variables: {
       parentId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
@@ -33,14 +61,14 @@ const ShelfDetails = (props) => {
 
   const [books, setBooks] = useState(null);
 
-  useQuery(LOAD_BOOK_BY_SHELF, {
+  const [getBooks, { refetch }] = useLazyQuery(LOAD_BOOK_BY_SHELF, {
     notifyOnNetworkStatusChange: true,
     variables: {
       shelfId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
     },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      setBooks(null);
+      // setBooks(null);
       if (!data.loadBookByShelf.failure) {
         if (data.loadBookByShelf.bookList.length > 0) {
           setBooks(data.loadBookByShelf.bookList);
@@ -54,15 +82,14 @@ const ShelfDetails = (props) => {
   });
 
   useEffect(() => {
+    // sessionStorage.removeItem("childreloadCount");
     getChildShelfs();
+    setTimeout(() => {
+      getBooks();
+    }, 100);
+
     // setCurrentShelf(JSON.parse(sessionStorage.getItem("currentShelf")));
   }, []);
-
-  useEffect(() => {
-    console.log(productSlug);
-
-    getChildShelfs();
-  }, [productSlug]);
 
   return (
     <Fragment>
@@ -102,7 +129,14 @@ const ShelfDetails = (props) => {
         <div className="row mt-2">
           {books &&
             books.map((m) => {
-              return <DisplayBook key={m.bookId} data={m} />;
+              return (
+                <DisplayBook
+                  key={m.bookId}
+                  data={m}
+                  shelfs={allShelfs}
+                  refetch={refetch}
+                />
+              );
             })}
         </div>
       </div>

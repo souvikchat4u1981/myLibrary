@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Books = (props) => {
   const navigate = useNavigate();
   const [parentShelfs, setParentShelfs] = useState(null);
+  sessionStorage.setItem("CurrentPage", "Home");
 
   const { refetch } = useQuery(GET_ALL_PARENT_BOOKSHELFS, {
     notifyOnNetworkStatusChange: true,

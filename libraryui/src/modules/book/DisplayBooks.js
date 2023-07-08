@@ -1,23 +1,23 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { LOAD_BOOK_BY_SHELF } from "../../queries/BookQueries";
+import {
+  GET_ALL_SHELF_WITH_RELATION,
+  LOAD_BOOK_BY_SHELF,
+} from "../../queries/BookQueries";
 import DisplayBook from "./DisplayBook";
 
 const DisplayBooks = (props) => {
-  const [books, setBooks] = useState(null);
-
-  useQuery(LOAD_BOOK_BY_SHELF, {
+  const [books, setBooks] = useState(props.books);
+  const [allShelfs, setAllShelfs] = useState(null);
+  useQuery(GET_ALL_SHELF_WITH_RELATION, {
     notifyOnNetworkStatusChange: true,
-    variables: {
-      shelfId: sessionStorage.getItem("shelfId"),
-    },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       setBooks(null);
-      if (!data.loadBookByShelf.failure) {
-        if (data.loadBookByShelf.bookList.length > 0) {
-          setBooks(data.loadBookByShelf.bookList);
+      if (!data.getAllShelfWithRelation.failure) {
+        if (data.getAllShelfWithRelation.shelfRelationModelList.length > 0) {
+          setAllShelfs(data.getAllShelfWithRelation.shelfRelationModelList);
         }
       }
     },
@@ -26,12 +26,26 @@ const DisplayBooks = (props) => {
       console.log(data);
     },
   });
+
   return (
     <Fragment>
-      {books &&
-        books.map((m) => {
-          return <DisplayBook key={m.bookId} data={m} />;
-        })}
+      <div
+        className="row"
+        style={{ width: "96%", marginLeft: "auto", marginRight: "auto" }}
+      >
+        {!props.books && <div>No Book Present {JSON.parse(props.books)} </div>}
+        {props.books &&
+          props.books.map((m) => {
+            return (
+              <DisplayBook
+                key={m.bookId}
+                data={m}
+                shelfs={allShelfs}
+                refetch={props.refetch}
+              />
+            );
+          })}
+      </div>
     </Fragment>
   );
 };

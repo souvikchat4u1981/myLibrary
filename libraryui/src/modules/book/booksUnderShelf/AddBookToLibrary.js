@@ -15,8 +15,14 @@ import {
   ErrorMessage,
   SuccessMessage,
 } from "../../../lib/toastMessage/Toastmessage";
+import axios from "axios";
+import { multiPartPost, postCall } from "../../../utils/RestCalls";
 
 const AddBookToLibrary = (props) => {
+  sessionStorage.setItem(
+    "CurrentPage",
+    "Addbook" + JSON.parse(sessionStorage.getItem("currentShelf")).shelfId
+  );
   const location = useLocation();
   const [book, setBook] = useState({
     author: "",
@@ -42,6 +48,8 @@ const AddBookToLibrary = (props) => {
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
+    sessionStorage.removeItem("reloadCount");
+    // sessionStorage.removeItem("childreloadCount");
     if (location.state) {
       if (typeof location.state.edit !== "undefined") {
         if (location.state.edit) {
@@ -74,7 +82,7 @@ const AddBookToLibrary = (props) => {
     },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      console.log(data);
+      //   console.log(data);
       if (!data.bookDetails.failure) {
         setLodedBook(data.bookDetails);
         newBookDispatch({
@@ -93,7 +101,7 @@ const AddBookToLibrary = (props) => {
   });
 
   useEffect(() => {
-    if (book.detailsURL !== null) {
+    if (book.detailsURL !== null && book.detailsURL !== "") {
       setLoad(true);
       getBook({ variables: { book: book } });
     }
@@ -121,7 +129,7 @@ const AddBookToLibrary = (props) => {
     onCompleted: (data) => {
       if (!data.saveBook.failure) {
         SuccessMessage("Book added successfully");
-        navigate(-1);
+        // navigate("/shelfDetails");
       } else {
         ErrorMessage(data.saveBook.message);
       }
@@ -136,7 +144,8 @@ const AddBookToLibrary = (props) => {
 
   const onSaveClick = (e) => {
     e.preventDefault();
-    console.log(loadedBook);
+
+    // console.log(loadedBook);
     if (loadedBook.bookName !== "") {
       let b = { ...loadedBook };
       delete b.detailsURL;
@@ -148,8 +157,43 @@ const AddBookToLibrary = (props) => {
 
       b["purchaseDate"] = null;
       setLoad(true);
-      addBook({ variables: { book: { userId: loadedBook.userId, book: b } } });
+      if (loadedBook.image.includes("blob")) {
+        saveTempImage(b);
+      } else {
+        addBook({
+          variables: { book: { userId: loadedBook.userId, book: b } },
+        });
+      }
     }
+  };
+
+  const [fileLocation, setFileLocation] = useState("web");
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const saveTempImage = (b) => {
+    const data = new FormData();
+    data.append("image", selectedImage);
+    let url = "uploadImage";
+    setLoad(true);
+    multiPartPost({ endpoint: url, data: data })
+      .then((data) => {
+        //console.log(data);
+        // loadedBook.image = data;
+        setLoad(false);
+        b.image = data;
+        addBook({
+          variables: { book: { userId: loadedBook.userId, book: b } },
+        });
+      })
+      .catch((error) => {
+        setLoad(false);
+      });
+  };
+
+  const loadImageFromFolder = (event) => {
+    event.preventDefault();
+    setSelectedImage(event.target.files[0]);
+    loadedBook.image = URL.createObjectURL(event.target.files[0]);
   };
 
   return (
@@ -168,38 +212,69 @@ const AddBookToLibrary = (props) => {
           {loadedBook && (
             <div className="col-sm-8 add-book row">
               <div className="p-2 border-end col-sm-6">
+                <div>
+                  <i
+                    className="fa fa-folder me-2"
+                    title="From folder"
+                    onClick={() => setFileLocation("folder")}
+                  ></i>
+                  <i
+                    className="fa fa-globe me-2"
+                    title="From URL"
+                    onClick={() => setFileLocation("web")}
+                  ></i>
+                </div>
                 <div className="mb-2">
-                  <Input
-                    id="image"
-                    value={newBook.image}
-                    inputType="text"
-                    placeholder={"Image URL"}
-                    label="Image URL"
-                    icon={<i className="fa fa-user-circle"></i>}
-                    events={{ onChange: (data) => onInputChange(data) }}
-                    classes={{
-                      contClass: "",
-                      errorClass: "error-label",
-                      fieldClass: "form-control form-control-sm",
-                      labelClass: "large-text-header",
-                    }}
-                  />
+                  {fileLocation === "web" && (
+                    <Input
+                      id="image"
+                      value={newBook.image}
+                      inputType="text"
+                      placeholder={"Image URL"}
+                      label="Image URL"
+                      icon={<i className="fa fa-user-circle"></i>}
+                      events={{ onChange: (data) => onInputChange(data) }}
+                      classes={{
+                        contClass: "",
+                        errorClass: "error-label",
+                        fieldClass: "form-control form-control-sm",
+                        labelClass: "large-text-header",
+                      }}
+                    />
+                  )}
+                  {fileLocation === "folder" && (
+                    <input
+                      type="file"
+                      name="myImage"
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        loadImageFromFolder(event);
+                      }}
+                    />
+                  )}
                 </div>
 
-                {!location.state.edit && (
+                {loadedBook.image.includes("http") && (
                   <img
                     src={loadedBook.image}
                     alt={loadedBook.image}
                     width={"90%"}
                   />
                 )}
-                {location.state.edit && (
+                {!loadedBook.image.includes("http") && (
                   <img
                     src={`${process.env.PUBLIC_URL}/assets/bookImages/${loadedBook.image}`}
                     alt={loadedBook.image}
                     width={"90%"}
                   />
                 )}
+                {/* {fileLocation === "folder" && selectedImage && (
+                  <img
+                    alt="not found"
+                    width={"90%"}
+                    src={URL.createObjectURL(selectedImage)}
+                  />
+                )} */}
               </div>
               <div className="col-sm-6 p-2 ">
                 <div className="row">
