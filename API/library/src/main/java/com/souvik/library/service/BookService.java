@@ -24,6 +24,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +59,7 @@ public class BookService {
     public BookListModel loadBookByShelfAndFilter(@GraphQLArgument(name = "shelfId") int shelfId, @GraphQLArgument(name = "filterParam") String filterParam) {
         BookListModel model = new BookListModel();
         try {
-            model.setBookList(bookRepository.getBookByShelfAndFilter(shelfId, "%"+filterParam+"%"));
+            model.setBookList(bookRepository.getBookByShelfAndFilter(shelfId, "%" + filterParam + "%"));
             model.setFailure(false);
             model.setMessage("SUCCESS");
         } catch (Exception ex) {
@@ -70,7 +75,7 @@ public class BookService {
     public BookListModel loadBookByParentShelfAndFilter(@GraphQLArgument(name = "shelfId") int shelfId, @GraphQLArgument(name = "filterParam") String filterParam) {
         BookListModel model = new BookListModel();
         try {
-            model.setBookList(bookRepository.getBookByParentShelfAndFilter(shelfId, "%"+filterParam+"%"));
+            model.setBookList(bookRepository.getBookByParentShelfAndFilter(shelfId, "%" + filterParam + "%"));
             model.setFailure(false);
             model.setMessage("SUCCESS");
         } catch (Exception ex) {
@@ -82,8 +87,8 @@ public class BookService {
         return model;
     }
 
-    @GraphQLQuery(name="totalBookCount")
-    public int totalBookCount(){
+    @GraphQLQuery(name = "totalBookCount")
+    public int totalBookCount() {
         return (int) bookRepository.count();
     }
 
@@ -142,5 +147,29 @@ public class BookService {
             ex.printStackTrace();
         }
         return status;
+    }
+
+    @GraphQLQuery(name = "getUniqueListByColumn")
+    public List<String> getUniqueListByColumn(@GraphQLArgument(name = "columnName") String columnName) {
+        List<String> values = new ArrayList<>();
+        try {
+
+            List<Book> books = bookRepository.findAll();
+            if (columnName.toLowerCase().equals("author"))
+                values = books.stream().map(Book::getAuthor).toList();
+            else if (columnName.toLowerCase().equals("publication"))
+                values = books.stream().map(Book::getPublicastion).toList();
+
+            values = values.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+            values.removeAll(Arrays.asList("", null));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+        return values;
     }
 }

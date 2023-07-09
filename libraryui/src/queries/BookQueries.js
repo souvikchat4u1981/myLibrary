@@ -261,3 +261,9 @@ export const FILTER_BOOK_BY_SHELF = gql`
     }
   }
 `;
+
+export const GET_AUTOCOMPLETE_VALUES = gql`
+  query GetUniqueListByColumn($columnName: String) {
+    getUniqueListByColumn(columnName: $columnName)
+  }
+`;

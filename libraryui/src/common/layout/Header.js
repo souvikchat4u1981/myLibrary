@@ -68,14 +68,14 @@ const Header = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light nav-back fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand" onClick={() => navigate("/")}>
+        <a className="navbar-brand hand" onClick={() => navigate("/")}>
           <img
             src={`${process.env.PUBLIC_URL}/assets/images/Books.png`}
             alt="library"
             width={"32px"}
             className="me-2"
           />
-          My Library
+          {window.Configs.applicationName || "My Library"}
         </a>
         <button
           className="navbar-toggler"

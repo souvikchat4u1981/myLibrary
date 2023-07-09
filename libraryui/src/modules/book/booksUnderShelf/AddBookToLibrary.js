@@ -5,6 +5,7 @@ import CustomLoader from "../../../lib/customLoader/CustomLoader";
 import "../book.scss";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
+  GET_AUTOCOMPLETE_VALUES,
   GET_ONLINE_BOOK_DETAILS,
   SAVE_BOOK,
 } from "../../../queries/BookQueries";
@@ -17,6 +18,7 @@ import {
 } from "../../../lib/toastMessage/Toastmessage";
 import axios from "axios";
 import { multiPartPost, postCall } from "../../../utils/RestCalls";
+import AutoComplete from "../../../lib/autoComplete/AutoComplete";
 
 const AddBookToLibrary = (props) => {
   sessionStorage.setItem(
@@ -44,6 +46,8 @@ const AddBookToLibrary = (props) => {
   });
 
   const [loadedBook, setLodedBook] = useState(null);
+  const [authors, setAuthors] = useState([]);
+  const [publication, setPublication] = useState([]);
 
   const [load, setLoad] = useState(false);
 
@@ -73,6 +77,9 @@ const AddBookToLibrary = (props) => {
       });
       setLodedBook(book);
     }
+
+    getAuthor();
+    getPublication();
   }, []);
 
   const [getBook] = useLazyQuery(GET_ONLINE_BOOK_DETAILS, {
@@ -91,6 +98,46 @@ const AddBookToLibrary = (props) => {
           payload: data.bookDetails,
         });
       }
+      setLoad(false);
+    },
+
+    onError: (data) => {
+      setLoad(false);
+      console.log(data);
+    },
+  });
+
+  const [getAuthor] = useLazyQuery(GET_AUTOCOMPLETE_VALUES, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      columnName: "author",
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      //   console.log(data);
+
+      setAuthors(data.getUniqueListByColumn);
+
+      setLoad(false);
+    },
+
+    onError: (data) => {
+      setLoad(false);
+      console.log(data);
+    },
+  });
+
+  const [getPublication] = useLazyQuery(GET_AUTOCOMPLETE_VALUES, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      columnName: "publication",
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      //   console.log(data);
+
+      setPublication(data.getUniqueListByColumn);
+
       setLoad(false);
     },
 
@@ -295,7 +342,16 @@ const AddBookToLibrary = (props) => {
                   />
                 </div>
                 <div className="row mt-2">
-                  <Input
+                  <AutoComplete
+                    id="author"
+                    value={newBook.author}
+                    data={authors}
+                    placeholder={"Author"}
+                    events={{ onChange: (data) => onInputChange(data) }}
+                    className="form-control form-control-sm"
+                    label="Author"
+                  />
+                  {/* <Input
                     id="author"
                     value={newBook.author}
                     inputType="text"
@@ -309,10 +365,20 @@ const AddBookToLibrary = (props) => {
                       fieldClass: "form-control form-control-sm",
                       labelClass: "large-text-header",
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="row mt-2">
-                  <Input
+                  <AutoComplete
+                    id="publicastion"
+                    value={newBook.publicastion}
+                    inputType="text"
+                    placeholder={"Publicastion"}
+                    label="Publicastion"
+                    data={publication}
+                    events={{ onChange: (data) => onInputChange(data) }}
+                    className="form-control form-control-sm"
+                  />
+                  {/* <Input
                     id="publicastion"
                     value={newBook.publicastion}
                     inputType="text"
@@ -326,7 +392,7 @@ const AddBookToLibrary = (props) => {
                       fieldClass: "form-control form-control-sm",
                       labelClass: "large-text-header",
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="row mt-2">
                   <Input

@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import DisplayBooks from "../DisplayBooks";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
+  FILTER_BOOK_BY_SHELF,
   GET_SHELF_BY_ID,
   LOAD_BOOK_BY_SHELF,
 } from "../../../queries/BookQueries";
+import CustomLoader from "../../../lib/customLoader/CustomLoader";
 
 const ChildShelf = (props) => {
   const navigate = useNavigate();
@@ -16,6 +18,12 @@ const ChildShelf = (props) => {
       JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName
   );
   const [parentShelf, setParentShelf] = useState("");
+  const [load, setLoad] = useState(false);
+  const [searchParam, setSearchparam] = useState(
+    sessionStorage.getItem("ShelfFilterParam")
+      ? sessionStorage.getItem("ShelfFilterParam")
+      : ""
+  );
   useQuery(GET_SHELF_BY_ID, {
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -28,10 +36,12 @@ const ChildShelf = (props) => {
       if (!data.getShelfById.failure) {
         setParentShelf(data.getShelfById.bookShelfs.shelfName);
       }
+      setLoad(false);
     },
 
     onError: (data) => {
       console.log(data);
+      setLoad(false);
     },
   });
 
@@ -61,15 +71,84 @@ const ChildShelf = (props) => {
         setBooks(data.loadBookByShelf.bookList);
         // }
       }
+      setLoad(false);
     },
 
     onError: (data) => {
       console.log(data);
+      setLoad(false);
+    },
+  });
+  const onFilterChange = (e) => {
+    setSearchparam(e.target.value);
+    sessionStorage.setItem("ShelfFilterParam", e.target.value);
+  };
+
+  const [filterBooksByShelf] = useLazyQuery(FILTER_BOOK_BY_SHELF, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      shelfId: JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfId,
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      // setBooks(null);
+      if (!data.loadBookByShelfAndFilter.failure) {
+        setBooks(data.loadBookByShelfAndFilter.bookList);
+      }
+      setLoad(false);
+    },
+
+    onError: (data) => {
+      console.log(data);
+      setLoad(false);
     },
   });
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setLoad(true);
+      // console.log(searchBook);
+      if (searchParam !== "") {
+        setLoad(true);
+
+        filterBooksByShelf({
+          variables: {
+            shelfId: sessionStorage.getItem("shelfId"),
+            filterParam: searchParam,
+          },
+        });
+      } else {
+        fetchBooks({
+          variables: {
+            shelfId: sessionStorage.getItem("shelfId"),
+          },
+        });
+      }
+      // Send Axios request here
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchParam]);
+
   return (
     <Fragment>
+      {load && <CustomLoader />}
+      <div className="p-2 pt-3 row col-sm-12">
+        <div className="col-sm-4">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search By Author or Book"
+              value={searchParam}
+              onChange={onFilterChange}
+            />
+            <span class="input-group-text" id="basic-addon2">
+              <i className="fa fa-search"></i>
+            </span>
+          </div>
+        </div>
+      </div>
       <div className="p-2 pt-3 row d-flex">
         <div>
           <i

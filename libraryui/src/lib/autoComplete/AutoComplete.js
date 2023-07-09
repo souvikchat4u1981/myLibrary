@@ -47,7 +47,7 @@ const AutoComplete = (props) => {
       console.log(value);
       if (value !== "") {
         setActiveOption(0);
-        getStockList(value);
+        getFilteredValue(value);
       }
       // Send Axios request here
     }, 500);
@@ -55,18 +55,27 @@ const AutoComplete = (props) => {
     return () => clearTimeout(delayDebounceFn);
   }, [value]);
 
-  const getStockList = (val) => {
-    let url = "tradingview/search-stock/?stockName=" + val;
-
-    getCall({
-      endpoint: url,
-    }).then((data) => {
-      //console.log(data);
-      if (!data.failure) {
-        generateOptionList(data.list);
-        setFilteredOption(data.list);
+  const getFilteredValue = (val) => {
+    let filtervalues = [];
+    props.data.forEach((e) => {
+      if (e.toLowerCase().includes(val.toLowerCase())) {
+        filtervalues.push(e);
       }
     });
+
+    generateOptionList(filtervalues);
+    setFilteredOption(filtervalues);
+    // let url = "tradingview/search-stock/?stockName=" + val;
+
+    // getCall({
+    //   endpoint: url,
+    // }).then((data) => {
+    //   //console.log(data);
+    //   if (!data.failure) {
+    //     generateOptionList(data.list);
+    //     setFilteredOption(data.list);
+    //   }
+    // });
   };
 
   const onClick = (e) => {
@@ -74,10 +83,7 @@ const AutoComplete = (props) => {
     setFilteredOption([]);
     setShowOptions(false);
     let d = { ...props };
-    d.value = e.currentTarget.innerText.substr(
-      0,
-      e.currentTarget.innerText.indexOf("--") - 1
-    );
+    d.value = e.currentTarget.innerText;
     props.events.onChange(d);
   };
 
@@ -90,7 +96,7 @@ const AutoComplete = (props) => {
       setFilteredOption([]);
       setShowOptions(false);
       let d = { ...props };
-      let item = filteredOptions[activeOption].symbol;
+      let item = filteredOptions[activeOption];
       d.value = item;
       props.events.onChange(d);
       //   showOption = false;
@@ -100,7 +106,7 @@ const AutoComplete = (props) => {
       //   let d = { ...props };
       //   d.value = item;
       //   setValue(item);
-      //   getStockList(item);
+      //   getFilteredValue(item);
       //   setActiveOption(0);
       //   setFilteredOption([]);
       //   setShowOptions(false);
@@ -155,16 +161,8 @@ const AutoComplete = (props) => {
               className = "option-active";
             }
             return (
-              <li
-                className={className}
-                key={optionName.symbol + optionName.description}
-                onClick={onClick}
-              >
-                {optionName.symbol.replace("<em>", "").replace("</em>", "") +
-                  "  --  " +
-                  optionName.description
-                    .replace("<em>", "")
-                    .replace("</em>", "")}
+              <li className={className} key={optionName} onClick={onClick}>
+                {optionName}
               </li>
             );
           })}
