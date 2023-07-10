@@ -17,4 +17,7 @@ public interface IBookShelfs extends JpaRepository<BookShelfs, Integer> {
 
     @Query("select bs from BookShelfs bs where bs.parentShelfId =:parentShelfId and (lower(bs.shelfName) like (lower(:author)) or bs.shelfId in (select b.shelfId  from Book b where lower(b.bookName) like(lower(:bookName)) or lower(b.author) like(lower(:author)))) ")
     List<BookShelfs> getChildBookShelfsByFilterparam(@Param("author") String author, @Param("bookName") String bookName,@Param("parentShelfId") int parentShelfId);
+
+    @Query("select count(0) from Book b where shelfId=:shelfId or shelfId in (select shelfId from BookShelfs bs where bs.parentShelfId=:shelfId)")
+    Integer getBookCountByShelf(@Param("shelfId") int shelfId);
 }

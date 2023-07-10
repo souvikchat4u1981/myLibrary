@@ -16,7 +16,7 @@ const ParentShelf = (props) => {
   const [imageName, setImageName] = useState("shelf1.png");
 
   useEffect(() => {
-    if (props.data.shelfImage === null) {
+    if (props.data.bookShelfs.shelfImage === null) {
       let min = 1;
       let max = 6;
       const rand = min + Math.random() * (max - min);
@@ -34,19 +34,25 @@ const ParentShelf = (props) => {
       // console.log(r);
       setImageName("shelf" + r + ".png");
     } else {
-      setImageName(props.data.shelfImage);
+      setImageName(props.data.bookShelfs.shelfImage);
     }
   }, []);
 
   const navigate = useNavigate();
   const onShelfClickHandle = () => {
     // console.log(props.data.shelfId);
-    sessionStorage.setItem("shelfId", props.data.shelfId);
+    sessionStorage.setItem("shelfId", props.data.bookShelfs.shelfId);
     if (props.fromChildPage) {
-      sessionStorage.setItem("currentChildShelf", JSON.stringify(props.data));
+      sessionStorage.setItem(
+        "currentChildShelf",
+        JSON.stringify(props.data.bookShelfs)
+      );
       navigate("/childShelf");
     } else {
-      sessionStorage.setItem("currentShelf", JSON.stringify(props.data));
+      sessionStorage.setItem(
+        "currentShelf",
+        JSON.stringify(props.data.bookShelfs)
+      );
       navigate("/shelfDetails");
     }
   };
@@ -59,13 +65,14 @@ const ParentShelf = (props) => {
             className="fa fa-edit text-success float-end"
             title="Edit Shelf"
             style={{ position: "relative", top: "-5px" }}
-            onClick={() =>
+            onClick={() => {
+              console.log("Book Shelf", props.data.bookShelfs);
               navigate("/addShelf", {
                 state: {
-                  shelf: props.data,
+                  shelf: props.data.bookShelfs,
                 },
-              })
-            }
+              });
+            }}
           ></i>
         </div>
         <img
@@ -78,7 +85,10 @@ const ParentShelf = (props) => {
           onClick={onShelfClickHandle}
         />
         <div className="mt-2" onClick={onShelfClickHandle}>
-          <b>{props.data.shelfName}</b>
+          <b>{props.data.bookShelfs.shelfName}</b>
+        </div>
+        <div className="mt-2" onClick={onShelfClickHandle}>
+          Books : {props.data.bookCount}
         </div>
       </div>
     </div>

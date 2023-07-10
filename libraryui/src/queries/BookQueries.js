@@ -15,6 +15,28 @@ export const GET_ALL_PARENT_BOOKSHELFS = gql`
     }
   }
 `;
+export const GET_ALL_PARENT_BOOKSHELFS_WITH_COUNT = gql`
+  query GetAllBookShelfsWithCount {
+    getAllBookShelfsWithCount {
+      failure
+      message
+      userId
+      bookShelfList {
+        bookCount
+        failure
+        message
+        userId
+        bookShelfs {
+          parentShelfId
+          shelfId
+          shelfImage
+          shelfName
+          userId
+        }
+      }
+    }
+  }
+`;
 
 export const ADD_BOOK_SHELF = gql`
   mutation AddBookShelf($bookShelf: BookShelfModelInput) {
@@ -38,6 +60,29 @@ export const GET_CHILD_SHELF = gql`
         parentShelfId
         userId
         shelfImage
+      }
+    }
+  }
+`;
+
+export const GET_CHILD_SHELF_WITH_BOOK_COUNT = gql`
+  query GetChildBookShelfsWithCount($parentId: Int) {
+    getChildBookShelfsWithCount(parentId: $parentId) {
+      failure
+      message
+      userId
+      bookShelfList {
+        bookCount
+        failure
+        message
+        userId
+        bookShelfs {
+          parentShelfId
+          shelfId
+          shelfImage
+          shelfName
+          userId
+        }
       }
     }
   }

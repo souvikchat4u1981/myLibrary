@@ -9,4 +9,5 @@ import java.util.List;
 @Data
 public class BookShelfsListModel extends RestStatus {
     private List<BookShelfs> bookShelfs;
+
 }

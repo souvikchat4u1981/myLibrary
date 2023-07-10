@@ -4,6 +4,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   FILTER_BOOK_SHELFS,
   GET_ALL_PARENT_BOOKSHELFS,
+  GET_ALL_PARENT_BOOKSHELFS_WITH_COUNT,
   TOTAL_BOOKS_COUNT,
 } from "../../queries/BookQueries";
 import ParentShelf from "./ParentShelf";
@@ -22,21 +23,24 @@ const Books = (props) => {
   );
   sessionStorage.setItem("CurrentPage", "Home");
 
-  const [getAllShelfs, { refetch }] = useLazyQuery(GET_ALL_PARENT_BOOKSHELFS, {
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      if (!data.getAllBookShelfs.failure) {
-        setParentShelfs(data.getAllBookShelfs.bookShelfs);
-      }
-      setLoad(false);
-    },
+  const [getAllShelfs, { refetch }] = useLazyQuery(
+    GET_ALL_PARENT_BOOKSHELFS_WITH_COUNT,
+    {
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        if (!data.getAllBookShelfsWithCount.failure) {
+          setParentShelfs(data.getAllBookShelfsWithCount.bookShelfList);
+        }
+        setLoad(false);
+      },
 
-    onError: (data) => {
-      console.log(data);
-      setLoad(false);
-    },
-  });
+      onError: (data) => {
+        console.log(data);
+        setLoad(false);
+      },
+    }
+  );
 
   useQuery(TOTAL_BOOKS_COUNT, {
     notifyOnNetworkStatusChange: true,
@@ -132,7 +136,7 @@ const Books = (props) => {
           parentShelfs.map((m) => {
             return (
               <ParentShelf
-                key={m.shelfId}
+                key={m.bookShelfs.shelfId}
                 data={m}
                 count={parentShelfs.length}
               />

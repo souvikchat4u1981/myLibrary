@@ -41,7 +41,7 @@ const AddShelf = (props) => {
       let existingData = location.state.shelf;
       shelf.shelfId = existingData.shelfId;
       shelf.shelfName = existingData.shelfName;
-      shelf.shelfImage = existingData.shelfImage;
+      shelf.shelfImage = existingData.shelfName ? existingData.shelfImage : "";
       shelf.parentShelfId = existingData.parentShelfId
         ? existingData.parentShelfId
         : 0;
@@ -195,20 +195,22 @@ const AddShelf = (props) => {
                 />
               </div>
               <div className="col-sm-4">
-                {newShelf.shelfImage.includes("http") && (
-                  <img
-                    src={newShelf.shelfImage}
-                    alt={newShelf.shelfImage}
-                    width={"90%"}
-                  />
-                )}
-                {!newShelf.shelfImage.includes("http") && (
-                  <img
-                    src={`${process.env.PUBLIC_URL}/assets/authorImage/${newShelf.shelfImage}`}
-                    alt={newShelf.shelfImage}
-                    width={"90%"}
-                  />
-                )}
+                {newShelf.shelfImage &&
+                  newShelf.shelfImage.includes("http") && (
+                    <img
+                      src={newShelf.shelfImage}
+                      alt={newShelf.shelfImage}
+                      width={"90%"}
+                    />
+                  )}
+                {newShelf.shelfImage &&
+                  !newShelf.shelfImage.includes("http") && (
+                    <img
+                      src={`${process.env.PUBLIC_URL}/assets/authorImage/${newShelf.shelfImage}`}
+                      alt={newShelf.shelfImage}
+                      width={"90%"}
+                    />
+                  )}
               </div>
             </div>
             <div className="row mt-2 p-2">

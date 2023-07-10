@@ -7,4 +7,5 @@ import lombok.Data;
 @Data
 public class BookShelfModel extends RestStatus {
     private BookShelfs bookShelfs;
+    private int bookCount;
 }

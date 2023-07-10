@@ -8,6 +8,7 @@ import {
   FILTER_CHILD_BOOK_SHELFS,
   GET_ALL_SHELF_WITH_RELATION,
   GET_CHILD_SHELF,
+  GET_CHILD_SHELF_WITH_BOOK_COUNT,
   LOAD_BOOK_BY_SHELF,
 } from "../../queries/BookQueries";
 import ParentShelf from "./ParentShelf";
@@ -49,7 +50,7 @@ const ShelfDetails = (props) => {
 
   const [currentShelfId, setCurrentShelfId] = useState(0);
 
-  const [getChildShelfs] = useLazyQuery(GET_CHILD_SHELF, {
+  const [getChildShelfs] = useLazyQuery(GET_CHILD_SHELF_WITH_BOOK_COUNT, {
     notifyOnNetworkStatusChange: true,
     variables: {
       parentId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
@@ -57,9 +58,9 @@ const ShelfDetails = (props) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       setChildSelfs(null);
-      if (!data.getChildBookShelfs.failure) {
-        if (data.getChildBookShelfs.bookShelfs.length > 0) {
-          setChildSelfs(data.getChildBookShelfs.bookShelfs);
+      if (!data.getChildBookShelfsWithCount.failure) {
+        if (data.getChildBookShelfsWithCount.bookShelfList.length > 0) {
+          setChildSelfs(data.getChildBookShelfsWithCount.bookShelfList);
         }
       }
       setLoad(false);
