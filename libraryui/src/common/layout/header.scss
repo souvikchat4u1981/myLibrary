@@ -13,8 +13,9 @@
     font-family: "Arboria-Medium";
 
     &.active {
-      color: themed("navActive") !important;
-      border-bottom: 1px solid themed("colorText") !important;
+      color: themed("golden") !important;
+      // font-weight: bold;
+      // border-bottom: 1px solid themed("colorText") !important;
     }
   }
 }

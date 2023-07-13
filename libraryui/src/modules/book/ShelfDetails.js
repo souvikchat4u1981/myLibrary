@@ -136,7 +136,7 @@ const ShelfDetails = (props) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       if (!data.filterChildShelfByAuthorOrBook.failure) {
-        setChildSelfs(data.filterChildShelfByAuthorOrBook.bookShelfs);
+        setChildSelfs(data.filterChildShelfByAuthorOrBook.bookShelfList);
       }
       setLoad(false);
     },

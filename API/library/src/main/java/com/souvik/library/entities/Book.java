@@ -15,6 +15,8 @@ public class Book {
     private Integer bookId;
     @Column(name = "book_name")
     private String bookName;
+    @Column(name = "book_name_in_english")
+    private String bookNameInEnglish;
     @Column(name = "shelf_id")
     private int shelfId;
     @Column(name = "author")

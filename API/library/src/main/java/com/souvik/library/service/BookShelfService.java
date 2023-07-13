@@ -7,6 +7,7 @@ import com.souvik.library.models.bookShelfs.BookShelfModel;
 import com.souvik.library.models.bookShelfs.BookShelfsListModel;
 import com.souvik.library.models.bookShelfs.ShelfRelationListModel;
 import com.souvik.library.models.bookShelfs.ShelfRelationModel;
+
 import com.souvik.library.repositiries.IBookShelfs;
 import com.souvik.library.repositiries.IConfigurationsRepository;
 import com.souvik.library.utility.UtilityService;
@@ -197,10 +198,19 @@ public class BookShelfService {
     }
 
     @GraphQLQuery(name = "filterShelfByAuthorOrBook")
-    public BookShelfsListModel filterShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam) {
-        BookShelfsListModel model = new BookShelfsListModel();
+    public BookShelfListWithCount filterShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam) {
+        BookShelfListWithCount model = new BookShelfListWithCount();
         try {
-            model.setBookShelfs(bookShelfs.getAllByFilerParam("%" + searchparam + "%", "%" + searchparam + "%"));
+            List<BookShelfs> shelfs =bookShelfs.getAllByFilerParam("%" + searchparam + "%", "%" + searchparam + "%");
+            List<BookShelfModel> sm = new ArrayList<>();
+            for (BookShelfs b : shelfs) {
+                int count = bookShelfs.getBookCountByShelf(b.getShelfId());
+                BookShelfModel m = new BookShelfModel();
+                m.setBookShelfs(b);
+                m.setBookCount(count);
+                sm.add(m);
+            }
+            model.setBookShelfList(sm);
             model.setFailure(false);
             model.setMessage("SUCCESS");
 
@@ -213,10 +223,19 @@ public class BookShelfService {
     }
 
     @GraphQLQuery(name = "filterChildShelfByAuthorOrBook")
-    public BookShelfsListModel filterChildShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam, @GraphQLArgument(name = "parentId") int parentId) {
-        BookShelfsListModel model = new BookShelfsListModel();
+    public BookShelfListWithCount filterChildShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam, @GraphQLArgument(name = "parentId") int parentId) {
+        BookShelfListWithCount model = new BookShelfListWithCount();
         try {
-            model.setBookShelfs(bookShelfs.getChildBookShelfsByFilterparam("%" + searchparam + "%", "%" + searchparam + "%", parentId));
+            List<BookShelfs> shelfs =  bookShelfs.getChildBookShelfsByFilterparam("%" + searchparam + "%", "%" + searchparam + "%", parentId);
+            List<BookShelfModel> sm = new ArrayList<>();
+            for (BookShelfs b : shelfs) {
+                int count = bookShelfs.getBookCountByShelf(b.getShelfId());
+                BookShelfModel m = new BookShelfModel();
+                m.setBookShelfs(b);
+                m.setBookCount(count);
+                sm.add(m);
+            }
+            model.setBookShelfList(sm);
             model.setFailure(false);
             model.setMessage("SUCCESS");
 

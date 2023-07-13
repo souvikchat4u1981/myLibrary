@@ -30,6 +30,7 @@ const AddBookToLibrary = (props) => {
     author: "",
     bookId: 0,
     bookName: "",
+    bookNameInEnglish: "",
     description: "",
     detailsURL: "",
     format: "",
@@ -331,6 +332,23 @@ const AddBookToLibrary = (props) => {
                     inputType="text"
                     placeholder={"Book Name"}
                     label="Book Name"
+                    icon={<i className="fa fa-user-circle"></i>}
+                    events={{ onChange: (data) => onInputChange(data) }}
+                    classes={{
+                      contClass: "",
+                      errorClass: "error-label",
+                      fieldClass: "form-control form-control-sm",
+                      labelClass: "large-text-header",
+                    }}
+                  />
+                </div>
+                <div className="row">
+                  <Input
+                    id="bookNameInEnglish"
+                    value={newBook.bookNameInEnglish}
+                    inputType="text"
+                    placeholder={"Book Name In English"}
+                    label="Book Name In English"
                     icon={<i className="fa fa-user-circle"></i>}
                     events={{ onChange: (data) => onInputChange(data) }}
                     classes={{

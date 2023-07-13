@@ -8,6 +8,7 @@ const OnlineBook = (props) => {
     author: null,
     bookId: 0,
     bookName: null,
+    bookNameInEnglish: null,
     description: null,
     detailsURL: null,
     format: null,
@@ -32,6 +33,7 @@ const OnlineBook = (props) => {
     b.userId = currentShelf.userId;
     b.author = props.data.author;
     b.bookName = props.data.bookName;
+    b.bookNameInEnglish = props.data.bookNameInEnglish;
     b.detailsURL = props.data.detailsURL;
     b.publicastion = props.data.publicastion;
     navigate("/addBookToLibrary", { state: { book: b } });

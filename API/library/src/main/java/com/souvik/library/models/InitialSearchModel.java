@@ -6,6 +6,7 @@ import lombok.Data;
 public class InitialSearchModel extends RestStatus {
     private Integer bookId;
     private String bookName;
+    private String bookNameInEnglish;
     private Integer shelfId;
     private String author;
     private String image;

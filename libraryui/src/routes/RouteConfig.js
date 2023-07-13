@@ -5,6 +5,8 @@ import ShelfDetails from "../modules/book/ShelfDetails";
 import AddBook from "../modules/book/booksUnderShelf/AddBook";
 import AddBookToLibrary from "../modules/book/booksUnderShelf/AddBookToLibrary";
 import ChildShelf from "../modules/book/booksUnderShelf/ChildShelf";
+import BookList from "../modules/reports/BookList";
+import MainReport from "../modules/reports/MainReport";
 import Profile from "../modules/user/profile/Profile";
 
 const routes = [
@@ -35,6 +37,14 @@ const routes = [
   {
     path: RouterLinks.AddBookToLibrary,
     Component: AddBookToLibrary,
+  },
+  {
+    path: RouterLinks.Report,
+    Component: MainReport,
+  },
+  {
+    path: RouterLinks.BookList,
+    Component: BookList,
   },
 ];
 export default routes;

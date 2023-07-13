@@ -63,7 +63,7 @@ const Books = (props) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       if (!data.filterShelfByAuthorOrBook.failure) {
-        setParentShelfs(data.filterShelfByAuthorOrBook.bookShelfs);
+        setParentShelfs(data.filterShelfByAuthorOrBook.bookShelfList);
       }
       setLoad(false);
     },

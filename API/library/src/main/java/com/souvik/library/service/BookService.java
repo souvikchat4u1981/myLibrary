@@ -5,6 +5,9 @@ import com.souvik.library.models.InitialSearchModel;
 import com.souvik.library.models.RestStatus;
 import com.souvik.library.models.book.BookListModel;
 import com.souvik.library.models.book.BookModel;
+import com.souvik.library.models.book.BooksWithAuthorAndShelfListModel;
+import com.souvik.library.models.book.BooksWithAuthorAndShelfModel;
+import com.souvik.library.repositiries.CustomRepository;
 import com.souvik.library.repositiries.IBookRepository;
 import com.souvik.library.repositiries.IConfigurationsRepository;
 import com.souvik.library.utility.UtilityService;
@@ -38,6 +41,7 @@ public class BookService {
     private final IConfigurationsRepository configurationsRepository;
     private final IBookRepository bookRepository;
     private final UtilityService utilityService;
+    private final CustomRepository customRepository;
 
     @GraphQLQuery(name = "loadBookByShelf")
     public BookListModel loadBookByShelf(@GraphQLArgument(name = "shelfId") int shelfId) {
@@ -110,6 +114,7 @@ public class BookService {
                     boolean saved = utilityService.DownloadImage(fileName, book.getBook().getImage());
                     if (!saved) {
                         b.setImage("");
+                        status.setMessage("Image not saved...");
                     } else {
                         b.setImage(utilityService.removeSpecialCharacter(b.getBookName()) + b.getShelfId() + extension);
                     }
@@ -171,5 +176,40 @@ public class BookService {
 
 
         return values;
+    }
+
+    @GraphQLQuery(name = "getAllBooksWithAuthorAndShelf")
+    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelf(){
+        BooksWithAuthorAndShelfListModel model = new BooksWithAuthorAndShelfListModel();
+        try
+        {
+            List<Object[]> items = customRepository.getBookDetailsWithShelfAndAuthor();
+            List<BooksWithAuthorAndShelfModel> m = new ArrayList<>();
+            for (Object[] item: items) {
+                BooksWithAuthorAndShelfModel b = new BooksWithAuthorAndShelfModel();
+                b.setBookId(Integer.valueOf(item[0].toString()));
+                b.setBookName(String.valueOf(item[1]));
+                b.setBookImage(String.valueOf(item[2]));
+                b.setAuthor(String.valueOf(item[3]));
+                b.setPublication(String.valueOf(item[4]));
+                b.setFormat(String.valueOf(item[5]));
+                b.setDescription(String.valueOf(item[6]));
+                b.setLanguage(String.valueOf(item[7]));
+                b.setShelfId(Integer.valueOf(item[8].toString()));
+                b.setShelfName(String.valueOf(item[9]));
+                b.setShelfImage(String.valueOf(item[10]));
+                b.setParentShelfName(String.valueOf(item[11]));
+                b.setBookNameInEnglish(String.valueOf(item[12]));
+                m.add(b);
+            }
+            model.setBookList(m);
+            model.setMessage("SUCCESS");
+            model.setFailure(false);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            model.setMessage(ex.getMessage());
+            model.setFailure(true);
+        }
+        return model;
     }
 }

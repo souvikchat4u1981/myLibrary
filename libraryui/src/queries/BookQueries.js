@@ -98,6 +98,7 @@ export const GET_ONLINE_BOOKS = gql`
         author
         bookId
         bookName
+        bookNameInEnglish
         description
         detailsURL
         failure
@@ -123,6 +124,7 @@ export const GET_ONLINE_BOOK_DETAILS = gql`
       author
       bookId
       bookName
+      bookNameInEnglish
       description
       detailsURL
       failure
@@ -161,6 +163,7 @@ export const LOAD_BOOK_BY_SHELF = gql`
         author
         bookId
         bookName
+        bookNameInEnglish
         description
         format
         genere
@@ -221,12 +224,18 @@ export const FILTER_BOOK_SHELFS = gql`
       failure
       message
       userId
-      bookShelfs {
-        parentShelfId
-        shelfId
-        shelfImage
-        shelfName
+      bookShelfList {
+        bookCount
+        failure
+        message
         userId
+        bookShelfs {
+          parentShelfId
+          shelfId
+          shelfImage
+          shelfName
+          userId
+        }
       }
     }
   }
@@ -241,12 +250,18 @@ export const FILTER_CHILD_BOOK_SHELFS = gql`
       failure
       message
       userId
-      bookShelfs {
-        parentShelfId
-        shelfId
-        shelfImage
-        shelfName
+      bookShelfList {
+        bookCount
+        failure
+        message
         userId
+        bookShelfs {
+          parentShelfId
+          shelfId
+          shelfImage
+          shelfName
+          userId
+        }
       }
     }
   }
@@ -291,6 +306,7 @@ export const FILTER_BOOK_BY_SHELF = gql`
         author
         bookId
         bookName
+        bookNameInEnglish
         description
         format
         genere
@@ -310,5 +326,30 @@ export const FILTER_BOOK_BY_SHELF = gql`
 export const GET_AUTOCOMPLETE_VALUES = gql`
   query GetUniqueListByColumn($columnName: String) {
     getUniqueListByColumn(columnName: $columnName)
+  }
+`;
+
+export const GET_ALL_BOOKS = gql`
+  query GetAllBooksWithAuthorAndShelf {
+    getAllBooksWithAuthorAndShelf {
+      failure
+      message
+      userId
+      bookList {
+        author
+        bookId
+        bookName
+        bookNameInEnglish
+        description
+        format
+        language
+        parentShelfName
+        publication
+        shelfId
+        shelfName
+        bookImage
+        shelfImage
+      }
+    }
   }
 `;

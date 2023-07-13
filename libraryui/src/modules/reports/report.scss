@@ -1,0 +1,14 @@
+@import "../../styles/theme-variables.scss";
+.main-report-div {
+  @include themify($themes) {
+    border: 1px solid themed("golden");
+    // height: 15%;
+    border-radius: 8px;
+  }
+}
+
+.border-golden {
+  @include themify($themes) {
+    border-color: themed("golden");
+  }
+}

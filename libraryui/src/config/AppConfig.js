@@ -7,15 +7,23 @@ export const RouterLinks = {
   ChildShelf: "/childShelf",
   AddBook: "/addBook",
   AddBookToLibrary: "/addBookToLibrary",
+  Report: "/report",
+  BookList: "/bookList",
 };
 
 export const menuList = [
-  // {
-  //   menuName: "Dashboard",
-  //   routerLink: "/dashboard",
-  //   icon: "fa fa-home",
-  //   visible: true,
-  // },
+  {
+    menuName: "Home",
+    routerLink: "/",
+    icon: "fa fa-home",
+    visible: true,
+  },
+  {
+    menuName: "Report",
+    routerLink: "/report",
+    icon: "fa fa-file-lines",
+    visible: true,
+  },
   // {
   //   menuName: "Holdings",
   //   routerLink: "/holdings",

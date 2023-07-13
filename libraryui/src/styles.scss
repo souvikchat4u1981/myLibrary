@@ -211,6 +211,19 @@ select:focus,
   font-size: 14px;
 }
 
+.fixheader {
+  @include themify($themes) {
+    position: sticky;
+    top: 0;
+    background-color: themed("golden");
+  }
+}
+.tableContainer {
+  width: 100%;
+  height: 70vh;
+  overflow: auto;
+}
+
 .table {
   @include themify($themes) {
     --bs-table-bg: transparent !important;
@@ -218,7 +231,8 @@ select:focus,
     thead {
       font-family: "Arboria-Medium";
       font-size: 14px;
-      background: themed("gradient");
+      background: themed("golden");
+      color: #fff;
 
       tr {
         border-top-left-radius: 8px;
