@@ -19,8 +19,8 @@ export const menuList = [
     visible: true,
   },
   {
-    menuName: "Report",
-    routerLink: "/report",
+    menuName: "Book List",
+    routerLink: "/bookList",
     icon: "fa fa-file-lines",
     visible: true,
   },
