@@ -7,6 +7,7 @@ import AddBookToLibrary from "../modules/book/booksUnderShelf/AddBookToLibrary";
 import ChildShelf from "../modules/book/booksUnderShelf/ChildShelf";
 import BookList from "../modules/reports/BookList";
 import MainReport from "../modules/reports/MainReport";
+import AuthorList from "../modules/reports/author/AuthorList";
 import Profile from "../modules/user/profile/Profile";
 
 const routes = [
@@ -45,6 +46,10 @@ const routes = [
   {
     path: RouterLinks.BookList,
     Component: BookList,
+  },
+  {
+    path: RouterLinks.AuthorList,
+    Component: AuthorList,
   },
 ];
 export default routes;

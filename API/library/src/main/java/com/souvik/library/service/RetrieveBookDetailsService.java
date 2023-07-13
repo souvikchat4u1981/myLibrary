@@ -1,7 +1,9 @@
 package com.souvik.library.service;
 
+import com.souvik.library.models.BookShelfListWithCount;
 import com.souvik.library.models.InitialSearchListModel;
 import com.souvik.library.models.InitialSearchModel;
+import com.souvik.library.models.book.AuthorWithBookCountListModel;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
@@ -18,6 +20,7 @@ import java.util.List;
 @Service
 @GraphQLApi
 public class RetrieveBookDetailsService {
+
     @GraphQLQuery(name = "retrieveBooks")
     public InitialSearchListModel retrieveBooks(@GraphQLArgument(name = "queryString") String queryString) throws ParseException {
         String _url = "https://readbengalibooks.com/catalogsearch/result/?q=" + queryString;
@@ -95,7 +98,7 @@ public class RetrieveBookDetailsService {
             }
 
             model.setBookNameInEnglish(doc.select(".base").first().html());
-            model.setPrice(Double.parseDouble(doc.select(".price").first().html().replace("₹","").toString()));
+            model.setPrice(Double.parseDouble(doc.select(".price").first().html().replace("₹","").replace(",","").toString()));
             //Get Description
             Element desc = doc.select(".product.attribute.description").first();
             if (desc != null) {
@@ -147,6 +150,7 @@ public class RetrieveBookDetailsService {
 
         return model;
     }
+
 
 
 }

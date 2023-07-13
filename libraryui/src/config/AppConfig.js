@@ -9,6 +9,7 @@ export const RouterLinks = {
   AddBookToLibrary: "/addBookToLibrary",
   Report: "/report",
   BookList: "/bookList",
+  AuthorList: "/authorList",
 };
 
 export const menuList = [
@@ -22,6 +23,12 @@ export const menuList = [
     menuName: "Book List",
     routerLink: "/bookList",
     icon: "fa fa-file-lines",
+    visible: true,
+  },
+  {
+    menuName: "Author List",
+    routerLink: "/authorList",
+    icon: "fa-solid fa-user-pen",
     visible: true,
   },
   // {

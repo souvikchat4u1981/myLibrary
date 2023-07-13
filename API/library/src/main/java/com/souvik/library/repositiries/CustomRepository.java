@@ -18,4 +18,10 @@ public class CustomRepository {
         List<Object[]> result = q.getResultList();
         return result;
     }
+
+    public List<Object[]> getAuthors(){
+        Query q = (Query) entityManager.createNativeQuery("select b.author, count(b.book_name) from books b  group by b.author order by b.author");
+        List<Object[]> result = q.getResultList();
+        return result;
+    }
 }

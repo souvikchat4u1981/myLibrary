@@ -1,14 +1,13 @@
 package com.souvik.library.service;
 
 import com.souvik.library.entities.Book;
+import com.souvik.library.entities.BookShelfs;
 import com.souvik.library.models.InitialSearchModel;
 import com.souvik.library.models.RestStatus;
-import com.souvik.library.models.book.BookListModel;
-import com.souvik.library.models.book.BookModel;
-import com.souvik.library.models.book.BooksWithAuthorAndShelfListModel;
-import com.souvik.library.models.book.BooksWithAuthorAndShelfModel;
+import com.souvik.library.models.book.*;
 import com.souvik.library.repositiries.CustomRepository;
 import com.souvik.library.repositiries.IBookRepository;
+import com.souvik.library.repositiries.IBookShelfs;
 import com.souvik.library.repositiries.IConfigurationsRepository;
 import com.souvik.library.utility.UtilityService;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -42,6 +41,7 @@ public class BookService {
     private final IBookRepository bookRepository;
     private final UtilityService utilityService;
     private final CustomRepository customRepository;
+    private final IBookShelfs bookShelfs;
 
     @GraphQLQuery(name = "loadBookByShelf")
     public BookListModel loadBookByShelf(@GraphQLArgument(name = "shelfId") int shelfId) {
@@ -212,4 +212,39 @@ public class BookService {
         }
         return model;
     }
+
+    @GraphQLQuery(name="getAllAuthor")
+    public AuthorWithBookCountListModel getAllAuthor(){
+        AuthorWithBookCountListModel model = new AuthorWithBookCountListModel();
+        try {
+            List<Object[]> authorsObject = customRepository.getAuthors();
+            List<AuthorWithBookCountModel> a = new ArrayList<>();
+            List<BookShelfs> shelfs = bookShelfs.findAll();
+            for (Object[] item : authorsObject) {
+                AuthorWithBookCountModel m = new AuthorWithBookCountModel();
+                m.setAuthorName(String.valueOf(item[0]));
+                m.setBookCount(Integer.valueOf(item[1].toString()));
+                String authImage = "";
+                try {
+                    String authName = String.valueOf(item[0]);
+                    List<BookShelfs> s = shelfs.stream().filter(m1 -> m1.getShelfName().equalsIgnoreCase(authName)).collect(Collectors.toList());
+                    List<BookShelfs> bsithPic = s.stream().filter(m2 -> m2.getShelfImage() != "").collect(Collectors.toList());
+                    authImage = bsithPic.get(0).getShelfImage();
+                } catch (Exception e) {
+
+                }
+                m.setAuthorImage(authImage);
+                a.add(m);
+            }
+            model.setAuthorWithBookCountModels(a);
+            model.setFailure(false);
+            model.setMessage("SUCCESS");
+        }catch(Exception ex){
+            model.setFailure(true);
+            model.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return model;
+    }
+
 }

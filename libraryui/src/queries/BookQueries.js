@@ -353,3 +353,17 @@ export const GET_ALL_BOOKS = gql`
     }
   }
 `;
+
+export const GET_ALL_AUTHORS = gql`
+  query GetAllAuthor {
+    getAllAuthor {
+      authorWithBookCountModels {
+        authorImage
+        authorName
+        bookCount
+      }
+      failure
+      message
+    }
+  }
+`;

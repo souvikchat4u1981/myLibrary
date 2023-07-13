@@ -37,7 +37,10 @@ const BookList = (props) => {
           m.bookName.toLowerCase().includes(e.target.value.toLowerCase()) ||
           m.bookNameInEnglish
             .toLowerCase()
-            .includes(e.target.value.toLowerCase())
+            .includes(e.target.value.toLowerCase()) ||
+          m.author.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          m.shelfName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          m.parentShelfName.toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return m;
         }
@@ -58,7 +61,7 @@ const BookList = (props) => {
               <input
                 type="text"
                 class="form-control col-sm-2"
-                placeholder="Search By Author or Book"
+                placeholder="Search By Author or Book or Shelf"
                 value={searchParam}
                 onChange={onFilterChange}
               />
@@ -80,6 +83,9 @@ const BookList = (props) => {
               </Button>
             </div>
           </div>
+        </div>
+        <div className="ps-3 row mt-2 ">
+          Total Books : {books ? books.length : 0}
         </div>
         {showPage === "mainPage" && (
           <div className="p-3 row ">
