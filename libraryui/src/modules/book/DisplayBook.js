@@ -22,7 +22,7 @@ const DisplayBook = (props) => {
     } else {
       setWidth("12.5%");
     }
-  }, [props.count]);
+  }, [props.data]);
 
   const [imageName, setImageName] = useState("book.png");
 

@@ -120,6 +120,7 @@ const ShelfDetails = (props) => {
     // sessionStorage.removeItem("childreloadCount");
     getChildShelfs();
     setTimeout(() => {
+      setBooks(null);
       getBooks();
     }, 100);
 
@@ -236,17 +237,19 @@ const ShelfDetails = (props) => {
         <div className="col-sm-12 text-center fs-2">
           {JSON.parse(sessionStorage.getItem("currentShelf")).shelfName}
         </div>
-        {childShelfs &&
-          childShelfs.map((m) => {
-            return (
-              <ParentShelf
-                key={m.shelfId}
-                data={m}
-                count={childShelfs.length}
-                fromChildPage={true}
-              />
-            );
-          })}
+        <div className="border-bottom golden-border-color row mb-2">
+          {childShelfs &&
+            childShelfs.map((m) => {
+              return (
+                <ParentShelf
+                  key={m.shelfId}
+                  data={m}
+                  count={childShelfs.length}
+                  fromChildPage={true}
+                />
+              );
+            })}
+        </div>
         <div className="row mt-2">
           {books &&
             books.map((m) => {
