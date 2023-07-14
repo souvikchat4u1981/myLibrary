@@ -203,6 +203,25 @@ const ShelfDetails = (props) => {
             title="back to home"
           ></i>
           <i
+            className="fa fa-plus-circle fa-2x hand text-success ms-2"
+            onClick={() =>
+              navigate("/addShelf", {
+                state: {
+                  shelf: {
+                    parentShelfId: JSON.parse(
+                      sessionStorage.getItem("currentShelf")
+                    ).shelfId,
+                    shelfId: 0,
+                    shelfImage: "",
+                    shelfName: "",
+                    userId: null,
+                  },
+                },
+              })
+            }
+            title="Add Child Shelf"
+          ></i>
+          <i
             className="fa fa-plus-circle fa-2x hand golden-text ms-2"
             onClick={() =>
               navigate("/addBook", {

@@ -19,6 +19,7 @@ const AddShelf = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [parentShelfs, setParentShelfs] = useState(null);
+  const [buttonText, setButtontext] = useState("Save");
   const initShelf = {
     parentShelfId: "0",
     shelfId: 0,
@@ -36,12 +37,13 @@ const AddShelf = (props) => {
         payload: d,
       });
       setShelf(d);
+      setButtontext("Save");
     } else {
       let shelf = initShelf;
       let existingData = location.state.shelf;
       shelf.shelfId = existingData.shelfId;
       shelf.shelfName = existingData.shelfName;
-      shelf.shelfImage = existingData.shelfName ? existingData.shelfImage : "";
+      shelf.shelfImage = existingData.shelfImage ? existingData.shelfImage : "";
       shelf.parentShelfId = existingData.parentShelfId
         ? existingData.parentShelfId
         : 0;
@@ -52,6 +54,12 @@ const AddShelf = (props) => {
         payload: d,
       });
       setShelf(d);
+
+      if (shelf.shelfName !== "") {
+        setButtontext("Update");
+      } else {
+        setButtontext("Save");
+      }
     }
   }, []);
 
@@ -215,7 +223,7 @@ const AddShelf = (props) => {
             </div>
             <div className="row mt-2 p-2">
               <Button type="submit" onClick={onSaveClick}>
-                {location.state ? "Update" : "Save"}
+                {buttonText}
               </Button>
             </div>
           </form>
