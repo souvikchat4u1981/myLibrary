@@ -20,7 +20,7 @@ const DisplayBook = (props) => {
     if (window.screen.width < 600) {
       setWidth("50%");
     } else {
-      setWidth("20%");
+      setWidth("12.5%");
     }
   }, [props.count]);
 
@@ -135,7 +135,7 @@ const DisplayBook = (props) => {
               <img
                 src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
                 alt="library"
-                width={"50%"}
+                width={"100%"}
                 className="img-fluid rounded"
                 key={Math.random()}
 

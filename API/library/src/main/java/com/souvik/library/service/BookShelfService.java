@@ -93,6 +93,12 @@ public class BookShelfService {
                 m.setBookCount(count);
                 sm.add(m);
             }
+            Collections.sort(sm, new Comparator<BookShelfModel>() {
+                @Override
+                public int compare(final BookShelfModel object1, final BookShelfModel object2) {
+                    return object1.getBookShelfs().getShelfName().compareTo(object2.getBookShelfs().getShelfName());
+                }
+            });
             model.setBookShelfList(sm);
             model.setFailure(false);
             model.setMessage("SUCCESS");

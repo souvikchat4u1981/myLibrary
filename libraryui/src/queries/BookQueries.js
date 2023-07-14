@@ -367,3 +367,28 @@ export const GET_ALL_AUTHORS = gql`
     }
   }
 `;
+
+export const GET_ALL_BOOKS_BY_AUTHOR = gql`
+  query GetAllBooksWithAuthorAndShelfByAuthor($author: String) {
+    getAllBooksWithAuthorAndShelfByAuthor(author: $author) {
+      failure
+      message
+      userId
+      bookList {
+        author
+        bookId
+        bookName
+        bookNameInEnglish
+        description
+        format
+        language
+        parentShelfName
+        publication
+        shelfId
+        shelfName
+        bookImage
+        shelfImage
+      }
+    }
+  }
+`;

@@ -300,6 +300,12 @@ select:focus,
   }
 }
 
+.golden-border-color {
+  @include themify($themes) {
+    border-color: themed("golden") !important;
+  }
+}
+
 .form-border {
   @include themify($themes) {
     border: 1px solid themed("golden");

@@ -84,8 +84,13 @@ const BookList = (props) => {
             </div>
           </div>
         </div>
-        <div className="ps-3 row mt-2 ">
-          Total Books : {books ? books.length : 0}
+        <div className="p-2 pt-3 d-flex">
+          <div
+            className="badge rounded-pill bg-primary ms-2"
+            style={{ fontSize: "15px", fontWeight: "normal" }}
+          >
+            Total Books : {books ? books.length : 0}
+          </div>
         </div>
         {showPage === "mainPage" && (
           <div className="p-3 row ">

@@ -1,15 +1,25 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_AUTHORS, GET_ALL_BOOKS } from "../../../queries/BookQueries";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import {
+  GET_ALL_AUTHORS,
+  GET_ALL_BOOKS,
+  GET_ALL_BOOKS_BY_AUTHOR,
+} from "../../../queries/BookQueries";
 import CustomLoader from "../../../lib/customLoader/CustomLoader";
 import Button from "../../../lib/button/Button";
+import MainList from "./MainList";
+import BooksByAuthor from "./BooksByAuthor";
 
 const AuthorList = (props) => {
   const [baseAuthor, setBaseAuthor] = useState(null);
   const [author, setAuthor] = useState(null);
   const [books, setBooks] = useState(null);
   const [baseBooks, setBaseBooks] = useState(null);
+  const [searchParam, setSearchparam] = useState("");
+  const [bookSearchParam, setBookSearchparam] = useState("");
+  const [visibleArea, setVisibleArea] = useState("main");
+  const [selectedAuthor, setSelectedAuthor] = useState("");
 
   const { loading, refetch } = useQuery(GET_ALL_AUTHORS, {
     notifyOnNetworkStatusChange: true,
@@ -40,57 +50,85 @@ const AuthorList = (props) => {
       console.log(data);
     },
   });
+  const onFilterChange = (e) => {
+    let filterAuthor = [...baseAuthor];
+    setSearchparam(e.target.value);
+    if (e.target.value === "") {
+      setAuthor([...baseAuthor]);
+    } else {
+      filterAuthor = filterAuthor.filter((m) => {
+        if (m.authorName.toLowerCase().includes(e.target.value.toLowerCase())) {
+          return m;
+        }
+      });
+      setAuthor(filterAuthor);
+    }
+  };
+
+  const [getBookByAuthor, { loading: loading2 }] = useLazyQuery(
+    GET_ALL_BOOKS_BY_AUTHOR,
+    {
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        if (!data.getAllBooksWithAuthorAndShelfByAuthor.failure) {
+          setBooks(data.getAllBooksWithAuthorAndShelfByAuthor.bookList);
+          setBaseBooks(data.getAllBooksWithAuthorAndShelfByAuthor.bookList);
+          setVisibleArea("books");
+        }
+      },
+
+      onError: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
+  const onClickAuthor = (author) => {
+    setSelectedAuthor(author.authorName);
+    getBookByAuthor({ variables: { author: author.authorName } });
+  };
+
+  const onBookFilterChange = (e) => {
+    let filterBooks = [...baseBooks];
+    setBookSearchparam(e.target.value);
+    if (e.target.value === "") {
+      setBooks([...baseBooks]);
+    } else {
+      filterBooks = filterBooks.filter((m) => {
+        if (
+          m.bookName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          m.bookNameInEnglish
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase())
+        ) {
+          return m;
+        }
+      });
+      setBooks(filterBooks);
+    }
+  };
+
   return (
     <Fragment>
-      {(loading || loading1) && <CustomLoader />}
-      <div className="p-2 pt-3 row col-sm-12">
-        <div className="d-flex justify-content-start">
-          <div class="input-group" style={{ width: "30%" }}>
-            <input
-              type="text"
-              class="form-control col-sm-2"
-              placeholder="Search By Author"
-              // value={searchParam}
-              // onChange={onFilterChange}
-            />
-            <span class="input-group-text" id="basic-addon2">
-              <i className="fa fa-search"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="p-2 pt-3 row d-flex">
-        {author &&
-          author.map((m, index) => {
-            return (
-              <div key={index} className="hand mb-4" style={{ width: "10%" }}>
-                <div className="col-sm-12 shelf text-center p-2 shadow">
-                  <img
-                    src={`${process.env.PUBLIC_URL}/assets/authorImage/${
-                      m.authorImage !== "" ? m.authorImage : "author.png"
-                    }`}
-                    alt="library"
-                    width={"100%"}
-                    className="me-2"
-                    // onClick={onShelfClickHandle}
-                  />
-                  <div
-                    className="mt-2"
-                    //   onClick={onShelfClickHandle}
-                  >
-                    <b>{m.authorName}</b>
-                  </div>
-                  <div
-                    className="mt-2"
-                    //   onClick={onShelfClickHandle}
-                  >
-                    Books : {m.bookCount}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
+      {(loading || loading1 || loading2) && <CustomLoader />}
+      {visibleArea === "main" && (
+        <MainList
+          searchParam={searchParam}
+          onFilterChange={onFilterChange}
+          onClickAuthor={onClickAuthor}
+          author={author}
+        />
+      )}
+      {visibleArea === "books" && (
+        <BooksByAuthor
+          books={books}
+          author={selectedAuthor}
+          setVisibleArea={setVisibleArea}
+          bookSearchParam={bookSearchParam}
+          onBookFilterChange={onBookFilterChange}
+        />
+      )}
     </Fragment>
   );
 };

@@ -11,7 +11,7 @@ const ParentShelf = (props) => {
     } else {
       setWidth("10%");
     }
-  }, [props.count]);
+  }, [props.data]);
 
   const [imageName, setImageName] = useState("shelf1.png");
 
@@ -36,7 +36,7 @@ const ParentShelf = (props) => {
     } else {
       setImageName(props.data.bookShelfs.shelfImage);
     }
-  }, []);
+  }, [props.data]);
 
   const navigate = useNavigate();
   const onShelfClickHandle = () => {

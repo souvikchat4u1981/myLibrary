@@ -10,6 +10,7 @@ export const RouterLinks = {
   Report: "/report",
   BookList: "/bookList",
   AuthorList: "/authorList",
+  BorrowBook: "/borrow",
 };
 
 export const menuList = [

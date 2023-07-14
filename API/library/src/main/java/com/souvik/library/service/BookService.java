@@ -213,6 +213,41 @@ public class BookService {
         return model;
     }
 
+    @GraphQLQuery(name = "getAllBooksWithAuthorAndShelfByAuthor")
+    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelfByAuthor(@GraphQLArgument(name = "author")String author){
+        BooksWithAuthorAndShelfListModel model = new BooksWithAuthorAndShelfListModel();
+        try
+        {
+            List<Object[]> items = customRepository.getBookDetailsWithShelfAndAuthorByAuthor(author);
+            List<BooksWithAuthorAndShelfModel> m = new ArrayList<>();
+            for (Object[] item: items) {
+                BooksWithAuthorAndShelfModel b = new BooksWithAuthorAndShelfModel();
+                b.setBookId(Integer.valueOf(item[0].toString()));
+                b.setBookName(String.valueOf(item[1]));
+                b.setBookImage(String.valueOf(item[2]));
+                b.setAuthor(String.valueOf(item[3]));
+                b.setPublication(String.valueOf(item[4]));
+                b.setFormat(String.valueOf(item[5]));
+                b.setDescription(String.valueOf(item[6]));
+                b.setLanguage(String.valueOf(item[7]));
+                b.setShelfId(Integer.valueOf(item[8].toString()));
+                b.setShelfName(String.valueOf(item[9]));
+                b.setShelfImage(String.valueOf(item[10]));
+                b.setParentShelfName(String.valueOf(item[11]));
+                b.setBookNameInEnglish(String.valueOf(item[12]));
+                m.add(b);
+            }
+            model.setBookList(m);
+            model.setMessage("SUCCESS");
+            model.setFailure(false);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            model.setMessage(ex.getMessage());
+            model.setFailure(true);
+        }
+        return model;
+    }
+
     @GraphQLQuery(name="getAllAuthor")
     public AuthorWithBookCountListModel getAllAuthor(){
         AuthorWithBookCountListModel model = new AuthorWithBookCountListModel();
