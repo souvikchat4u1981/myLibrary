@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   GET_ALL_PARENT_BOOKSHELFS,
+  GET_FIRST_BOOK_BY_SHELF,
   SAVE_BOOK,
 } from "../../queries/BookQueries";
 import Select from "../../lib/Select";
@@ -130,6 +131,20 @@ const DisplayBook = (props) => {
           <div
             className="d-flex justify-content-center"
             style={{ width: "100%" }}
+            onClick={() =>
+              navigate("/borrow", {
+                state: {
+                  book: {
+                    bookId: props.data.bookId,
+                    bookName: props.data.bookName,
+                    authorName: props.data.author,
+                    bookImage: props.data.image,
+                    description: props.data.description,
+                    shelfName: props.shelfName,
+                  },
+                },
+              })
+            }
           >
             {showImage && (
               <img
@@ -161,6 +176,7 @@ const DisplayBook = (props) => {
                     props.shelfs &&
                     props.shelfs.map((m) => {
                       return {
+                        key: m.shelfId,
                         displayText:
                           m.shelfName !== ""
                             ? m.parentShelfName + "->" + m.shelfName

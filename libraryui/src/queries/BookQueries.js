@@ -392,3 +392,30 @@ export const GET_ALL_BOOKS_BY_AUTHOR = gql`
     }
   }
 `;
+
+export const GET_FIRST_BOOK_BY_SHELF = gql`
+  query GetFirstBookInShelf($shelfId: Int!) {
+    getFirstBookInShelf(shelfId: $shelfId) {
+      failure
+      message
+      userId
+      book {
+        author
+        bookId
+        bookName
+        bookNameInEnglish
+        description
+        format
+        genere
+        image
+        isbn
+        language
+        price
+        publicastion
+        publishigYear
+        purchaseDate
+        shelfId
+      }
+    }
+  }
+`;

@@ -27,3 +27,13 @@
     border-radius: 8px;
   }
 }
+
+.relative-image {
+  position: relative;
+  top: -140px;
+  left: 40px;
+  width: 50%;
+  height: 50%;
+  opacity: 0.8;
+  transform: skew(30deg) rotate(-30deg);
+}

@@ -239,10 +239,10 @@ const ShelfDetails = (props) => {
         </div>
         <div className="border-bottom golden-border-color row mb-2">
           {childShelfs &&
-            childShelfs.map((m) => {
+            childShelfs.map((m, index) => {
               return (
                 <ParentShelf
-                  key={m.shelfId}
+                  key={m.bookShelfs.shelfName}
                   data={m}
                   count={childShelfs.length}
                   fromChildPage={true}
@@ -259,6 +259,9 @@ const ShelfDetails = (props) => {
                   data={m}
                   shelfs={allShelfs}
                   refetch={refetch}
+                  shelfName={
+                    JSON.parse(sessionStorage.getItem("currentShelf")).shelfName
+                  }
                 />
               );
             })}

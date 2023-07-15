@@ -42,6 +42,7 @@ const DisplayBooks = (props) => {
                 data={m}
                 shelfs={allShelfs}
                 refetch={props.refetch}
+                shelfName={props.shelfName}
               />
             );
           })}

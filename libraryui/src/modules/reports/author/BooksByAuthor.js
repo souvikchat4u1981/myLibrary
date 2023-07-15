@@ -73,6 +73,7 @@ const BooksByAuthor = (props) => {
                               bookName: m.bookName,
                               authorName: m.author,
                               bookImage: m.bookImage,
+                              description: m.description,
                               shelfName:
                                 m.parentShelfName + " -> " + m.shelfName,
                             },

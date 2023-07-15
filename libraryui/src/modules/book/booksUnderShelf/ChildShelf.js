@@ -175,7 +175,18 @@ const ChildShelf = (props) => {
           {JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName}
         </div>
         <div className="col-sm-12 mt-2 p-2">
-          {books.length > 0 && <DisplayBooks books={books} refetch={refetch} />}
+          {books.length > 0 && (
+            <DisplayBooks
+              books={books}
+              refetch={refetch}
+              shelfName={
+                parentShelf +
+                " -> " +
+                JSON.parse(sessionStorage.getItem("currentChildShelf"))
+                  .shelfName
+              }
+            />
+          )}
         </div>
       </div>
     </Fragment>

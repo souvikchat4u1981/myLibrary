@@ -45,6 +45,14 @@ const Borrow = (props) => {
                 <div className="col-sm-12 mt-2 text-center">
                   {book.shelfName}
                 </div>
+                {book.description && (
+                  <div
+                    className="col-sm-12 mt-2 text-center"
+                    style={{ maxHeight: "100px", overflow: "auto" }}
+                  >
+                    <p>{book.description}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

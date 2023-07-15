@@ -282,4 +282,20 @@ public class BookService {
         return model;
     }
 
+    @GraphQLQuery(name = "getFirstBookInShelf")
+    public BookModel getFirstBookInShelf(@GraphQLArgument(name = "shelfId") int shelfId){
+        BookModel book = new BookModel();
+        try{
+            List<Book> bookList = bookRepository.findByShelfIdOrderByBookName(shelfId);
+            book.setBook(bookList.get(0));
+            book.setFailure(false);
+            book.setMessage("SUCCESS");
+        }catch(Exception ex){
+            book.setFailure(true);
+            book.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return book;
+    }
+
 }
