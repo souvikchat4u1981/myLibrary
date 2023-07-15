@@ -1,4 +1,4 @@
-@import '../../styles/theme-variables.scss';
+@import "../../styles/theme-variables.scss";
 
 .group-box {
   @include themify($themes) {
@@ -10,13 +10,18 @@
 
 .text-addon {
   @include themify($themes) {
-    background-color: themed('backGroundColor');
+    background-color: themed("backGroundColor");
     border-right: none;
     border-radius: 0.5rem !important;
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
     height: 31px;
-    border-color: themed('golden');
-    color: themed('colorText') !important;
+    border-color: themed("golden");
+    color: themed("colorText") !important;
   }
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  display: block !important;
 }

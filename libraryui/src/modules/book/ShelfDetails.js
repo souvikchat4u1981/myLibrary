@@ -252,13 +252,14 @@ const ShelfDetails = (props) => {
         </div>
         <div className="row mt-2">
           {books &&
-            books.map((m) => {
+            books.map((m, index) => {
               return (
                 <DisplayBook
                   key={m.bookId}
                   data={m}
                   shelfs={allShelfs}
                   refetch={refetch}
+                  index={index + 1}
                   shelfName={
                     JSON.parse(sessionStorage.getItem("currentShelf")).shelfName
                   }

@@ -20,24 +20,35 @@ const ParentShelf = (props) => {
   useEffect(() => {
     if (props.data.bookShelfs.shelfImage === null) {
       let min = 1;
-      let max = 6;
+      let max = 10;
       const rand = min + Math.random() * (max - min);
-      let r = Math.round(rand);
+      // let r = Math.round(rand);
+      // if (sessionStorage.getItem("prevRand")) {
+      //   if (r === +sessionStorage.getItem("prevRand")) {
+      //     r = r + 1;
+      //     if (r > max) {
+      //       r = 1;
+      //     }
+      //   }
+      // }
+      let r = 1;
       if (sessionStorage.getItem("prevRand")) {
-        if (r === +sessionStorage.getItem("prevRand")) {
-          r = r + 1;
-          if (r > max) {
-            r = 1;
-          }
+        r = +sessionStorage.getItem("prevRand") + 1;
+
+        if (r > 10) {
+          r = 1;
         }
+        sessionStorage.setItem("prevRand", r);
+      } else {
+        sessionStorage.setItem("prevRand", r);
       }
-      sessionStorage.setItem("prevRand", r);
 
       // console.log(r);
       setImageName("shelf" + r + ".png");
     } else {
       setImageName(props.data.bookShelfs.shelfImage);
-      generateThumbNail(props.data.bookShelfs.shelfImage);
+      if (sessionStorage.getItem("currentShelf") !== null)
+        generateThumbNail(props.data.bookShelfs.shelfImage);
     }
   }, [props.data]);
 
@@ -64,9 +75,9 @@ const ParentShelf = (props) => {
 
   const [getBookImage] = useLazyQuery(GET_FIRST_BOOK_BY_SHELF, {
     notifyOnNetworkStatusChange: true,
-    variables: {
-      shelfId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
-    },
+    // variables: {
+    //   shelfId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
+    // },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       // setBooks(null);
@@ -85,7 +96,13 @@ const ParentShelf = (props) => {
 
   const generateThumbNail = (imageName) => {
     if (imageName === "") {
-      getBookImage({ variables: { shelfId: props.data.bookShelfs.shelfId } });
+      getBookImage({
+        variables: {
+          shelfId: props.data.bookShelfs.shelfId
+            ? props.data.bookShelfs.shelfId
+            : 0,
+        },
+      });
     }
   };
 

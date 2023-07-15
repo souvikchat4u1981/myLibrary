@@ -35,7 +35,7 @@ const DisplayBooks = (props) => {
       >
         {!props.books && <div>No Book Present {JSON.parse(props.books)} </div>}
         {props.books &&
-          props.books.map((m) => {
+          props.books.map((m, index) => {
             return (
               <DisplayBook
                 key={m.bookId}
@@ -43,6 +43,7 @@ const DisplayBooks = (props) => {
                 shelfs={allShelfs}
                 refetch={props.refetch}
                 shelfName={props.shelfName}
+                index={index + 1}
               />
             );
           })}

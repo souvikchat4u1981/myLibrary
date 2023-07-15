@@ -14,6 +14,7 @@ import {
   SuccessMessage,
 } from "../../lib/toastMessage/Toastmessage";
 import CustomLoader from "../../lib/customLoader/CustomLoader";
+import { SideBySideMagnifier } from "react-image-magnifiers";
 
 const DisplayBook = (props) => {
   const [width, setWidth] = useState("100%");
@@ -147,15 +148,32 @@ const DisplayBook = (props) => {
             }
           >
             {showImage && (
-              <img
-                src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
-                alt="library"
-                width={"100%"}
-                className="img-fluid rounded"
-                key={Math.random()}
-
-                //   onClick={onShelfClickHandle}
+              <SideBySideMagnifier
+                imageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
+                imageAlt="library"
+                largeImageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`} // Optional
+                // magnifierSize={"50%"}
+                alwaysInPlace={false}
+                fillAvailableSpace={true}
+                switchSides={
+                  props.index % 8 === 0 ||
+                  props.index % 8 === 6 ||
+                  props.index % 8 === 7
+                    ? true
+                    : false
+                }
+                magnifierBorderColor="rgba(255, 255, 255, .5)"
+                zoomContainerBorder="1px solid #ccc"
+                zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
               />
+              // <img
+              //   src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
+              //   alt="library"
+              //   width={"100%"}
+              //   className="img-fluid rounded"
+              //   key={Math.random()}
+
+              // />
             )}
             {!showImage && (
               <Fragment>

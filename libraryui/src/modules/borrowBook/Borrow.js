@@ -1,20 +1,63 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useReducer, useState } from "react";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
+import Input from "../../lib/input/Input";
+import formReducer from "../../lib/formReducer/FormReducer";
+import Button from "../../lib/button/Button";
 
 const Borrow = (props) => {
   const location = useLocation();
   const [book, setBook] = useState(null);
+  const initBorrow = {
+    borrowId: "0",
+    borrowBy: "",
+    bookId: 0,
+    borrowDate: null,
+    returnDate: null,
+    isReturn: false,
+  };
+  const [borrow, setBorrow] = useState(initBorrow);
   const navigate = useNavigate();
   useEffect(() => {
     if (location.state) {
       if (typeof location.state.book !== "undefined") {
         if (location.state.book) {
           setBook(location.state.book);
+          let b = location.state.book;
+          let borrow = initBorrow;
+          borrow.bookId = b.bookId;
+
+          newBorrowfDispatch({
+            type: "SET INITIAL VALUE",
+
+            payload: borrow,
+          });
+          setBorrow(borrow);
         }
       }
+    } else {
+      let d = initBorrow;
+      newBorrowfDispatch({
+        type: "SET INITIAL VALUE",
+
+        payload: d,
+      });
     }
   }, []);
+
+  let [newBorrow, newBorrowfDispatch] = useReducer(formReducer, initBorrow);
+  const onInputChange = (data) => {
+    let d = borrow;
+    d[data.id] = data.value;
+
+    newBorrowfDispatch({
+      type: "HANDLE INPUT TEXT",
+      field: data.id,
+
+      payload: data.value,
+    });
+  };
+
   return (
     <Fragment>
       <div className="container-fluid">
@@ -53,6 +96,60 @@ const Borrow = (props) => {
                     <p>{book.description}</p>
                   </div>
                 )}
+              </div>
+              <div className="row mt-2 mb-2">
+                <form>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <Input
+                        id="borrowBy"
+                        label="Lend To"
+                        type=""
+                        value={newBorrow.borrowBy}
+                        events={{ onChange: (data) => onInputChange(data) }}
+                        classes={{
+                          errorClass: "error-label",
+                          fieldClass: "form-control form-control-sm",
+                        }}
+                      ></Input>
+                    </div>
+                    <div className="col-sm-6 customDatePickerWidth">
+                      <Input
+                        id="borrowDate"
+                        label="Lend Date"
+                        type="date"
+                        inputType="text"
+                        value={newBorrow.borrowDate}
+                        showIcon={true}
+                        events={{ onChange: (data) => onInputChange(data) }}
+                        classes={{
+                          errorClass: "error-label",
+                          fieldClass: "form-control form-control-sm",
+                        }}
+                      ></Input>
+                    </div>
+                    <div className="col-sm-6 customDatePickerWidth mt-2">
+                      <Input
+                        id="returnDate"
+                        label="Return Date"
+                        type="date"
+                        inputType="text"
+                        value={newBorrow.returnDate}
+                        showIcon={true}
+                        events={{ onChange: (data) => onInputChange(data) }}
+                        classes={{
+                          errorClass: "error-label",
+                          fieldClass: "form-control form-control-sm",
+                        }}
+                      ></Input>
+                    </div>
+                    <div className="col-sm-6 customDatePickerWidth mt-2">
+                      <div className="row col-sm-12 ps-4 mt-4">
+                        <Button>Save</Button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

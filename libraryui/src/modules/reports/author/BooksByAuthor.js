@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { SideBySideMagnifier } from "react-image-magnifiers";
 
 const BooksByAuthor = (props) => {
   const [width, setWidth] = useState("100%");
@@ -13,6 +14,19 @@ const BooksByAuthor = (props) => {
   }, [props.count]);
 
   const navigate = useNavigate();
+
+  const switchSide = (index) => {
+    let switchSide = false;
+    if (index > 0) {
+      let mod = index % 8;
+      if (mod === 0 || mod === 7 || mod === 6) {
+        switchSide = true;
+      }
+    }
+
+    console.log(index, switchSide);
+    return switchSide;
+  };
 
   return (
     <Fragment>
@@ -59,7 +73,7 @@ const BooksByAuthor = (props) => {
               }}
             >
               {props.books &&
-                props.books.map((m) => {
+                props.books.map((m, index) => {
                   return (
                     <div
                       className="hand mb-4"
@@ -86,7 +100,28 @@ const BooksByAuthor = (props) => {
                           className="d-flex justify-content-center"
                           style={{ width: "100%" }}
                         >
-                          <img
+                          <SideBySideMagnifier
+                            imageSrc={`${
+                              process.env.PUBLIC_URL
+                            }/assets/bookImages/${
+                              m.bookImage !== "" ? m.bookImage : "book.png"
+                            }`}
+                            imageAlt="library"
+                            largeImageSrc={`${
+                              process.env.PUBLIC_URL
+                            }/assets/bookImages/${
+                              m.bookImage !== "" ? m.bookImage : "book.png"
+                            }`} // Optional
+                            // magnifierSize={"50%"}
+                            alwaysInPlace={false}
+                            fillAvailableSpace={true}
+                            switchSides={switchSide(index + 1)}
+                            magnifierBorderColor="rgba(255, 255, 255, .5)"
+                            zoomContainerBorder="1px solid #ccc"
+                            zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
+                          />
+
+                          {/* <img
                             src={`${process.env.PUBLIC_URL}/assets/bookImages/${
                               m.bookImage !== "" ? m.bookImage : "book.png"
                             }`}
@@ -96,7 +131,7 @@ const BooksByAuthor = (props) => {
                             key={Math.random()}
 
                             //   onClick={onShelfClickHandle}
-                          />
+                          /> */}
                         </div>
                         <div className="mt-2">
                           <b>{m.bookName}</b>
