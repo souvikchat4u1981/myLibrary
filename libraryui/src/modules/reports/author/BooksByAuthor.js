@@ -136,6 +136,14 @@ const BooksByAuthor = (props) => {
                         <div className="mt-2">
                           <b>{m.bookName}</b>
                         </div>
+                        <div className="mt-2">
+                          <b>
+                            {m.parentShelfName !== ""
+                              ? m.parentShelfName + " -> "
+                              : ""}{" "}
+                            {m.shelfName}
+                          </b>
+                        </div>
                       </div>
                     </div>
                   );

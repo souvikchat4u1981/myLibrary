@@ -33,7 +33,7 @@ const AddBookToLibrary = (props) => {
     bookNameInEnglish: "",
     description: "",
     detailsURL: "",
-    format: "",
+    format: "Hardcover",
     genere: "",
     image: "",
     isbn: "",
@@ -472,18 +472,23 @@ const AddBookToLibrary = (props) => {
                     <Input
                       id="format"
                       value={newBook.format}
-                      inputType="text"
+                      inputType="dropdown"
+                      type="dropdown"
                       placeholder={"Format"}
                       label="Format"
-                      icon={<i className="fa fa-user-circle"></i>}
                       events={{ onChange: (data) => onInputChange(data) }}
                       classes={{
                         contClass: "",
                         errorClass: "error-label",
-                        fieldClass: "form-control form-control-sm",
+                        fieldClass: "form-select form-select-sm",
                         labelClass: "large-text-header",
                       }}
-                    />
+                    >
+                      <option value="Hardcover">Hardcover</option>
+                      <option value="Hardbound">Hardbound</option>
+                      <option value={"Softcover"}>Softcover</option>
+                      <option value={"Paperback"}>Paperback</option>
+                    </Input>
                   </div>
                   <div className="col-sm-4">
                     <Input

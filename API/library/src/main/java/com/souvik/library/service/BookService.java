@@ -298,4 +298,20 @@ public class BookService {
         return book;
     }
 
+    @GraphQLQuery(name = "getFirstBookInAuthor")
+    public BookModel getFirstBookInAuthor(@GraphQLArgument(name = "author") String author){
+        BookModel book = new BookModel();
+        try{
+            List<Book> bookList = bookRepository.findByAuthorOrderByBookName(author);
+            book.setBook(bookList.get(0));
+            book.setFailure(false);
+            book.setMessage("SUCCESS");
+        }catch(Exception ex){
+            book.setFailure(true);
+            book.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return book;
+    }
+
 }

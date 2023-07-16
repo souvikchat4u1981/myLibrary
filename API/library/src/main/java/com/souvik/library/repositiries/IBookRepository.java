@@ -11,6 +11,8 @@ import java.util.List;
 public interface IBookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByShelfIdOrderByBookName(int shelfId);
 
+    List<Book> findByAuthorOrderByBookName(String author);
+
     @Query("select b from Book b where (lower(b.bookName) like (lower(:bookName))  or lower(b.bookNameInEnglish) like (lower(:bookName))) and b.shelfId in (select bs.shelfId  from BookShelfs bs where bs.parentShelfId=:shelfId) order by b.bookName")
     List<Book> getBookByParentShelfAndFilter(@Param("shelfId") int shelfId, @Param("bookName") String bookName);
 

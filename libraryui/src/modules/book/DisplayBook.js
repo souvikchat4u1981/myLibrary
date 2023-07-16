@@ -132,81 +132,78 @@ const DisplayBook = (props) => {
           <div
             className="d-flex justify-content-center"
             style={{ width: "100%" }}
-            onClick={() =>
-              navigate("/borrow", {
-                state: {
-                  book: {
-                    bookId: props.data.bookId,
-                    bookName: props.data.bookName,
-                    authorName: props.data.author,
-                    bookImage: props.data.image,
-                    description: props.data.description,
-                    shelfName: props.shelfName,
-                  },
-                },
-              })
-            }
           >
             {showImage && (
-              <SideBySideMagnifier
-                imageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
-                imageAlt="library"
-                largeImageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`} // Optional
-                // magnifierSize={"50%"}
-                alwaysInPlace={false}
-                fillAvailableSpace={true}
-                switchSides={
-                  props.index % 8 === 0 ||
-                  props.index % 8 === 6 ||
-                  props.index % 8 === 7
-                    ? true
-                    : false
+              <div
+                onClick={() =>
+                  navigate("/borrow", {
+                    state: {
+                      book: {
+                        bookId: props.data.bookId,
+                        bookName: props.data.bookName,
+                        authorName: props.data.author,
+                        bookImage: props.data.image,
+                        description: props.data.description,
+                        shelfName: props.shelfName,
+                      },
+                    },
+                  })
                 }
-                magnifierBorderColor="rgba(255, 255, 255, .5)"
-                zoomContainerBorder="1px solid #ccc"
-                zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
-              />
-              // <img
-              //   src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
-              //   alt="library"
-              //   width={"100%"}
-              //   className="img-fluid rounded"
-              //   key={Math.random()}
-
-              // />
+              >
+                <SideBySideMagnifier
+                  imageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
+                  imageAlt="library"
+                  largeImageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`} // Optional
+                  // magnifierSize={"50%"}
+                  alwaysInPlace={false}
+                  fillAvailableSpace={true}
+                  switchSides={
+                    props.index % 8 === 0 ||
+                    props.index % 8 === 6 ||
+                    props.index % 8 === 7
+                      ? true
+                      : false
+                  }
+                  magnifierBorderColor="rgba(255, 255, 255, .5)"
+                  zoomContainerBorder="1px solid #ccc"
+                  zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
+                />
+              </div>
             )}
             {!showImage && (
               <Fragment>
-                <Select
-                  id={"changedShelf"}
-                  value={changedShelf}
-                  onChange={onChangeShelf}
-                  //   inputLabel="Shelf"
-                  //   required={true}
-                  //   inputsValid={inputsValid}
-                  //   error={error}
-                  withValidation={false}
-                  initialOption={{
-                    displayText: "--- Select Shelf ---",
-                    value: "0",
-                  }}
-                  options={
-                    props.shelfs &&
-                    props.shelfs.map((m) => {
-                      return {
-                        key: m.shelfId,
-                        displayText:
-                          m.shelfName !== ""
-                            ? m.parentShelfName + "->" + m.shelfName
-                            : m.parentShelfName,
-                        value: m.shelfId,
-                      };
-                    })
-                  }
-                />
-                <Button extraClass={"ms-2"} onClick={changeBookShelf}>
-                  Change
-                </Button>
+                <div style={{ zIndex: "5" }}>
+                  <Select
+                    id={"changedShelf"}
+                    value={changedShelf}
+                    onChange={onChangeShelf}
+                    //   inputLabel="Shelf"
+                    //   required={true}
+                    //   inputsValid={inputsValid}
+                    //   error={error}
+                    withValidation={false}
+                    initialOption={{
+                      displayText: "--- Select Shelf ---",
+                      value: "0",
+                    }}
+                    options={
+                      props.shelfs &&
+                      props.shelfs.map((m) => {
+                        return {
+                          key: m.shelfId,
+                          displayText:
+                            m.shelfName !== ""
+                              ? m.parentShelfName + "->" + m.shelfName
+                              : m.parentShelfName,
+                          value: m.shelfId,
+                        };
+                      })
+                    }
+                  />
+                  <Button extraClass={"ms-2"} onClick={changeBookShelf}>
+                    Change
+                  </Button>
+                </div>
               </Fragment>
             )}
           </div>

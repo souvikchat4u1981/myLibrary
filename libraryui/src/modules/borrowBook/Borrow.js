@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Input from "../../lib/input/Input";
 import formReducer from "../../lib/formReducer/FormReducer";
 import Button from "../../lib/button/Button";
+import { SideBySideMagnifier } from "react-image-magnifiers";
 
 const Borrow = (props) => {
   const location = useLocation();
@@ -71,19 +72,39 @@ const Borrow = (props) => {
           <div className="p-2 pt-3 row col-sm-12 d-flex justify-content-center">
             <div className="add-book " style={{ width: "30%" }}>
               <div className="row border-bottom golden-border-color p-3 mb-2">
-                <div className="col-sm-12 text-center">
-                  <img
+                <div className="col-sm-12 text-center d-flex align-items-center justify-content-center">
+                  <div style={{ width: "30%" }}>
+                    <SideBySideMagnifier
+                      imageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${
+                        book.bookImage !== "" ? book.bookImage : "book.png"
+                      }`}
+                      width={"30%"}
+                      imageAlt="library"
+                      largeImageSrc={`${
+                        process.env.PUBLIC_URL
+                      }/assets/bookImages/${
+                        book.bookImage !== "" ? book.bookImage : "book.png"
+                      }`} // Optional
+                      // magnifierSize={"50%"}
+                      alwaysInPlace={false}
+                      fillAvailableSpace={true}
+                      magnifierBorderColor="rgba(255, 255, 255, .5)"
+                      zoomContainerBorder="1px solid #ccc"
+                      zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
+                    />
+                  </div>
+                  {/* <img
                     src={`${process.env.PUBLIC_URL}/assets/bookImages/${
                       book.bookImage !== "" ? book.bookImage : "book.png"
                     }`}
                     alt="library"
                     width={"30%"}
                     className="img-fluid rounded img-thumbnail"
-                  />{" "}
+                  />{" "} */}
                 </div>
                 <div className="col-sm-6 mt-2 text-center">{book.bookName}</div>
                 <div className="col-sm-6 mt-2 text-center">
-                  {book.authorName}
+                  By: {book.authorName}
                 </div>
                 <div className="col-sm-12 mt-2 text-center">
                   {book.shelfName}
