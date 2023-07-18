@@ -22,6 +22,18 @@ const MainList = (props) => {
         </div>
       </div>
       <div className="p-2 pt-3 row d-flex">
+        {props.author && props.author.length > 0 && (
+          <div className="row mb-3">
+            <div className="">
+              <div
+                className="badge rounded-pill bg-primary ms-2"
+                style={{ fontSize: "15px", fontWeight: "normal" }}
+              >
+                Total authors {props.author.length}
+              </div>
+            </div>
+          </div>
+        )}
         {props.author &&
           props.author.length > 0 &&
           props.author.map((m, index) => {

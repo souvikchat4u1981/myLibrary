@@ -453,18 +453,24 @@ const AddBookToLibrary = (props) => {
                     <Input
                       id="language"
                       value={newBook.language}
-                      inputType="text"
+                      inputType="dropdown"
+                      type="dropdown"
                       placeholder={"Language"}
                       label="Language"
-                      icon={<i className="fa fa-user-circle"></i>}
                       events={{ onChange: (data) => onInputChange(data) }}
                       classes={{
                         contClass: "",
                         errorClass: "error-label",
-                        fieldClass: "form-control form-control-sm",
+                        fieldClass: "form-select form-select-sm",
                         labelClass: "large-text-header",
                       }}
-                    />
+                    >
+                      <option value="Bengali">Bengali</option>
+                      <option value={"bengali"}>bengali</option>
+                      <option value="English">English</option>
+                      <option value={"english"}>english</option>
+                      <option value={"Hindi"}>Hindi</option>
+                    </Input>
                   </div>
                 </div>
                 <div className="row mt-2">
@@ -488,6 +494,7 @@ const AddBookToLibrary = (props) => {
                       <option value="Hardbound">Hardbound</option>
                       <option value={"Softcover"}>Softcover</option>
                       <option value={"Paperback"}>Paperback</option>
+                      <option value={"PaperBack"}>PaperBack</option>
                     </Input>
                   </div>
                   <div className="col-sm-4">

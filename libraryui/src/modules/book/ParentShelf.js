@@ -121,7 +121,7 @@ const ParentShelf = (props) => {
   };
 
   return (
-    <div className="hand mb-4" style={{ width: width }}>
+    <div className="hand mb-2" style={{ width: width }}>
       <div className="col-sm-12 shelf text-center p-2 shadow">
         <div className="col-sm-12 text-center hand">
           <i
