@@ -139,6 +139,7 @@ const Books = (props) => {
                 key={m.bookShelfs.shelfId}
                 data={m}
                 count={parentShelfs.length}
+                shelfRefetch={refetch}
               />
             );
           })}

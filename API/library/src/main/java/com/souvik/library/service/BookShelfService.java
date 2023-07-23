@@ -1,8 +1,10 @@
 package com.souvik.library.service;
 
+import com.souvik.library.entities.Book;
 import com.souvik.library.entities.BookShelfs;
 import com.souvik.library.models.BookShelfListWithCount;
 import com.souvik.library.models.RestStatus;
+import com.souvik.library.models.book.BookListModel;
 import com.souvik.library.models.bookShelfs.BookShelfModel;
 import com.souvik.library.models.bookShelfs.BookShelfsListModel;
 import com.souvik.library.models.bookShelfs.ShelfRelationListModel;
@@ -29,6 +31,7 @@ public class BookShelfService {
     private final IBookShelfs bookShelfs;
     private final IConfigurationsRepository configurationsRepository;
     private final UtilityService utilityService;
+    private final BookService bookService;
 
     @GraphQLQuery(name = "getAllBookShelfs")
     public BookShelfsListModel getAllBookShelfs(@GraphQLArgument(name = "reststatus") RestStatus restStatus) {
@@ -160,6 +163,44 @@ public class BookShelfService {
         return status;
     }
 
+    @GraphQLMutation(name = "deleteShelfs")
+    public RestStatus deleteShelf(@GraphQLArgument(name = "shelf") int id) {
+        RestStatus status = new RestStatus();
+        try {
+            //Check if any book associated with shelf
+            BookListModel books = bookService.loadBookByShelf(id);
+            if (books.getBookList().size() > 0) {
+                status.setFailure(true);
+                status.setMessage("Shelf has books.");
+            } else if (bookShelfs.findByParentShelfId(id).size() > 0) {
+                status.setFailure(true);
+                status.setMessage("Shelf has child sheifs.");
+            } else {
+                BookShelfs b = bookShelfs.getById(id);
+                if(b.getShelfImage()!=""){
+                    String filePath = configurationsRepository.findByConfigName("authorImagePath").getConfigValue();
+                    try {
+                        utilityService.deletePhysicalFile(filePath + "//" + b.getShelfImage());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+                bookShelfs.deleteById(id);
+                status.setFailure(false);
+                status.setMessage("Success");
+            }
+
+        } catch (Exception ex) {
+            status.setMessage(ex.getMessage());
+            status.setFailure(true);
+            ex.printStackTrace();
+        }
+
+
+        return status;
+    }
+
     @GraphQLQuery(name = "getAllShelfWithRelation")
     public ShelfRelationListModel getAllShelfWithRelation() {
         ShelfRelationListModel model = new ShelfRelationListModel();
@@ -207,7 +248,7 @@ public class BookShelfService {
     public BookShelfListWithCount filterShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam) {
         BookShelfListWithCount model = new BookShelfListWithCount();
         try {
-            List<BookShelfs> shelfs =bookShelfs.getAllByFilerParam("%" + searchparam + "%", "%" + searchparam + "%");
+            List<BookShelfs> shelfs = bookShelfs.getAllByFilerParam("%" + searchparam + "%", "%" + searchparam + "%");
             List<BookShelfModel> sm = new ArrayList<>();
             for (BookShelfs b : shelfs) {
                 int count = bookShelfs.getBookCountByShelf(b.getShelfId());
@@ -232,7 +273,7 @@ public class BookShelfService {
     public BookShelfListWithCount filterChildShelfByAuthorOrBook(@GraphQLArgument(name = "searchParam") String searchparam, @GraphQLArgument(name = "parentId") int parentId) {
         BookShelfListWithCount model = new BookShelfListWithCount();
         try {
-            List<BookShelfs> shelfs =  bookShelfs.getChildBookShelfsByFilterparam("%" + searchparam + "%", "%" + searchparam + "%", parentId);
+            List<BookShelfs> shelfs = bookShelfs.getChildBookShelfsByFilterparam("%" + searchparam + "%", "%" + searchparam + "%", parentId);
             List<BookShelfModel> sm = new ArrayList<>();
             for (BookShelfs b : shelfs) {
                 int count = bookShelfs.getBookCountByShelf(b.getShelfId());

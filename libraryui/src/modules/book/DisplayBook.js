@@ -1,8 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
+  DELETE_BOOK,
   GET_ALL_PARENT_BOOKSHELFS,
   GET_FIRST_BOOK_BY_SHELF,
   SAVE_BOOK,
@@ -96,12 +99,66 @@ const DisplayBook = (props) => {
   });
 
   const navigate = useNavigate();
+
+  const [deleteBook] = useMutation(DELETE_BOOK, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.deleteBook.failure) {
+        SuccessMessage("Book Deleted Successfully.");
+        props.refetch();
+      } else {
+        ErrorMessage(data.deleteBook.message);
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const onDeleteBook = (id) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div
+            className="p-2"
+            style={{ border: "1px solid black", borderRadius: "8px" }}
+          >
+            <h1>Confirm to delete</h1>
+            <p>You want to delete this book?</p>
+            <Button onClick={onClose} extraClass={"btn-warning me-2"}>
+              No
+            </Button>
+            <Button
+              buttonType="loss"
+              extraClass={"btn-danger"}
+              onClick={() => {
+                deleteBook({ variables: { bookId: id } });
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </Button>
+          </div>
+        );
+      },
+    });
+  };
+
   return (
     <Fragment>
       {load && <CustomLoader />}
       <div className="hand mb-2" style={{ width: width }}>
         <div className="col-sm-12 shelf text-center p-2 shadow">
           <div className="col-sm-12 text-center">
+            <i
+              className="fa fa-times-circle text-danger float-start hand"
+              title="Delete Book"
+              style={{ position: "relative", top: "-5px" }}
+              onClick={() => onDeleteBook(props.data.bookId)}
+            ></i>
+
             <i
               className="fa fa-edit text-success float-end hand"
               title="Edit Book"

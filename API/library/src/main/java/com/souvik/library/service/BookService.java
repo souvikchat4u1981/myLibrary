@@ -97,6 +97,32 @@ public class BookService {
     }
 
 
+    @GraphQLMutation(name = "deleteBook")
+    public RestStatus deleteBook(@GraphQLArgument(name = "bookId") int bookId) {
+        RestStatus status = new RestStatus();
+        try {
+            Book b = bookRepository.getById(bookId);
+            if (b.getImage() != "") {
+                String filePath = configurationsRepository.findByConfigName("imagePath").getConfigValue();
+                try {
+                    utilityService.deletePhysicalFile(filePath + "//" + b.getImage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            bookRepository.deleteById(bookId);
+            status.setFailure(false);
+            status.setMessage("Success");
+
+        } catch (Exception ex) {
+            status.setMessage(ex.getMessage());
+            status.setFailure(true);
+            ex.printStackTrace();
+        }
+        return status;
+    }
+
     @GraphQLMutation(name = "saveBook")
     public RestStatus saveBook(@GraphQLArgument(name = "book") BookModel book) {
         RestStatus status = new RestStatus();
@@ -179,13 +205,12 @@ public class BookService {
     }
 
     @GraphQLQuery(name = "getAllBooksWithAuthorAndShelf")
-    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelf(){
+    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelf() {
         BooksWithAuthorAndShelfListModel model = new BooksWithAuthorAndShelfListModel();
-        try
-        {
+        try {
             List<Object[]> items = customRepository.getBookDetailsWithShelfAndAuthor();
             List<BooksWithAuthorAndShelfModel> m = new ArrayList<>();
-            for (Object[] item: items) {
+            for (Object[] item : items) {
                 BooksWithAuthorAndShelfModel b = new BooksWithAuthorAndShelfModel();
                 b.setBookId(Integer.valueOf(item[0].toString()));
                 b.setBookName(String.valueOf(item[1]));
@@ -205,7 +230,7 @@ public class BookService {
             model.setBookList(m);
             model.setMessage("SUCCESS");
             model.setFailure(false);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             model.setMessage(ex.getMessage());
             model.setFailure(true);
@@ -214,13 +239,12 @@ public class BookService {
     }
 
     @GraphQLQuery(name = "getAllBooksWithAuthorAndShelfByAuthor")
-    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelfByAuthor(@GraphQLArgument(name = "author")String author){
+    public BooksWithAuthorAndShelfListModel getAllBooksWithAuthorAndShelfByAuthor(@GraphQLArgument(name = "author") String author) {
         BooksWithAuthorAndShelfListModel model = new BooksWithAuthorAndShelfListModel();
-        try
-        {
+        try {
             List<Object[]> items = customRepository.getBookDetailsWithShelfAndAuthorByAuthor(author);
             List<BooksWithAuthorAndShelfModel> m = new ArrayList<>();
-            for (Object[] item: items) {
+            for (Object[] item : items) {
                 BooksWithAuthorAndShelfModel b = new BooksWithAuthorAndShelfModel();
                 b.setBookId(Integer.valueOf(item[0].toString()));
                 b.setBookName(String.valueOf(item[1]));
@@ -240,7 +264,7 @@ public class BookService {
             model.setBookList(m);
             model.setMessage("SUCCESS");
             model.setFailure(false);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             model.setMessage(ex.getMessage());
             model.setFailure(true);
@@ -248,8 +272,8 @@ public class BookService {
         return model;
     }
 
-    @GraphQLQuery(name="getAllAuthor")
-    public AuthorWithBookCountListModel getAllAuthor(){
+    @GraphQLQuery(name = "getAllAuthor")
+    public AuthorWithBookCountListModel getAllAuthor() {
         AuthorWithBookCountListModel model = new AuthorWithBookCountListModel();
         try {
             List<Object[]> authorsObject = customRepository.getAuthors();
@@ -274,7 +298,7 @@ public class BookService {
             model.setAuthorWithBookCountModels(a);
             model.setFailure(false);
             model.setMessage("SUCCESS");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             model.setFailure(true);
             model.setMessage(ex.getMessage());
             ex.printStackTrace();
@@ -283,14 +307,14 @@ public class BookService {
     }
 
     @GraphQLQuery(name = "getFirstBookInShelf")
-    public BookModel getFirstBookInShelf(@GraphQLArgument(name = "shelfId") int shelfId){
+    public BookModel getFirstBookInShelf(@GraphQLArgument(name = "shelfId") int shelfId) {
         BookModel book = new BookModel();
-        try{
+        try {
             List<Book> bookList = bookRepository.findByShelfIdOrderByBookName(shelfId);
             book.setBook(bookList.get(0));
             book.setFailure(false);
             book.setMessage("SUCCESS");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             book.setFailure(true);
             book.setMessage(ex.getMessage());
             ex.printStackTrace();
@@ -299,14 +323,14 @@ public class BookService {
     }
 
     @GraphQLQuery(name = "getFirstBookInAuthor")
-    public BookModel getFirstBookInAuthor(@GraphQLArgument(name = "author") String author){
+    public BookModel getFirstBookInAuthor(@GraphQLArgument(name = "author") String author) {
         BookModel book = new BookModel();
-        try{
+        try {
             List<Book> bookList = bookRepository.findByAuthorOrderByBookName(author);
             book.setBook(bookList.get(0));
             book.setFailure(false);
             book.setMessage("SUCCESS");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             book.setFailure(true);
             book.setMessage(ex.getMessage());
             ex.printStackTrace();

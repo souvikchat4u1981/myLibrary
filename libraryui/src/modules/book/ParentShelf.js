@@ -2,8 +2,18 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./book.scss";
 import { Link, useNavigate } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
-import { GET_FIRST_BOOK_BY_SHELF } from "../../queries/BookQueries";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+  DELETE_SHELF,
+  GET_FIRST_BOOK_BY_SHELF,
+} from "../../queries/BookQueries";
+import {
+  ErrorMessage,
+  SuccessMessage,
+} from "../../lib/toastMessage/Toastmessage";
+import Button from "../../lib/button/Button";
 
 const ParentShelf = (props) => {
   const [width, setWidth] = useState("100%");
@@ -120,10 +130,62 @@ const ParentShelf = (props) => {
     );
   };
 
+  const [deleteShelf] = useMutation(DELETE_SHELF, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.deleteShelfs.failure) {
+        SuccessMessage("Shelf Deleted Successfully.");
+        props.shelfRefetch();
+      } else {
+        ErrorMessage(data.deleteShelfs.message);
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const onDeleteShelf = (id) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div
+            className="p-2"
+            style={{ border: "1px solid black", borderRadius: "8px" }}
+          >
+            <h1>Confirm to delete</h1>
+            <p>You want to delete this Shelf?</p>
+            <Button onClick={onClose} extraClass={"btn-warning me-2"}>
+              No
+            </Button>
+            <Button
+              buttonType="loss"
+              extraClass={"btn-danger"}
+              onClick={() => {
+                deleteShelf({ variables: { shelf: id } });
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </Button>
+          </div>
+        );
+      },
+    });
+  };
+
   return (
     <div className="hand mb-2" style={{ width: width }}>
       <div className="col-sm-12 shelf text-center p-2 shadow">
         <div className="col-sm-12 text-center hand">
+          <i
+            className="fa fa-times-circle hand text-danger float-end ps-2"
+            style={{ position: "relative", top: "-5px", zIndex: "3" }}
+            onClick={() => onDeleteShelf(props.data.bookShelfs.shelfId)}
+            title={"Delete Shelf"}
+          ></i>
           <i
             className="fa fa-edit text-success float-end"
             title="Edit Shelf"

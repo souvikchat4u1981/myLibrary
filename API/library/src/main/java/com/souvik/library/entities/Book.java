@@ -1,5 +1,6 @@
 package com.souvik.library.entities;
 
+import io.leangen.graphql.annotations.GraphQLInputField;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -41,4 +42,6 @@ public class Book {
     private String genere;
     @Column(name="purchase_date")
     private Timestamp purchaseDate;
+    @GraphQLInputField(defaultValue = "1")
+    private Integer copy;
 }

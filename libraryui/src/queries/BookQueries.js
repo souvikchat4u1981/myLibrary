@@ -446,3 +446,23 @@ export const GET_FIRST_BOOK_BY_AUTHOR = gql`
     }
   }
 `;
+
+export const DELETE_SHELF = gql`
+  mutation DeleteShelfs($shelf: Int!) {
+    deleteShelfs(shelf: $shelf) {
+      failure
+      message
+      userId
+    }
+  }
+`;
+
+export const DELETE_BOOK = gql`
+  mutation DeleteBook($bookId: Int!) {
+    deleteBook(bookId: $bookId) {
+      failure
+      message
+      userId
+    }
+  }
+`;

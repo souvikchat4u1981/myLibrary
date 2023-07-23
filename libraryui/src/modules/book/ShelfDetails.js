@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
+  DELETE_SHELF,
   FILTER_BOOK_BY_PARENT_SHELF,
   FILTER_BOOK_BY_SHELF,
   FILTER_CHILD_BOOK_SHELFS,
@@ -14,6 +15,10 @@ import {
 import ParentShelf from "./ParentShelf";
 import DisplayBook from "./DisplayBook";
 import CustomLoader from "../../lib/customLoader/CustomLoader";
+import {
+  ErrorMessage,
+  SuccessMessage,
+} from "../../lib/toastMessage/Toastmessage";
 
 const ShelfDetails = (props) => {
   const navigate = useNavigate();
@@ -50,27 +55,30 @@ const ShelfDetails = (props) => {
 
   const [currentShelfId, setCurrentShelfId] = useState(0);
 
-  const [getChildShelfs] = useLazyQuery(GET_CHILD_SHELF_WITH_BOOK_COUNT, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      parentId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
-    },
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      setChildSelfs(null);
-      if (!data.getChildBookShelfsWithCount.failure) {
-        if (data.getChildBookShelfsWithCount.bookShelfList.length > 0) {
-          setChildSelfs(data.getChildBookShelfsWithCount.bookShelfList);
+  const [getChildShelfs, { refetch: shelfRefetch }] = useLazyQuery(
+    GET_CHILD_SHELF_WITH_BOOK_COUNT,
+    {
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        parentId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
+      },
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        setChildSelfs(null);
+        if (!data.getChildBookShelfsWithCount.failure) {
+          if (data.getChildBookShelfsWithCount.bookShelfList.length > 0) {
+            setChildSelfs(data.getChildBookShelfsWithCount.bookShelfList);
+          }
         }
-      }
-      setLoad(false);
-    },
+        setLoad(false);
+      },
 
-    onError: (data) => {
-      setLoad(false);
-      console.log(data);
-    },
-  });
+      onError: (data) => {
+        setLoad(false);
+        console.log(data);
+      },
+    }
+  );
 
   const [books, setBooks] = useState(null);
 
@@ -246,6 +254,7 @@ const ShelfDetails = (props) => {
                   data={m}
                   count={childShelfs.length}
                   fromChildPage={true}
+                  shelfRefetch={shelfRefetch}
                 />
               );
             })}
