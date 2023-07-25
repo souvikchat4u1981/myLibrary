@@ -216,14 +216,14 @@ const ParentShelf = (props) => {
             <img
               src={`${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`}
               alt="library"
-              width={"60%"}
+              width={"58%"}
               height={"70%"}
               onClick={onShelfClickHandle}
               style={{
                 position: "relative",
-                left: "13%",
+                left: "18%",
                 zIndex: "2",
-                top: "23%",
+                top: "24%",
               }}
             />
             <img
@@ -236,7 +236,7 @@ const ParentShelf = (props) => {
                 position: "relative",
                 left: "0%",
                 zIndex: "1",
-                top: "-130px",
+                top: "-125px",
               }}
             />
           </div>
