@@ -5,6 +5,12 @@ import Input from "../../lib/input/Input";
 import formReducer from "../../lib/formReducer/FormReducer";
 import Button from "../../lib/button/Button";
 import { SideBySideMagnifier } from "react-image-magnifiers";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { BORROW_BOOK, GET_BORROW_DETAILS } from "../../queries/BookQueries";
+import {
+  ErrorMessage,
+  SuccessMessage,
+} from "../../lib/toastMessage/Toastmessage";
 
 const Borrow = (props) => {
   const location = useLocation();
@@ -13,8 +19,9 @@ const Borrow = (props) => {
     borrowId: "0",
     borrowBy: "",
     bookId: 0,
-    borrowDate: null,
-    returnDate: null,
+    comment: "",
+    borrowDate: new Date(),
+    returnDate: new Date(),
     isReturn: false,
   };
   const [borrow, setBorrow] = useState(initBorrow);
@@ -34,6 +41,8 @@ const Borrow = (props) => {
             payload: borrow,
           });
           setBorrow(borrow);
+
+          borrowBookInfo({ variables: { bookId: b.bookId } });
         }
       }
     } else {
@@ -49,6 +58,20 @@ const Borrow = (props) => {
   let [newBorrow, newBorrowfDispatch] = useReducer(formReducer, initBorrow);
   const onInputChange = (data) => {
     let d = borrow;
+    if (data.id === "isReturn") {
+      if (data.value === "false") {
+        data.value = true;
+
+        newBorrowfDispatch({
+          type: "HANDLE INPUT TEXT",
+          field: "returnDate",
+
+          payload: new Date(),
+        });
+      } else {
+        data.value = false;
+      }
+    }
     d[data.id] = data.value;
 
     newBorrowfDispatch({
@@ -57,6 +80,59 @@ const Borrow = (props) => {
 
       payload: data.value,
     });
+  };
+
+  const [borrowBookInfo] = useLazyQuery(GET_BORROW_DETAILS, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.bookBorrowedBy.failure) {
+        if (data.bookBorrowedBy.borrow) {
+          newBorrowfDispatch({
+            type: "SET INITIAL VALUE",
+
+            payload: data.bookBorrowedBy.borrow,
+          });
+          setBorrow(data.bookBorrowedBy.borrow);
+        }
+      } else {
+        ErrorMessage(data.bookBorrowedBy.message);
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [borrowBook] = useMutation(BORROW_BOOK, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.addBookToBorrow.failure) {
+        SuccessMessage("Book Added to Borrow Successfully.");
+      } else {
+        ErrorMessage(data.addBookToBorrow.message);
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const onClickBorrow = (e) => {
+    e.preventDefault();
+    if (newBorrow.borrowId === 0) {
+      newBorrow.returnDate = null;
+      newBorrowfDispatch({
+        type: "HANDLE INPUT TEXT",
+        field: "returnDate",
+
+        payload: null,
+      });
+    }
+    borrowBook({ variables: { borrowBook: { borrow: newBorrow } } });
   };
 
   return (
@@ -120,6 +196,22 @@ const Borrow = (props) => {
               </div>
               <div className="row mt-2 mb-2">
                 <form>
+                  {newBorrow.borrowId > 0 && (
+                    <div className="row">
+                      <Input
+                        id="isReturn"
+                        label="Book Returned?"
+                        type="checkbox"
+                        value={newBorrow.isReturn}
+                        checked={newBorrow.isReturn}
+                        events={{ onChange: (data) => onInputChange(data) }}
+                        classes={{
+                          errorClass: "error-label",
+                          fieldClass: "",
+                        }}
+                      ></Input>
+                    </div>
+                  )}
                   <div className="row">
                     <div className="col-sm-6">
                       <Input
@@ -139,9 +231,8 @@ const Borrow = (props) => {
                         id="borrowDate"
                         label="Lend Date"
                         type="date"
-                        inputType="text"
                         value={newBorrow.borrowDate}
-                        showIcon={true}
+                        showIcon={false}
                         events={{ onChange: (data) => onInputChange(data) }}
                         classes={{
                           errorClass: "error-label",
@@ -149,14 +240,13 @@ const Borrow = (props) => {
                         }}
                       ></Input>
                     </div>
-                    <div className="col-sm-6 customDatePickerWidth mt-2">
+                    <div className="col-sm-12 customDatePickerWidth">
                       <Input
-                        id="returnDate"
-                        label="Return Date"
-                        type="date"
-                        inputType="text"
-                        value={newBorrow.returnDate}
-                        showIcon={true}
+                        id="comment"
+                        label="Comment"
+                        type="textarea"
+                        rows="10"
+                        value={newBorrow.comment}
                         events={{ onChange: (data) => onInputChange(data) }}
                         classes={{
                           errorClass: "error-label",
@@ -164,9 +254,26 @@ const Borrow = (props) => {
                         }}
                       ></Input>
                     </div>
+                    {newBorrow.borrowId > 0 && newBorrow.isReturn === true && (
+                      <div className="col-sm-6 customDatePickerWidth mt-2">
+                        <Input
+                          id="returnDate"
+                          label="Return Date"
+                          type="date"
+                          inputType="text"
+                          value={newBorrow.returnDate}
+                          showIcon={false}
+                          events={{ onChange: (data) => onInputChange(data) }}
+                          classes={{
+                            errorClass: "error-label",
+                            fieldClass: "form-control form-control-sm",
+                          }}
+                        ></Input>
+                      </div>
+                    )}
                     <div className="col-sm-6 customDatePickerWidth mt-2">
                       <div className="row col-sm-12 ps-4 mt-4">
-                        <Button>Save</Button>
+                        <Button onClick={onClickBorrow}>Save</Button>
                       </div>
                     </div>
                   </div>

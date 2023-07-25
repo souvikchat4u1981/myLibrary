@@ -466,3 +466,32 @@ export const DELETE_BOOK = gql`
     }
   }
 `;
+
+export const BORROW_BOOK = gql`
+  mutation AddBookToBorrow($borrowBook: BorrowModelInput) {
+    addBookToBorrow(borrowBook: $borrowBook) {
+      failure
+      message
+      userId
+    }
+  }
+`;
+
+export const GET_BORROW_DETAILS = gql`
+  query BookBorrowedBy($bookId: Int!) {
+    bookBorrowedBy(bookId: $bookId) {
+      failure
+      message
+      userId
+      borrow {
+        bookId
+        borrowBy
+        borrowDate
+        borrowId
+        comment
+        isReturn
+        returnDate
+      }
+    }
+  }
+`;

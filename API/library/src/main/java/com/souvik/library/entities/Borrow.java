@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name="borro")
+@Table(name="borrow")
 public class Borrow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -30,5 +30,7 @@ public class Borrow {
     @Column(name = "is_return")
     @GraphQLInputField(defaultValue = "false")
     private Boolean isReturn;
+
+    private String comment;
 
 }

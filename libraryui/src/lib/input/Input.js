@@ -156,7 +156,7 @@ const Input = (props) => {
         <div>
           <DatePicker
             selected={startDate}
-            showIcon
+            showIcon={props.showIcon}
             onChange={(date) => onDateChange(date)}
             dateFormat={props.dateFormat ? props.dateFormat : "dd/MM/yyyy"}
             className={`${fieldClass} ${validationErrorClass}`}
