@@ -2,6 +2,14 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { SideBySideMagnifier } from "react-image-magnifiers";
+import Button from "../../../lib/button/Button";
+import { useMutation } from "@apollo/client";
+import { DELETE_BOOK } from "../../../queries/BookQueries";
+import {
+  ErrorMessage,
+  SuccessMessage,
+} from "../../../lib/toastMessage/Toastmessage";
+import { confirmAlert } from "react-confirm-alert";
 
 const BooksByAuthor = (props) => {
   const [width, setWidth] = useState("100%");
@@ -28,6 +36,75 @@ const BooksByAuthor = (props) => {
     return switchSide;
   };
 
+  const [deleteBook] = useMutation(DELETE_BOOK, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (!data.deleteBook.failure) {
+        SuccessMessage("Book Deleted Successfully.");
+        props.refetch();
+      } else {
+        ErrorMessage(data.deleteBook.message);
+      }
+    },
+
+    onError: (data) => {
+      console.log(data);
+    },
+  });
+
+  const onDeleteBook = (id) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div
+            className="p-2"
+            style={{ border: "1px solid black", borderRadius: "8px" }}
+          >
+            <h1>Confirm to delete</h1>
+            <p>You want to delete this book?</p>
+            <Button onClick={onClose} extraClass={"btn-warning me-2"}>
+              No
+            </Button>
+            <Button
+              buttonType="loss"
+              extraClass={"btn-danger"}
+              onClick={() => {
+                deleteBook({ variables: { bookId: id } });
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </Button>
+          </div>
+        );
+      },
+    });
+  };
+
+  const copyBook = (m) => {
+    let book = {
+      author: m.author,
+      bookId: m.bookId,
+      bookName: m.bookName,
+      bookNameInEnglish: m.bookNameInEnglish,
+      description: m.description,
+      format: m.format,
+      language: m.language,
+      publicastion: m.publication,
+      image: m.bookImage,
+      shelfId: m.shelfId,
+    };
+    book.bookId = 0;
+    navigate("/addBookToLibrary", {
+      state: {
+        book: book,
+        edit: true,
+      },
+    });
+  };
+
+  const [showImage, setShowImage] = useState(true);
   return (
     <Fragment>
       <div className="container-fluid">
@@ -79,26 +156,65 @@ const BooksByAuthor = (props) => {
                       className="hand mb-4"
                       key={props.books.bookId}
                       style={{ width: width }}
-                      onClick={() =>
-                        navigate("/borrow", {
-                          state: {
-                            book: {
-                              bookId: m.bookId,
-                              bookName: m.bookName,
-                              authorName: m.author,
-                              bookImage: m.bookImage,
-                              description: m.description,
-                              shelfName:
-                                m.parentShelfName + " -> " + m.shelfName,
-                            },
-                          },
-                        })
-                      }
                     >
                       <div className="col-sm-12 shelf text-center p-2 shadow">
+                        <div className="col-sm-12 text-center">
+                          <i
+                            className="fa fa-times-circle text-danger float-start hand"
+                            title="Delete Book"
+                            style={{ position: "relative", top: "-5px" }}
+                            onClick={() => onDeleteBook(m.bookId)}
+                          ></i>
+
+                          <i
+                            className="fa fa-edit text-success float-end hand"
+                            title="Edit Book"
+                            style={{ position: "relative", top: "-5px" }}
+                            onClick={() =>
+                              navigate("/addBookToLibrary", {
+                                state: {
+                                  book: {
+                                    author: m.author,
+                                    bookId: m.bookId,
+                                    bookName: m.bookName,
+                                    bookNameInEnglish: m.bookNameInEnglish,
+                                    description: m.description,
+                                    format: m.format,
+                                    language: m.language,
+                                    publicastion: m.publication,
+                                    image: m.bookImage,
+                                    shelfId: m.shelfId,
+                                  },
+                                  edit: true,
+                                },
+                              })
+                            }
+                          ></i>
+                          <i
+                            className="fa fa-copy text-primary float-end hand me-2"
+                            title="Copy Book"
+                            style={{ position: "relative", top: "-5px" }}
+                            onClick={() => copyBook(m)}
+                          ></i>
+                        </div>
                         <div
                           className="d-flex justify-content-center"
                           style={{ width: "100%" }}
+                          onClick={() =>
+                            navigate("/borrow", {
+                              state: {
+                                book: {
+                                  bookId: m.bookId,
+                                  bookName: m.bookName,
+                                  authorName: m.author,
+                                  bookImage: m.bookImage,
+                                  description: m.description,
+                                  shelfName:
+                                    m.parentShelfName + " -> " + m.shelfName,
+                                },
+                              },
+                            })
+                          }
                         >
                           <SideBySideMagnifier
                             imageSrc={`${

@@ -58,6 +58,7 @@ const AddBookToLibrary = (props) => {
     if (location.state) {
       if (typeof location.state.edit !== "undefined") {
         if (location.state.edit) {
+          console.log("Loaded Book", location.state.book);
           setLodedBook(location.state.book);
           newBookDispatch({
             type: "SET INITIAL VALUE",
