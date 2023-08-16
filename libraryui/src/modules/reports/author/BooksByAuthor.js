@@ -202,7 +202,7 @@ const BooksByAuthor = (props) => {
                                     publicastion: m.publication,
                                     image: m.bookImage,
                                     shelfId: m.shelfId,
-                                    digitalFileName: "",
+                                    digitalFileName: m.digitalFileName,
                                     isbn: m.isbn,
                                     price: m.price,
                                     publishigYear: m.publishing_year,

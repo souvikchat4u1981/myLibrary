@@ -21,10 +21,12 @@ import { multiPartPost, postCall } from "../../../utils/RestCalls";
 import AutoComplete from "../../../lib/autoComplete/AutoComplete";
 
 const AddBookToLibrary = (props) => {
-  sessionStorage.setItem(
-    "CurrentPage",
-    "Addbook" + JSON.parse(sessionStorage.getItem("currentShelf")).shelfId
-  );
+  try {
+    sessionStorage.setItem(
+      "CurrentPage",
+      "Addbook" + JSON.parse(sessionStorage.getItem("currentShelf")).shelfId
+    );
+  } catch (ex) {}
   const location = useLocation();
   const [book, setBook] = useState({
     author: "",
@@ -88,7 +90,9 @@ const AddBookToLibrary = (props) => {
   const [getBook] = useLazyQuery(GET_ONLINE_BOOK_DETAILS, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      parentId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
+      parentId: sessionStorage.getItem("currentShelf")
+        ? JSON.parse(sessionStorage.getItem("currentShelf")).shelfId
+        : 0,
     },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
