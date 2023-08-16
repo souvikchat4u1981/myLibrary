@@ -225,6 +225,7 @@ public class BookService {
                 b.setShelfImage(String.valueOf(item[10]));
                 b.setParentShelfName(String.valueOf(item[11]));
                 b.setBookNameInEnglish(String.valueOf(item[12]));
+                b.setDigitalFileName(String.valueOf(item[13]));
                 m.add(b);
             }
             model.setBookList(m);
@@ -259,6 +260,10 @@ public class BookService {
                 b.setShelfImage(String.valueOf(item[10]));
                 b.setParentShelfName(String.valueOf(item[11]));
                 b.setBookNameInEnglish(String.valueOf(item[12]));
+                b.setDigitalFileName(String.valueOf(item[13]));
+                b.setIsbn(String.valueOf(item[14]));
+                b.setPrice(Double.valueOf(item[15].toString()));
+                b.setPublishing_year(String.valueOf(item[16]));
                 m.add(b);
             }
             model.setBookList(m);

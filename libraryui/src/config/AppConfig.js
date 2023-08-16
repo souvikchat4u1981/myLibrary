@@ -11,6 +11,7 @@ export const RouterLinks = {
   BookList: "/bookList",
   AuthorList: "/authorList",
   BorrowBook: "/borrow",
+  BookReader: "/readBook",
 };
 
 export const menuList = [

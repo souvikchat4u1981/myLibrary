@@ -175,6 +175,7 @@ export const LOAD_BOOK_BY_SHELF = gql`
         publishigYear
         purchaseDate
         shelfId
+        digitalFileName
       }
     }
   }
@@ -318,6 +319,7 @@ export const FILTER_BOOK_BY_SHELF = gql`
         publishigYear
         purchaseDate
         shelfId
+        digitalFileName
       }
     }
   }
@@ -349,6 +351,7 @@ export const GET_ALL_BOOKS = gql`
         shelfName
         bookImage
         shelfImage
+        digitalFileName
       }
     }
   }
@@ -388,6 +391,10 @@ export const GET_ALL_BOOKS_BY_AUTHOR = gql`
         shelfName
         bookImage
         shelfImage
+        digitalFileName
+        isbn
+        publishing_year
+        price
       }
     }
   }

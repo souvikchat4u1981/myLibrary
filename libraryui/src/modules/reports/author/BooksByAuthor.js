@@ -94,6 +94,10 @@ const BooksByAuthor = (props) => {
       publicastion: m.publication,
       image: m.bookImage,
       shelfId: m.shelfId,
+      digitalFileName: "",
+      isbn: m.isbn,
+      price: m.price,
+      publishigYear: m.publishing_year,
     };
     book.bookId = 0;
     navigate("/addBookToLibrary", {
@@ -165,7 +169,21 @@ const BooksByAuthor = (props) => {
                             style={{ position: "relative", top: "-5px" }}
                             onClick={() => onDeleteBook(m.bookId)}
                           ></i>
-
+                          {m.digitalFileName !== "" &&
+                            m.digitalFileName !== null && (
+                              <i
+                                className="fa fa-book-open-reader text-success float-start hand ms-2"
+                                title="Read Book"
+                                style={{ position: "relative", top: "-5px" }}
+                                onClick={() =>
+                                  navigate("/readBook", {
+                                    state: {
+                                      data: m,
+                                    },
+                                  })
+                                }
+                              ></i>
+                            )}
                           <i
                             className="fa fa-edit text-success float-end hand"
                             title="Edit Book"
@@ -184,6 +202,10 @@ const BooksByAuthor = (props) => {
                                     publicastion: m.publication,
                                     image: m.bookImage,
                                     shelfId: m.shelfId,
+                                    digitalFileName: "",
+                                    isbn: m.isbn,
+                                    price: m.price,
+                                    publishigYear: m.publishing_year,
                                   },
                                   edit: true,
                                 },

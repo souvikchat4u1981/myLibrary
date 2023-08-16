@@ -44,4 +44,6 @@ public class Book {
     private Timestamp purchaseDate;
     @GraphQLInputField(defaultValue = "1")
     private Integer copy;
+    @Column(name="digital_file_name")
+    private String digitalFileName;
 }

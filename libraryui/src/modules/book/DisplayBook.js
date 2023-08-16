@@ -158,6 +158,21 @@ const DisplayBook = (props) => {
               style={{ position: "relative", top: "-5px" }}
               onClick={() => onDeleteBook(props.data.bookId)}
             ></i>
+            {props.data.digitalFileName !== "" &&
+              props.data.digitalFileName !== null && (
+                <i
+                  className="fa fa-book-open-reader text-success float-start hand ms-2"
+                  title="Read Book"
+                  style={{ position: "relative", top: "-5px" }}
+                  onClick={() =>
+                    navigate("/readBook", {
+                      state: {
+                        data: props.data,
+                      },
+                    })
+                  }
+                ></i>
+              )}
 
             <i
               className="fa fa-edit text-success float-end hand"

@@ -21,4 +21,9 @@ public class BooksWithAuthorAndShelfModel {
     private Integer shelfId;
     private String shelfImage;
     private String bookNameInEnglish;
+    private String digitalFileName;
+    private String isbn;
+    private String publishing_year;
+    private Double price;
+
 }

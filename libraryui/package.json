@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@apollo/client": "^3.7.16",
+    "@cyntler/react-doc-viewer": "^1.13.0",
     "@react-pdf/renderer": "^3.1.12",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -30,6 +31,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-modal": "^3.16.1",
     "react-player": "^2.12.0",
+    "react-reader": "^1.2.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "react-scripts": "5.0.1",

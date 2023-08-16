@@ -44,6 +44,7 @@ const AddBookToLibrary = (props) => {
     shelfId: 0,
     userId: 0,
     purchaseDate: null,
+    digitalFileName: "",
   });
 
   const [loadedBook, setLodedBook] = useState(null);
@@ -522,6 +523,23 @@ const AddBookToLibrary = (props) => {
                       inputType="text"
                       placeholder={"Publishig Year"}
                       label="Publishig Year"
+                      icon={<i className="fa fa-user-circle"></i>}
+                      events={{ onChange: (data) => onInputChange(data) }}
+                      classes={{
+                        contClass: "",
+                        errorClass: "error-label",
+                        fieldClass: "form-control form-control-sm",
+                        labelClass: "large-text-header",
+                      }}
+                    />
+                  </div>
+                  <div className="col-sm-8 mt-2">
+                    <Input
+                      id="digitalFileName"
+                      value={newBook.digitalFileName}
+                      inputType="text"
+                      placeholder={"Digital File Name"}
+                      label="Digital File Name"
                       icon={<i className="fa fa-user-circle"></i>}
                       events={{ onChange: (data) => onInputChange(data) }}
                       classes={{
