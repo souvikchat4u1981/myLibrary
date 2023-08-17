@@ -2,7 +2,7 @@
   "name": "my-trading-web",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "/library",
   "dependencies": {
     "@apollo/client": "^3.7.16",
     "@cyntler/react-doc-viewer": "^1.13.0",

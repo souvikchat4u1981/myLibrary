@@ -502,3 +502,24 @@ export const GET_BORROW_DETAILS = gql`
     }
   }
 `;
+
+export const GET_BORROW_LIST = gql`
+  query GetBorrowList {
+    getBorrowList {
+      failure
+      message
+      userId
+      borrowList {
+        bookId
+        bookName
+        bookNameInEnglish
+        borrowBy
+        borrowDate
+        borrowId
+        parentShelfName
+        shelfName
+        bookImage
+      }
+    }
+  }
+`;
