@@ -42,7 +42,7 @@ public class RetrieveBookDetailsService {
                 book.setDetailsURL(mainPage);
                 //get Image
                 Element img = e.select("img").first();
-                String image = img.attr("data-original");
+                String image = img.attr("src");
 //            System.out.println(image);
                 book.setImage(image);
                 String productName = element.select(".product-item-link").first().html();
