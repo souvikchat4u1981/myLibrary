@@ -40,7 +40,7 @@ const ShelfDetails = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      setBooks(null);
+      //setBooks(null);
       if (!data.getAllShelfWithRelation.failure) {
         if (data.getAllShelfWithRelation.shelfRelationModelList.length > 0) {
           setAllShelfs(data.getAllShelfWithRelation.shelfRelationModelList);
@@ -95,6 +95,8 @@ const ShelfDetails = (props) => {
           setBooks(data.loadBookByShelf.bookList);
         }
       }
+
+      console.log("Books", JSON.stringify(data.loadBookByShelf.bookList));
       setLoad(false);
     },
 
@@ -190,15 +192,15 @@ const ShelfDetails = (props) => {
       {load && <CustomLoader />}
       <div className="p-2 pt-3 row col-sm-12">
         <div className="col-sm-4">
-          <div class="input-group">
+          <div className="input-group">
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               placeholder="Search By Author or Book"
               value={searchParam}
               onChange={onFilterChange}
             />
-            <span class="input-group-text" id="basic-addon2">
+            <span className="input-group-text" id="basic-addon2">
               <i className="fa fa-search"></i>
             </span>
           </div>

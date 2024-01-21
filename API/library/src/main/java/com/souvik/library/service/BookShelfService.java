@@ -177,11 +177,11 @@ public class BookShelfService {
                 status.setMessage("Shelf has child sheifs.");
             } else {
                 BookShelfs b = bookShelfs.getById(id);
-                if(b.getShelfImage()!=""){
+                if (b.getShelfImage() != "") {
                     String filePath = configurationsRepository.findByConfigName("authorImagePath").getConfigValue();
                     try {
                         utilityService.deletePhysicalFile(filePath + "//" + b.getShelfImage());
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -208,19 +208,24 @@ public class BookShelfService {
 
         try {
             List<BookShelfs> shelfs = bookShelfs.findAll();
+            List<BookShelfs> parentBookShelfs = bookShelfs.findAllParentBookShelfs();
             for (BookShelfs b : shelfs) {
                 String parentShelf = "";
                 String shelfName = "";
                 if (b.getParentShelfId() > 0) {
                     shelfName = b.getShelfName();
-                    for (BookShelfs b1 : shelfs) {
-                        if (b1.getShelfId() == b.getParentShelfId()) {
+                    if (shelfName.equals("Pallabi Sengupta")) {
+                        System.out.println(shelfName);
+                    }
+                    for (BookShelfs b1 : parentBookShelfs) {
+                        if (b1.getShelfId().equals(b.getParentShelfId())) {
                             parentShelf = b1.getShelfName();
                         }
                     }
                 } else {
                     parentShelf = b.getShelfName();
                 }
+
                 ShelfRelationModel m = new ShelfRelationModel();
                 m.setShelfId(b.getShelfId());
                 m.setShelfName(shelfName);
