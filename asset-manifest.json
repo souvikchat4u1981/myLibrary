@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/library/static/css/main.792d5aba.css",
+    "main.js": "/library/static/js/main.82f7011a.js",
+    "static/js/787.2e6865d1.chunk.js": "/library/static/js/787.2e6865d1.chunk.js",
+    "static/media/backGroundDark.jpg": "/library/static/media/backGroundDark.c6240c917c6ec6443f63.jpg",
+    "static/media/backGround.jpg": "/library/static/media/backGround.c58c6860732a2fc986bc.jpg",
+    "static/media/Arboria-Book.ttf": "/library/static/media/Arboria-Book.ccfb297631dfd37ed8cf.ttf",
+    "static/media/Arboria-Medium.ttf": "/library/static/media/Arboria-Medium.5f4c9a3274d0486756c6.ttf",
+    "static/media/Arboria-Light.ttf": "/library/static/media/Arboria-Light.99a5b9517f33e24e7689.ttf",
+    "static/media/Arboria-Bold.ttf": "/library/static/media/Arboria-Bold.51fcbdbf9113d167b694.ttf",
+    "static/media/Arboria-Black.ttf": "/library/static/media/Arboria-Black.eae86d26e1d4ce65f054.ttf",
+    "static/media/logo.svg": "/library/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/library/index.html",
+    "main.792d5aba.css.map": "/library/static/css/main.792d5aba.css.map",
+    "main.82f7011a.js.map": "/library/static/js/main.82f7011a.js.map",
+    "787.2e6865d1.chunk.js.map": "/library/static/js/787.2e6865d1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.792d5aba.css",
+    "static/js/main.82f7011a.js"
+  ]
+}
