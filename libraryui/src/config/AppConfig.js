@@ -12,6 +12,7 @@ export const RouterLinks = {
   AuthorList: "/authorList",
   BorrowBook: "/borrow",
   BookReader: "/readBook",
+  BorrowList: "/borrowList",
 };
 
 export const menuList = [
@@ -31,6 +32,12 @@ export const menuList = [
     menuName: "Author List",
     routerLink: "/authorList",
     icon: "fa-solid fa-user-pen",
+    visible: true,
+  },
+  {
+    menuName: "Borrow List",
+    routerLink: "/borrowList",
+    icon: "fa-solid fa-box-open",
     visible: true,
   },
   // {

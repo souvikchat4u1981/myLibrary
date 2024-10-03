@@ -42,4 +42,12 @@ public class CustomRepository {
         List<Object[]> result = q.getResultList();
         return result;
     }
+
+    public List<Object[]> getBorrowList() {
+        Query q = (Query) entityManager.createNativeQuery("select b.borrow_id,b.borrow_by,b.borrow_date,b2.book_name,b2.book_name_in_english,bs.shelf_name," +
+                "coalesce((select bs2.shelf_name from book_shelfs bs2 where bs2.shelf_id =bs.parent_shelf_id),'') parent_shelf, b.book_id,b2.image  " +
+                "from borrow b, books b2, book_shelfs bs  where b.book_id = b2.book_id and b2.shelf_id = bs.shelf_id  and b.is_return =false");
+        List<Object[]> result = q.getResultList();
+        return result;
+    }
 }
