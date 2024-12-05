@@ -10,6 +10,7 @@ import com.souvik.library.models.bookShelfs.BookShelfsListModel;
 import com.souvik.library.models.bookShelfs.ShelfRelationListModel;
 import com.souvik.library.models.bookShelfs.ShelfRelationModel;
 
+import com.souvik.library.repositiries.IBookRepository;
 import com.souvik.library.repositiries.IBookShelfs;
 import com.souvik.library.repositiries.IConfigurationsRepository;
 import com.souvik.library.utility.UtilityService;
@@ -29,6 +30,7 @@ import java.util.*;
 public class BookShelfService {
 
     private final IBookShelfs bookShelfs;
+    private final IBookRepository book;
     private final IConfigurationsRepository configurationsRepository;
     private final UtilityService utilityService;
     private final BookService bookService;
@@ -49,6 +51,12 @@ public class BookShelfService {
         for (BookShelfs b : shelfs) {
             int count = bookShelfs.getBookCountByShelf(b.getShelfId());
             BookShelfModel m = new BookShelfModel();
+
+//            Get first book image
+//            Book b1 = book.findTopByShelfIdOrderByBookName(b.getShelfId()).orElse(null);
+//            if(b1!=null){
+//                b.setShelfImage(b1.getImage());
+//            }
             m.setBookShelfs(b);
             m.setBookCount(count);
             sm.add(m);

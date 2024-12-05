@@ -116,7 +116,7 @@ const ParentShelf = (props) => {
     }
   };
 
-  useEffect(() => {}, [imageName]);
+  useEffect(() => { }, [imageName]);
 
   const setDynamicImage = (imageName) => {
     return (
@@ -202,14 +202,14 @@ const ParentShelf = (props) => {
         </div>
         {bookImage === "" && (
           <img
-            src={`${process.env.PUBLIC_URL}/assets/authorImage/${
-              imageName !== "" ? imageName : "author.png"
-            }`}
+            src={`${process.env.PUBLIC_URL}/assets/authorImage/${imageName !== "" ? imageName : "author.png"
+              }`}
             alt="library"
             width={"100%"}
             className="me-2"
             onClick={onShelfClickHandle}
           />
+
         )}
         {bookImage !== "" && (
           <div style={{ position: "relative", height: "200px" }}>

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IBookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByShelfIdOrderByBookName(int shelfId);
@@ -19,5 +20,5 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query("select b from Book b where (lower(b.bookName) like (lower(:bookName))  or lower(b.bookNameInEnglish) like (lower(:bookName))) and b.shelfId =:shelfId order by b.bookName")
     List<Book> getBookByShelfAndFilter(@Param("shelfId") int shelfId, @Param("bookName") String bookName);
 
-
+    Optional<Book> findTopByShelfIdOrderByBookName(int shelfId);
 }
