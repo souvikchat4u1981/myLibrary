@@ -1,17 +1,12 @@
 package com.souvik.library.service;
 
-import com.souvik.library.models.BookShelfListWithCount;
 import com.souvik.library.models.InitialSearchListModel;
 import com.souvik.library.models.InitialSearchModel;
-import com.souvik.library.models.book.AuthorWithBookCountListModel;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
 import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,136 +16,74 @@ import java.util.List;
 @GraphQLApi
 public class RetrieveBookDetailsService {
 
+    private final List<IScrapperService> scrappers;
+
+    @Autowired
+    public RetrieveBookDetailsService(ReadBengaliBooksScrapper readBengaliBooksScrapper, BoiChitroScrapper boiChitroScrapper) {
+        this.scrappers = new ArrayList<>();
+        this.scrappers.add(readBengaliBooksScrapper);
+        this.scrappers.add(boiChitroScrapper);
+    }
+
     @GraphQLQuery(name = "retrieveBooks")
     public InitialSearchListModel retrieveBooks(@GraphQLArgument(name = "queryString") String queryString) throws ParseException {
-        String _url = "https://readbengalibooks.com/catalogsearch/result/?q=" + queryString;
-        List<InitialSearchModel> books = new ArrayList<>();
-        InitialSearchListModel model = new InitialSearchListModel();
-        try {
-            Document doc = null;
-
-            doc = Jsoup.connect(_url).get();
-
-            Elements elements = doc.select(".item.product");
-
-            for (Element element : elements) {
-                InitialSearchModel book = new InitialSearchModel();
-                Element e = element.select(".product-item-photo").first();
-                //Get Main page
-                String mainPage = e.attr("href");
-//            System.out.println(mainPage);
-                book.setDetailsURL(mainPage);
-                //get Image
-                Element img = e.select("img").first();
-                String image = img.attr("src");
-//            System.out.println(image);
-                book.setImage(image);
-                String productName = element.select(".product-item-link").first().html();
-//            System.out.println(productName);
-                book.setBookName(productName);
-                Elements authandpub = element.select(".author-name");
-                int i = 0;
-                for (Element el : authandpub) {
-                    if (i == 0) {
-                        String authorName = el.select(".author-name").first().select("span").first().html();
-
-                        authorName = authorName.substring(0, authorName.length() - 1);
-//                    System.out.println(authorName);
-                        book.setAuthor(authorName);
-                    } else {
-                        String publisher = el.select(".author-name").first().select("span").first().html();
-                        publisher = publisher.substring(0, publisher.length() - 1);
-//                    System.out.println(publisher);
-                        book.setPublicastion(publisher);
-                    }
-                    i++;
+        InitialSearchListModel model = null;
+        for (IScrapperService scrapper : scrappers) {
+            try {
+                model = scrapper.retrieveBooks(queryString);
+                if (!model.isFailure() && model.getBooks() != null && !model.getBooks().isEmpty()) {
+                    return model;
                 }
-
-                books.add(book);
-
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            model.setFailure(false);
-            model.setMessage("SUCCESS");
-            model.setBooks(books);
-        } catch (Exception e) {
+        }
+        if (model == null) {
+            model = new InitialSearchListModel();
             model.setFailure(true);
-            model.setMessage(e.getMessage());
-            e.printStackTrace();
+            model.setMessage("All scrapers failed to retrieve books.");
         }
         return model;
     }
 
     @GraphQLQuery(name = "bookDetails")
     public InitialSearchModel bookDetails(@GraphQLArgument(name = "book") InitialSearchModel book) {
-        InitialSearchModel model = new InitialSearchModel();
-        model = book;
-        String _url = book.getDetailsURL();
-        try {
-            Document doc = null;
-
-            doc = Jsoup.connect(_url).get();
-
-            Element bengaiHeading = doc.select(".au-style").first();
-
-            if (bengaiHeading != null) {
-                model.setBookName(bengaiHeading.html());
-            }
-
-            model.setBookNameInEnglish(doc.select(".base").first().html());
-            model.setPrice(Double.parseDouble(doc.select(".price").first().html().replace("₹","").replace(",","").toString()));
-            //Get Description
-            Element desc = doc.select(".product.attribute.description").first();
-            if (desc != null) {
-                String desctiption = "";
-
-                Elements paragraphs = desc.child(0).children();
-                for (Element e : paragraphs) {
-                    desctiption += e.html() + "\n";
+        InitialSearchModel model = null;
+        for (IScrapperService scrapper : scrappers) {
+            try {
+                // A bit of a hack to know which scrapper to use.
+                // Ideally, the book model should contain the source.
+                if (book.getDetailsURL().contains("readbengalibooks")) {
+                    if (scrapper instanceof ReadBengaliBooksScrapper) {
+                        model = scrapper.bookDetails(book);
+                        if (!model.isFailure()) {
+                            return model;
+                        }
+                    }
+                } else if (book.getDetailsURL().contains("boichitro")) {
+                    if (scrapper instanceof BoiChitroScrapper) {
+                        model = scrapper.bookDetails(book);
+                        if (!model.isFailure()) {
+                            return model;
+                        }
+                    }
+                } else {
+                    // If we don't know the source, try all scrapers
+                    model = scrapper.bookDetails(book);
+                    if (!model.isFailure()) {
+                        return model;
+                    }
                 }
-
-                model.setDescription(desctiption);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            //Get Binding, ISBN, Publishing Year
-            Elements tds = doc.select("td");
-
-
-
-            for (Element td : tds) {
-                if (td.attr("data-th").equals("Binding")) {
-
-                    model.setFormat(td.html());
-                }else if(td.attr("data-th").equals("SKU")){
-                    String isbn=td.html();
-                    isbn = isbn.replaceAll("[^0-9]", "");
-                    model.setIsbn(isbn);
-                }else if(td.attr("data-th").equals("Publishing Year")){
-                    model.setPublishigYear(td.html());
-                }else if(td.attr("data-th").equals("Languages")){
-                    model.setLanguage(td.html());
-                }
-
-            }
-
-
-            //large image
-            String image = doc.select(".gallery-placeholder__image").first().attr("src");
-            model.setImage(image);
-
-
-            model.setFailure(false);
-            model.setMessage("SUCCESS");
-        } catch (Exception ex) {
-            model.setFailure(true);
-            model.setMessage(ex.getMessage());
-            ex.printStackTrace();
         }
 
-
+        if (model == null) {
+            model = new InitialSearchModel();
+            model.setFailure(true);
+            model.setMessage("All scrapers failed to retrieve book details.");
+        }
         return model;
     }
-
-
-
 }
