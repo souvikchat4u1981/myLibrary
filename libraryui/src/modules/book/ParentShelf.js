@@ -27,20 +27,26 @@ const ParentShelf = (props) => {
 
   const [imageName, setImageName] = useState("shelf1.png");
 
+
+  const generateThumbNail = (imageName) => {
+    if (imageName === "" || imageName === null) {
+      getBookImage({
+        variables: {
+          shelfId: props.data.bookShelfs.shelfId
+            ? props.data.bookShelfs.shelfId
+            : 0,
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     if (props.data.bookShelfs.shelfImage === null) {
+      generateThumbNail(props.data.bookShelfs.shelfImage);
       let min = 1;
       let max = 10;
       const rand = min + Math.random() * (max - min);
-      // let r = Math.round(rand);
-      // if (sessionStorage.getItem("prevRand")) {
-      //   if (r === +sessionStorage.getItem("prevRand")) {
-      //     r = r + 1;
-      //     if (r > max) {
-      //       r = 1;
-      //     }
-      //   }
-      // }
+
       let r = 1;
       if (sessionStorage.getItem("prevRand")) {
         r = +sessionStorage.getItem("prevRand") + 1;
@@ -104,17 +110,6 @@ const ParentShelf = (props) => {
     },
   });
 
-  const generateThumbNail = (imageName) => {
-    if (imageName === "") {
-      getBookImage({
-        variables: {
-          shelfId: props.data.bookShelfs.shelfId
-            ? props.data.bookShelfs.shelfId
-            : 0,
-        },
-      });
-    }
-  };
 
   useEffect(() => { }, [imageName]);
 
