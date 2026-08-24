@@ -31,8 +31,9 @@ public class BoiChitroScrapper implements IScrapperService {
         InitialSearchListModel model = new InitialSearchListModel();
         try {
             String encodedSearchTerm = URLEncoder.encode(queryString, StandardCharsets.UTF_8.toString());
-            String urlString = "https://boichitro.in/wp-content/plugins/ajax-search-for-woocommerce-premium/includes/Engines/TNTSearchMySQL/Endpoints/search.php?s=" + encodedSearchTerm;
+            String urlString = "https://boichitro.in/shop/?s="+ encodedSearchTerm +"&post_type=product";
 
+            /*
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -71,6 +72,38 @@ public class BoiChitroScrapper implements IScrapperService {
                 book.setDetailsURL(bookJson.has("url") ? bookJson.get("url").getAsString() : null);
                 // Price and SKU are available but not in InitialSearchModel
                 books.add(book);
+            }
+            */
+
+            Document doc = Jsoup.connect(urlString)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+                    .get();
+
+            Elements products = doc.select(".product");
+            for (Element product : products) {
+                InitialSearchModel book = new InitialSearchModel();
+                
+                Element titleLink = product.selectFirst(".woocommerce-loop-product__title a");
+                if (titleLink != null) {
+                    String fullTitle = titleLink.text();
+                    String[] parts = fullTitle.split("\\|\\|");
+                    if (parts.length >= 2) {
+                        book.setBookName(parts[0].trim());
+                        book.setAuthor(parts[1].trim());
+                    } else {
+                        book.setBookName(fullTitle.trim());
+                    }
+                    book.setDetailsURL(titleLink.attr("href"));
+                }
+                
+                Element imgElem = product.selectFirst(".product-thumbnail a img");
+                if (imgElem != null) {
+                    book.setImage(imgElem.attr("src"));
+                }
+                
+                if (book.getBookName() != null) {
+                    books.add(book);
+                }
             }
             model.setFailure(false);
             model.setMessage("SUCCESS");
