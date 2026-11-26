@@ -93,6 +93,39 @@ public class BookService {
         return model;
     }
 
+    @GraphQLMutation(name = "updateBookPurchaseDate")
+    public RestStatus updateBookPurchaseDate(
+            @GraphQLArgument(name = "bookId") int bookId,
+            @GraphQLArgument(name = "purchaseDate") String purchaseDate) {
+        RestStatus status = new RestStatus();
+        try {
+            Book b = bookRepository.findById(bookId)
+                    .orElseThrow(() -> new RuntimeException("Book not found"));
+            if (purchaseDate == null || purchaseDate.trim().isEmpty()) {
+                b.setPurchaseDate(null);
+            } else {
+                String dateStr = purchaseDate.trim();
+                if (dateStr.length() == 10) {
+                    dateStr = dateStr + " 00:00:00";
+                } else {
+                    dateStr = dateStr.replace("T", " ");
+                    if (dateStr.length() > 19) {
+                        dateStr = dateStr.substring(0, 19);
+                    }
+                }
+                b.setPurchaseDate(Timestamp.valueOf(dateStr));
+            }
+            bookRepository.save(b);
+            status.setFailure(false);
+            status.setMessage("Purchase date updated");
+        } catch (Exception ex) {
+            status.setFailure(true);
+            status.setMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return status;
+    }
+
     @GraphQLQuery(name = "totalBookCount")
     public int totalBookCount() {
         return (int) bookRepository.count();
@@ -171,6 +204,9 @@ public class BookService {
                 }
 
 
+                if ((b.getBookId() == null || b.getBookId() == 0) && b.getPurchaseDate() == null) {
+                    b.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+                }
                 bookRepository.save(b);
             }
 
@@ -228,6 +264,10 @@ public class BookService {
                 b.setParentShelfName(String.valueOf(item[11]));
                 b.setBookNameInEnglish(String.valueOf(item[12]));
                 b.setDigitalFileName(String.valueOf(item[13]));
+                b.setIsbn(String.valueOf(item[14]));
+                b.setPrice(item[15] != null ? Double.valueOf(item[15].toString()) : 0.0);
+                b.setPublishing_year(String.valueOf(item[16]));
+                b.setPurchaseDate(item.length > 17 && item[17] != null ? String.valueOf(item[17]) : "");
                 m.add(b);
             }
             model.setBookList(m);
@@ -266,6 +306,7 @@ public class BookService {
                 b.setIsbn(String.valueOf(item[14]));
                 b.setPrice(Double.valueOf(item[15].toString()));
                 b.setPublishing_year(String.valueOf(item[16]));
+                b.setPurchaseDate(item.length > 17 && item[17] != null ? String.valueOf(item[17]) : "");
                 m.add(b);
             }
             model.setBookList(m);

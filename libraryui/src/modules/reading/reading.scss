@@ -1,0 +1,90 @@
+.reading-entry-card,
+.reading-calendar-card {
+  background-color: var(--card-bg);
+  backdrop-filter: blur(22px) saturate(1.7);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.glass-calendar {
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: "Inter", sans-serif !important;
+  color: var(--text) !important;
+
+  .react-calendar__navigation {
+    margin-bottom: 0.75rem;
+    button {
+      color: var(--text) !important;
+      font-weight: 700;
+      border-radius: 10px;
+      background: transparent;
+      &:hover, &:focus {
+        background: var(--accent-soft) !important;
+      }
+    }
+  }
+
+  .react-calendar__month-view__weekdays {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    abbr { text-decoration: none; }
+  }
+
+  .react-calendar__tile {
+    position: relative;
+    color: var(--text);
+    border-radius: 10px;
+    padding: 0.6rem 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: transparent;
+
+    &:hover:not(.react-calendar__tile--active) {
+      background: var(--accent-soft) !important;
+      color: var(--text) !important;
+    }
+
+    &--now {
+      background: var(--surface2) !important;
+      border: 1px solid var(--border-hover) !important;
+      font-weight: 700;
+    }
+
+    &--active,
+    &--active:enabled:hover,
+    &--active:enabled:focus {
+      background: var(--gradient) !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      box-shadow: 0 4px 12px var(--accent-mid);
+    }
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: var(--muted) !important;
+    opacity: 0.45;
+  }
+}
+
+.calendar-dot-badge {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+}

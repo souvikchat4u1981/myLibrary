@@ -116,47 +116,76 @@ const ParentShelf = (props) => {
     ? `${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`
     : fallbackSrc;
 
+  const isList = props.viewMode === "list";
+
   return (
-    <div className="shelf">
-      {/* Action icons — visible on card hover */}
-      <div className="saas-card-actions">
+    <div className={`shelf ${isList ? "shelf-list-item" : ""}`}>
+      {/* Floating frosted action dock */}
+      <div className="saas-card-actions justify-content-end">
         <span
           className="saas-action-icon text-success hand"
           title="Edit Shelf"
-          onClick={() => navigate("/addShelf", { state: { shelf: props.data.bookShelfs } })}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/addShelf", { state: { shelf: props.data.bookShelfs } });
+          }}
         >
           <i className="fa fa-pen"></i>
         </span>
         <span
           className="saas-action-icon text-danger hand"
           title="Delete Shelf"
-          onClick={() => onDeleteShelf(props.data.bookShelfs.shelfId)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteShelf(props.data.bookShelfs.shelfId);
+          }}
         >
           <i className="fa fa-trash"></i>
         </span>
       </div>
 
-      {/* Cover image */}
+      {/* Cover image with ambient color aura + 3D cover */}
       <div className="saas-card-media" onClick={onShelfClickHandle}>
         <img
           src={imgSrc}
-          alt={props.data.bookShelfs.shelfName}
+          alt=""
+          aria-hidden="true"
+          className="glass-cover-aura"
           onError={(e) => {
             e.currentTarget.onerror = null;
             e.currentTarget.src = fallbackSrc;
           }}
         />
+        <img
+          src={imgSrc}
+          alt={props.data.bookShelfs.shelfName}
+          className="glass-cover-fg"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = fallbackSrc;
+          }}
+        />
+        {!isList && (
+          <span className="glass-count-pill">
+            <i className="fa-solid fa-book-open"></i>
+            {props.data.bookCount}
+          </span>
+        )}
       </div>
 
-      {/* Title */}
-      <div className="saas-card-title" onClick={onShelfClickHandle}>
-        {props.data.bookShelfs.shelfName}
-      </div>
-
-      {/* Meta */}
-      <div className="saas-card-meta" onClick={onShelfClickHandle}>
-        <i className="fa-solid fa-book-open"></i>
-        <span>{props.data.bookCount} Books</span>
+      <div
+        className={isList ? "flex-grow-1 min-w-0" : ""}
+        onClick={onShelfClickHandle}
+      >
+        <div className="saas-card-title">
+          {props.data.bookShelfs.shelfName}
+        </div>
+        {isList && (
+          <div className="saas-card-meta">
+            <i className="fa-solid fa-book-open"></i>
+            <span>{props.data.bookCount} Books</span>
+          </div>
+        )}
       </div>
     </div>
   );

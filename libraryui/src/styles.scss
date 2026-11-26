@@ -70,10 +70,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-select {
+  background-color: var(--select-bg) !important;
+  color: var(--text) !important;
+  padding-right: 2.25rem !important;
   background-image: var(--dropdown-arrow) !important;
   background-repeat: no-repeat !important;
   background-position: right 0.75rem center !important;
   background-size: 18px !important;
+
+  option {
+    background-color: var(--select-bg) !important;
+    color: var(--text) !important;
+  }
 }
 
 .input-group {

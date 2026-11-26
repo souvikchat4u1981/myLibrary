@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
@@ -61,6 +61,8 @@ const DisplayBook = (props) => {
   };
 
   const [showImage, setShowImage] = useState(true);
+  const [flipLeft, setFlipLeft] = useState(false);
+  const mediaRef = useRef(null);
 
   const [load, setLoad] = useState(false);
 
@@ -212,8 +214,24 @@ const DisplayBook = (props) => {
 
         <div className="saas-card-media">
           {showImage && (
+            <img
+              src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
+              alt=""
+              aria-hidden="true"
+              className="glass-cover-aura"
+            />
+          )}
+          {showImage && (
             <div
-              className="w-100 h-100 d-flex align-items-center justify-content-center saas-magnifier-wrap"
+              ref={mediaRef}
+              className="w-100 h-100 d-flex align-items-center justify-content-center saas-magnifier-wrap position-relative"
+              style={{ zIndex: 2 }}
+              onMouseEnter={() => {
+                if (mediaRef.current) {
+                  const rect = mediaRef.current.getBoundingClientRect();
+                  setFlipLeft(window.innerWidth - rect.right < 450);
+                }
+              }}
               onClick={() =>
                 navigate("/borrow", {
                   state: {
@@ -235,13 +253,7 @@ const DisplayBook = (props) => {
                 largeImageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
                 alwaysInPlace={false}
                 fillAvailableSpace={true}
-                switchSides={
-                  props.index % 8 === 0 ||
-                  props.index % 8 === 6 ||
-                  props.index % 8 === 7
-                    ? true
-                    : false
-                }
+                switchSides={flipLeft}
                 magnifierBorderColor="rgba(255, 255, 255, .5)"
                 zoomContainerBorder="1px solid #e2e8f0"
                 zoomContainerBoxShadow="0 12px 24px rgba(15, 23, 42, .2)"

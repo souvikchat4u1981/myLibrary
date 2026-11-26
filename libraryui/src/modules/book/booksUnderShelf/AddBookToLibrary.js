@@ -28,6 +28,15 @@ const AddBookToLibrary = (props) => {
     );
   } catch (ex) {}
   const location = useLocation();
+  const todayStr = () => new Date().toISOString().slice(0, 10);
+  const toDateInput = (val) => {
+    if (!val) return "";
+    if (typeof val === "number") return new Date(val).toISOString().slice(0, 10);
+    const s = String(val).trim();
+    if (/^\d+$/.test(s)) return new Date(Number(s)).toISOString().slice(0, 10);
+    return s.length >= 10 ? s.slice(0, 10) : "";
+  };
+
   const [book, setBook] = useState({
     author: "",
     bookId: 0,
@@ -45,7 +54,7 @@ const AddBookToLibrary = (props) => {
     publishigYear: "",
     shelfId: 0,
     userId: 0,
-    purchaseDate: null,
+    purchaseDate: todayStr(),
     digitalFileName: "",
   });
 
@@ -98,11 +107,15 @@ const AddBookToLibrary = (props) => {
     onCompleted: (data) => {
       //   console.log(data);
       if (!data.bookDetails.failure) {
-        setLodedBook(data.bookDetails);
+        const fetched = {
+          ...data.bookDetails,
+          purchaseDate: data.bookDetails.purchaseDate || todayStr(),
+        };
+        setLodedBook(fetched);
         newBookDispatch({
           type: "SET INITIAL VALUE",
 
-          payload: data.bookDetails,
+          payload: fetched,
         });
       }
       setLoad(false);
@@ -209,7 +222,12 @@ const AddBookToLibrary = (props) => {
       if (b.shelfId === 0)
         b.shelfId = JSON.parse(sessionStorage.getItem("AddBookUnder")).shelfId;
 
-      b["purchaseDate"] = null;
+      if (b.purchaseDate && String(b.purchaseDate).trim() !== "") {
+        const dateOnly = toDateInput(b.purchaseDate);
+        b["purchaseDate"] = dateOnly ? `${dateOnly}T00:00:00` : null;
+      } else {
+        b["purchaseDate"] = null;
+      }
       setLoad(true);
       if (loadedBook.image.includes("blob")) {
         saveTempImage(b);
@@ -537,7 +555,7 @@ const AddBookToLibrary = (props) => {
                       }}
                     />
                   </div>
-                  <div className="col-sm-8 mt-2">
+                  <div className="col-sm-4 mt-2">
                     <Input
                       id="digitalFileName"
                       value={newBook.digitalFileName}
@@ -552,6 +570,23 @@ const AddBookToLibrary = (props) => {
                         fieldClass: "form-control form-control-sm",
                         labelClass: "large-text-header",
                       }}
+                    />
+                  </div>
+                  <div className="col-sm-4 mt-2">
+                    <label className="large-text-header form-label mb-1">
+                      Purchase Date
+                    </label>
+                    <input
+                      id="purchaseDate"
+                      type="date"
+                      className="form-control form-control-sm"
+                      value={toDateInput(newBook.purchaseDate)}
+                      onChange={(e) =>
+                        onInputChange({
+                          id: "purchaseDate",
+                          value: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>

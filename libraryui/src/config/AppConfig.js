@@ -13,6 +13,8 @@ export const RouterLinks = {
   BorrowBook: "/borrow",
   BookReader: "/readBook",
   BorrowList: "/borrowList",
+  PurchaseList: "/purchaseList",
+  ReadingTracker: "/readingTracker",
 };
 
 export const menuList = [
@@ -38,6 +40,18 @@ export const menuList = [
     menuName: "Borrow List",
     routerLink: "/borrowList",
     icon: "fa-solid fa-box-open",
+    visible: true,
+  },
+  {
+    menuName: "Purchase List",
+    routerLink: "/purchaseList",
+    icon: "fa-solid fa-bag-shopping",
+    visible: true,
+  },
+  {
+    menuName: "Reading Calendar",
+    routerLink: "/readingTracker",
+    icon: "fa-solid fa-calendar-check",
     visible: true,
   },
   // {

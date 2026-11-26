@@ -1,46 +1,43 @@
-@import "../../styles/theme-variables.scss";
+/* AutoComplete Typeahead — Crisp Frosted Glass */
 ul.options {
-  @include themify($themes) {
-    display: block;
-    list-style: none;
-    width: 30rem;
-    transition: width 0.3s;
-    margin: auto;
-    position: absolute;
-    z-index: 20;
-    background: themed("backGroundColor");
-    border: 1px solid themed("golden");
-    border-radius: 8px;
-    padding: 0px;
-  }
+  display: block;
+  list-style: none;
+  width: 100%;
+  max-width: 30rem;
+  max-height: 240px;
+  overflow-y: auto;
+  margin: 0.35rem 0 0 0;
+  position: absolute;
+  z-index: 1050;
+  background-color: var(--select-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 0.35rem;
+  box-shadow: var(--shadow-lg);
 }
 
 ul.options li {
-  @include themify($themes) {
-    display: block;
-    background: themed("backGroundColor");
-    margin: 5px auto;
-    padding: 0px;
-    padding-left: 10px;
-    width: 100%;
-    border-radius: 2px;
-  }
+  display: block;
+  background: transparent;
+  color: var(--text);
+  margin: 2px 0;
+  padding: 0.5rem 0.85rem;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 ul.options li:hover {
-  @include themify($themes) {
-    font-weight: bold;
-    color: themed("invertedBackground");
-    // background: themed("invertedBackground");
-    cursor: pointer;
-    transition: 0.3s all;
-  }
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
 }
 
 ul.options li.option-active {
-  @include themify($themes) {
-    background: themed("invertedBackground");
-
-    color: themed("backGroundColor");
-  }
+  background: var(--gradient);
+  color: #ffffff;
+  font-weight: 600;
 }

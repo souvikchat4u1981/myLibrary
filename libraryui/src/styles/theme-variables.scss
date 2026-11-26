@@ -3,6 +3,8 @@
 // ═══════════════════════════════════════════════════
 
 .theme-light {
+  color-scheme: light;
+  --select-bg:      #ffffff;
   --bg:             #eef2ff;
   --bg-mesh:
     radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.16) 0px, transparent 50%),
@@ -47,6 +49,8 @@
 }
 
 .theme-dark {
+  color-scheme: dark;
+  --select-bg:      #111627;
   --bg:             #070913;
   --bg-mesh:
     radial-gradient(at 12% 12%, rgba(99, 102, 241, 0.22) 0px, transparent 50%),

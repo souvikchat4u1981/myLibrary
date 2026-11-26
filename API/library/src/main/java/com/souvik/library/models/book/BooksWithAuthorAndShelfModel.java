@@ -25,5 +25,6 @@ public class BooksWithAuthorAndShelfModel {
     private String isbn;
     private String publishing_year;
     private Double price;
+    private String purchaseDate;
 
 }

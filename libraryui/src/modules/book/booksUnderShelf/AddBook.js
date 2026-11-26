@@ -44,18 +44,13 @@ const AddBook = (props, { route }) => {
     },
   });
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      // console.log(searchBook);
-      if (searchBook !== "") {
-        setLoad(true);
-        getBooks({ variables: { queryString: searchBook } });
-      }
-      // Send Axios request here
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchBook]);
+  const handleSearch = (e) => {
+    if (e) e.preventDefault();
+    if (searchBook.trim() !== "") {
+      setLoad(true);
+      getBooks({ variables: { queryString: searchBook } });
+    }
+  };
 
   return (
     // <div>{JSON.parse(sessionStorage.getItem("AddBookUnder")).shelfId}</div>
@@ -86,7 +81,10 @@ const AddBook = (props, { route }) => {
       </div>
       <div className="p-2 row">
         <div className="col-sm-4"></div>
-        <div className="col-sm-4  border-bottom pb-2 border-golden">
+        <form
+          className="col-sm-4 border-bottom pb-2 border-golden"
+          onSubmit={handleSearch}
+        >
           <Input
             id="searchBook"
             value={searchBook}
@@ -102,16 +100,10 @@ const AddBook = (props, { route }) => {
               labelClass: "large-text-header",
             }}
           />
-          <Button
-            extraClass={"mt-2"}
-            onClick={() => {
-              setLoad(true);
-              getBooks({ variables: { queryString: searchBook } });
-            }}
-          >
+          <Button type="submit" extraClass={"mt-2"}>
             Search
           </Button>
-        </div>
+        </form>
       </div>
       <div className="p-2 row">
         {bookList &&

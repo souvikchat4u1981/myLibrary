@@ -8,6 +8,8 @@ import ChildShelf from "../modules/book/booksUnderShelf/ChildShelf";
 import BookReader from "../modules/bookReader/BookReader";
 import Borrow from "../modules/borrowBook/Borrow";
 import BorrowList from "../modules/borrowBook/BorrowList";
+import PurchaseList from "../modules/purchase/PurchaseList";
+import ReadingTracker from "../modules/reading/ReadingTracker";
 import BookList from "../modules/reports/BookList";
 import MainReport from "../modules/reports/MainReport";
 import AuthorList from "../modules/reports/author/AuthorList";
@@ -65,6 +67,14 @@ const routes = [
   {
     path: RouterLinks.BorrowList,
     Component: BorrowList,
+  },
+  {
+    path: RouterLinks.PurchaseList,
+    Component: PurchaseList,
+  },
+  {
+    path: RouterLinks.ReadingTracker,
+    Component: ReadingTracker,
   },
 ];
 export default routes;

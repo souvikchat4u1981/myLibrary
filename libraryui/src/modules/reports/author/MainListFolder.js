@@ -55,6 +55,16 @@ const MainListFolder = (props) => {
     );
   };
 
+  const imgSrc =
+    bookImage !== ""
+      ? `${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`
+      : `${process.env.PUBLIC_URL}/assets/authorImage/${
+          data && data.authorImage && data.authorImage !== ""
+            ? data.authorImage
+            : "author.png"
+        }`;
+  const fallbackAuthor = `${process.env.PUBLIC_URL}/assets/authorImage/author.png`;
+
   return (
     <Fragment>
       {data && (
@@ -64,27 +74,30 @@ const MainListFolder = (props) => {
         >
           <div className="saas-card-media">
             <img
-              src={
-                bookImage !== ""
-                  ? `${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`
-                  : `${process.env.PUBLIC_URL}/assets/authorImage/${
-                      data.authorImage && data.authorImage !== ""
-                        ? data.authorImage
-                        : "author.png"
-                    }`
-              }
-              alt={data.authorName}
+              src={imgSrc}
+              alt=""
+              aria-hidden="true"
+              className="glass-cover-aura"
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = `${process.env.PUBLIC_URL}/assets/authorImage/author.png`;
+                e.currentTarget.src = fallbackAuthor;
               }}
             />
+            <img
+              src={imgSrc}
+              alt={data.authorName}
+              className="glass-cover-fg"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = fallbackAuthor;
+              }}
+            />
+            <span className="glass-count-pill">
+              <i className="fa-solid fa-book-open"></i>
+              {data.bookCount}
+            </span>
           </div>
           <div className="saas-card-title">{data.authorName}</div>
-          <div className="saas-card-meta">
-            <i className="fa-solid fa-book-open"></i>
-            <span>{data.bookCount} Books</span>
-          </div>
         </div>
       )}
     </Fragment>

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   FILTER_BOOK_SHELFS,
-  GET_ALL_PARENT_BOOKSHELFS,
   GET_ALL_PARENT_BOOKSHELFS_WITH_COUNT,
   TOTAL_BOOKS_COUNT,
 } from "../../queries/BookQueries";
@@ -16,6 +15,9 @@ const Books = (props) => {
   const [load, setLoad] = useState(false);
   const [parentShelfs, setParentShelfs] = useState(null);
   const [totalBooks, setTotalBooks] = useState(0);
+  const [viewMode, setViewMode] = useState(
+    localStorage.getItem("shelf-view-mode") || "grid"
+  );
   const [searchParam, setSearchparam] = useState(
     sessionStorage.getItem("ShelfFilterParam")
       ? sessionStorage.getItem("ShelfFilterParam")
@@ -76,14 +78,12 @@ const Books = (props) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      // console.log(searchBook);
       if (searchParam !== "") {
         setLoad(true);
         filterShelfs({ variables: { searchParam: searchParam } });
       } else {
         getAllShelfs();
       }
-      // Send Axios request here
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
@@ -98,47 +98,114 @@ const Books = (props) => {
     sessionStorage.setItem("ShelfFilterParam", e.target.value);
   };
 
+  const clearSearch = () => {
+    setSearchparam("");
+    sessionStorage.setItem("ShelfFilterParam", "");
+  };
+
+  const switchView = (mode) => {
+    setViewMode(mode);
+    localStorage.setItem("shelf-view-mode", mode);
+  };
+
   return (
     <Fragment>
       {load && <CustomLoader />}
-      <div className="saas-page-header">
-        <div className="d-flex align-items-center gap-3 flex-wrap">
-          <h1 className="saas-page-title">
-            <i className="fa-solid fa-layer-group golden-text"></i>
-            My Shelves
+
+      {/* ── Frosted Glass Hero Spotlight ── */}
+      <div className="glass-hero">
+        <div>
+          <div className="glass-hero-eyebrow">
+            <i className="fa-solid fa-sparkles"></i>
+            Personal Collection
+          </div>
+          <h1 className="glass-hero-title">
+            {window.Configs?.applicationName || "My Library"} Shelves
           </h1>
-          <span className="saas-badge">
-            <i className="fa-solid fa-book"></i>
-            {totalBooks} Books
-          </span>
+          <p className="glass-hero-sub">
+            Browse your curated bookshelves, authors, and digital reads.
+          </p>
         </div>
 
-        <div className="d-flex align-items-center gap-2 flex-wrap flex-grow-1 justify-content-md-end">
-          <div className="input-group saas-search-box">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by author or book..."
-              value={searchParam}
-              onChange={onFilterChange}
-            />
-            <span className="input-group-text" id="basic-addon2">
-              <i className="fa fa-search"></i>
-            </span>
+        <div className="d-flex flex-column align-items-stretch align-items-lg-end gap-3 flex-grow-1">
+          <div className="glass-stat-row justify-content-lg-end">
+            <div className="glass-stat-chip">
+              <div className="stat-icon">
+                <i className="fa-solid fa-layer-group"></i>
+              </div>
+              <div>
+                <div className="stat-value">
+                  {parentShelfs ? parentShelfs.length : 0}
+                </div>
+                <div className="stat-label">Shelves</div>
+              </div>
+            </div>
+
+            <div className="glass-stat-chip">
+              <div className="stat-icon">
+                <i className="fa-solid fa-book"></i>
+              </div>
+              <div>
+                <div className="stat-value">{totalBooks}</div>
+                <div className="stat-label">Total Books</div>
+              </div>
+            </div>
           </div>
 
-          <button
-            type="button"
-            className="saas-toolbar-btn primary"
-            onClick={onAddClick}
-          >
-            <i className="fa fa-plus"></i>
-            New Shelf
-          </button>
+          <div className="d-flex align-items-center gap-2 flex-wrap justify-content-lg-end w-100">
+            <div className="glass-search-wrap">
+              <i className="fa fa-search glass-search-icon"></i>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by author, book, or shelf..."
+                value={searchParam}
+                onChange={onFilterChange}
+              />
+              {searchParam && (
+                <button
+                  type="button"
+                  className="glass-search-clear"
+                  onClick={clearSearch}
+                  title="Clear search"
+                >
+                  <i className="fa fa-times"></i>
+                </button>
+              )}
+            </div>
+
+            <div className="glass-view-switch" title="Switch layout">
+              <button
+                type="button"
+                className={viewMode === "grid" ? "active" : ""}
+                onClick={() => switchView("grid")}
+                title="Grid View"
+              >
+                <i className="fa-solid fa-grip"></i>
+              </button>
+              <button
+                type="button"
+                className={viewMode === "list" ? "active" : ""}
+                onClick={() => switchView("list")}
+                title="Compact List View"
+              >
+                <i className="fa-solid fa-list"></i>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className="saas-toolbar-btn primary"
+              onClick={onAddClick}
+            >
+              <i className="fa fa-plus"></i>
+              New Shelf
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="saas-grid">
+      <div className={viewMode === "list" ? "saas-list-grid" : "saas-grid"}>
         {parentShelfs &&
           parentShelfs.map((m) => (
             <ParentShelf
@@ -146,6 +213,7 @@ const Books = (props) => {
               data={m}
               count={parentShelfs.length}
               shelfRefetch={refetch}
+              viewMode={viewMode}
             />
           ))}
       </div>

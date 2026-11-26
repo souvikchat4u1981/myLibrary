@@ -1,68 +1,318 @@
 /* ══════════════════════════════════════════
-   SHELF / BOOK GRID  —  Crisp Frosted Glass
+   SHELF / BOOK GRID  —  WOW Frosted Glass + 3D Cover Aura
 ══════════════════════════════════════════ */
+
+/* ── Hero Spotlight Banner ── */
+.glass-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.65rem 1.85rem;
+  margin-bottom: 1.75rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+
+  /* subtle ambient orb inside hero */
+  &::before {
+    content: "";
+    position: absolute;
+    top: -60%;
+    right: -8%;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: var(--gradient);
+    opacity: 0.12;
+    filter: blur(55px);
+    pointer-events: none;
+  }
+}
+
+.glass-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 0.6rem;
+}
+
+.glass-hero-title {
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.15;
+}
+
+.glass-hero-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.glass-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.glass-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 14px;
+  background: var(--surface2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+
+  .stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient);
+    color: #fff;
+    font-size: 0.82rem;
+    box-shadow: 0 4px 12px var(--accent-mid);
+  }
+
+  .stat-value {
+    font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 1.02rem;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.glass-search-wrap {
+  position: relative;
+  min-width: 240px;
+  flex: 1 1 260px;
+  max-width: 360px;
+
+  .glass-search-icon {
+    position: absolute;
+    left: 0.95rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input.form-control {
+    padding-left: 2.45rem !important;
+    padding-right: 2.25rem !important;
+    height: 42px;
+    border-radius: 13px !important;
+  }
+
+  .glass-search-clear {
+    position: absolute;
+    right: 0.65rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: var(--surface2);
+    color: var(--muted);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    cursor: pointer;
+    z-index: 2;
+    &:hover { color: var(--text); background: var(--accent-soft); }
+  }
+}
+
+/* ── View Switcher Pill ── */
+.glass-view-switch {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+
+  button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    width: 34px;
+    height: 32px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-size: 0.82rem;
+
+    &.active {
+      background: var(--surface3);
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+    &:hover:not(.active) { color: var(--text); }
+  }
+}
 
 /* ── Grid ── */
 .saas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-  gap: 1.35rem;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.saas-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.9rem;
   width: 100%;
 }
 
 /* ══════════════════════════════════════════
-   FROSTED GLASS CARD
+   FROSTED GLASS CARD + 3D BOOK AURA
 ══════════════════════════════════════════ */
 .shelf {
   position: relative;
   display: flex;
   flex-direction: column;
   background-color: var(--card-bg);
-  backdrop-filter: blur(20px) saturate(1.65);
-  -webkit-backdrop-filter: blur(20px) saturate(1.65);
+  backdrop-filter: blur(22px) saturate(1.7);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
   border: 1px solid var(--card-border);
-  border-radius: 20px;
-  padding: 0.85rem;
+  border-radius: 22px;
+  padding: 0.75rem 0.75rem 0.95rem 0.75rem;
   cursor: pointer;
   overflow: visible;
   box-shadow: var(--shadow);
   transition:
-    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.24s ease,
-    background-color 0.24s ease,
-    box-shadow 0.24s ease;
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.28s ease;
 
   &:hover {
+    z-index: 1050;
     background-color: var(--glass-hover);
     border-color: var(--border-hover);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
-    transform: translateY(-4px);
+    transform: translateY(-6px);
 
     .saas-card-actions {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .saas-card-media img {
-      transform: scale(1.03);
+    .glass-cover-fg {
+      transform: perspective(700px) rotateY(0deg) scale(1.04);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34), 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass-cover-aura {
+      opacity: 0.62;
     }
   }
 }
 
+/* ── Compact List Variant ── */
+.shelf.shelf-list-item {
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+
+  &:hover { transform: translateY(-2px); }
+
+  .saas-card-media {
+    width: 60px;
+    height: 78px;
+    border-radius: 10px;
+    padding: 0.25rem;
+  }
+
+  .glass-cover-fg {
+    border-radius: 6px;
+    transform: none;
+  }
+
+  .saas-card-actions {
+    position: static;
+    opacity: 1;
+    transform: none;
+    margin: 0;
+    margin-left: auto;
+  }
+
+  .saas-card-title {
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .saas-card-meta {
+    justify-content: flex-start;
+  }
+}
+
 /* ══════════════════════════════════════════
-   ACTION ICONS (FROSTED PILLS)
+   FLOATING FROSTED ACTION DOCK
 ══════════════════════════════════════════ */
 .saas-card-actions {
-  position: relative;
-  z-index: 20;
+  position: absolute;
+  top: 1.15rem;
+  left: 1.15rem;
+  right: 1.15rem;
+  z-index: 25;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.3rem;
-  margin-bottom: 0.55rem;
   opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.22s ease;
+  pointer-events: none;
+
+  > * { pointer-events: auto; }
 }
 
 .shelf:hover .saas-card-actions {
@@ -79,52 +329,117 @@
   border-radius: 10px;
   font-size: 0.75rem;
   background-color: var(--surface3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
   color: var(--muted);
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.12);
     border-color: var(--border-hover);
   }
 
-  &.text-danger  { color: var(--red)    !important; &:hover { background-color: rgba(239, 68, 68, 0.14); } }
-  &.text-success { color: var(--green)  !important; &:hover { background-color: rgba(16, 185, 129, 0.14); } }
+  &.text-danger  { color: var(--red)    !important; &:hover { background-color: rgba(239, 68, 68, 0.16); } }
+  &.text-success { color: var(--green)  !important; &:hover { background-color: rgba(16, 185, 129, 0.16); } }
   &.text-primary { color: var(--accent) !important; &:hover { background-color: var(--accent-soft); } }
-  &.text-warning { color: var(--orange) !important; &:hover { background-color: rgba(245, 158, 11, 0.14); } }
+  &.text-warning { color: var(--orange) !important; &:hover { background-color: rgba(245, 158, 11, 0.16); } }
 }
 
 /* ══════════════════════════════════════════
-   CARD COVER (FROSTED FRAME)
+   CARD COVER WITH DYNAMIC COLOR AURA
 ══════════════════════════════════════════ */
 .saas-card-media {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 205px;
-  border-radius: 13px;
+  height: 218px;
+  border-radius: 15px;
   background-color: var(--surface2);
   border: 1px solid var(--card-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
+  padding: 0.85rem;
   flex-shrink: 0;
 
-  img {
-    max-height: 205px;
-    max-width: 100%;
+  /* Blurred ambient color-aura behind the cover */
+  .glass-cover-aura {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    border-radius: 12px;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: blur(22px) saturate(1.8);
+    opacity: 0.45;
+    clip-path: inset(0 round 14px);
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
+
+  /* Crisp 3D uncropped book cover */
+  .glass-cover-fg {
+    position: relative;
+    z-index: 2;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15);
+    transform: perspective(700px) rotateY(-4deg);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+
+  /* Fallback for plain img (e.g., magnifier wrap) */
+  > img:not(.glass-cover-aura):not(.glass-cover-fg) {
+    position: relative;
+    z-index: 2;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+  }
+
+  /* Constrain ONLY SideBySideMagnifier's small preview image, leave zoom container untouched */
+  .saas-magnifier-wrap {
+    > div > div > img {
+      max-height: 190px !important;
+      width: auto !important;
+      max-width: 100% !important;
+      object-fit: contain !important;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+/* ── Floating Count Chip inside Cover Frame ── */
+.glass-count-pill {
+  position: absolute;
+  bottom: 0.55rem;
+  right: 0.55rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.69rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface3);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
 }
 
 /* ══════════════════════════════════════════
@@ -133,10 +448,12 @@
 .saas-card-title {
   font-family: "Plus Jakarta Sans", "Inter", sans-serif;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--text);
-  margin-top: 0.72rem;
+  margin-top: 0.78rem;
+  padding: 0 0.25rem;
   line-height: 1.38;
+  text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -144,10 +461,11 @@
 }
 
 .saas-card-meta {
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--muted);
-  margin-top: 0.32rem;
+  margin-top: 0.28rem;
+  padding: 0 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +479,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.52rem 1.15rem;
+  padding: 0.55rem 1.15rem;
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -187,11 +505,11 @@
     background: var(--gradient);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 4px 16px var(--accent-mid), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 20px var(--accent-mid), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
     &:hover {
-      opacity: 0.94;
-      box-shadow: 0 8px 24px var(--accent-mid), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      opacity: 0.95;
+      box-shadow: 0 10px 26px var(--accent-mid), inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }
   }
 }

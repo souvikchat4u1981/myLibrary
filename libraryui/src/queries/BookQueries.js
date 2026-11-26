@@ -352,6 +352,8 @@ export const GET_ALL_BOOKS = gql`
         bookImage
         shelfImage
         digitalFileName
+        price
+        purchaseDate
       }
     }
   }
@@ -520,6 +522,71 @@ export const GET_BORROW_LIST = gql`
         shelfName
         bookImage
       }
+    }
+  }
+`;
+
+export const UPDATE_BOOK_PURCHASE_DATE = gql`
+  mutation UpdateBookPurchaseDate($bookId: Int!, $purchaseDate: String) {
+    updateBookPurchaseDate(bookId: $bookId, purchaseDate: $purchaseDate) {
+      failure
+      message
+      userId
+    }
+  }
+`;
+
+export const GET_READING_LOGS = gql`
+  query GetReadingLogs {
+    getReadingLogs {
+      failure
+      message
+      readingList {
+        readingId
+        bookId
+        readingDate
+        status
+        notes
+        bookName
+        bookNameInEnglish
+        author
+        publication
+        bookImage
+        shelfName
+        parentShelfName
+      }
+    }
+  }
+`;
+
+export const SAVE_READING_LOG = gql`
+  mutation SaveReadingLog(
+    $readingId: Int
+    $bookId: Int!
+    $readingDate: String
+    $status: String
+    $notes: String
+  ) {
+    saveReadingLog(
+      readingId: $readingId
+      bookId: $bookId
+      readingDate: $readingDate
+      status: $status
+      notes: $notes
+    ) {
+      failure
+      message
+      userId
+    }
+  }
+`;
+
+export const DELETE_READING_LOG = gql`
+  mutation DeleteReadingLog($readingId: Int!) {
+    deleteReadingLog(readingId: $readingId) {
+      failure
+      message
+      userId
     }
   }
 `;

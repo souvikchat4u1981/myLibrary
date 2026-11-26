@@ -108,6 +108,7 @@ const BooksByAuthor = (props) => {
   };
 
   const [showImage, setShowImage] = useState(true);
+  const [flippedIndex, setFlippedIndex] = useState(null);
   return (
     <Fragment>
       <div className="saas-page-header">
@@ -214,6 +215,10 @@ const BooksByAuthor = (props) => {
 
               <div
                 className="saas-card-media saas-magnifier-wrap"
+                onMouseEnter={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setFlippedIndex(window.innerWidth - rect.right < 450 ? index : null);
+                }}
                 onClick={() =>
                   navigate("/borrow", {
                     state: {
@@ -239,7 +244,7 @@ const BooksByAuthor = (props) => {
                   }`}
                   alwaysInPlace={false}
                   fillAvailableSpace={true}
-                  switchSides={switchSide(index + 1)}
+                  switchSides={flippedIndex === index}
                   magnifierBorderColor="rgba(255, 255, 255, .5)"
                   zoomContainerBorder="1px solid #e2e8f0"
                   zoomContainerBoxShadow="0 12px 24px rgba(15, 23, 42, .2)"
