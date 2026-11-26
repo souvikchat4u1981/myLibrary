@@ -336,7 +336,7 @@ const PurchaseList = () => {
             </div>
           )}
 
-          <div className="tableContainer">
+          <div className="tableContainer table-scroll-fixed">
             <table className="table table-hover align-middle">
               <thead>
                 <tr>
@@ -424,7 +424,7 @@ const PurchaseList = () => {
             )}
           </div>
 
-          <div className="tableContainer">
+          <div className="tableContainer table-scroll-fixed">
             <table className="table table-hover align-middle">
               <thead>
                 <tr>

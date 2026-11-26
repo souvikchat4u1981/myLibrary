@@ -117,6 +117,19 @@ label {
   border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--shadow);
+
+  &.table-scroll-fixed {
+    max-height: 62vh;
+    overflow: auto;
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background-color: var(--select-bg);
+      box-shadow: inset 0 -1px 0 var(--border);
+    }
+  }
 }
 
 .table {
