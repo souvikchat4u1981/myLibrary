@@ -71,11 +71,12 @@ const AddBookToLibrary = (props) => {
       if (typeof location.state.edit !== "undefined") {
         if (location.state.edit) {
           console.log("Loaded Book", location.state.book);
-          setLodedBook(location.state.book);
+          const clonedBook = { ...location.state.book };
+          setLodedBook(clonedBook);
           newBookDispatch({
             type: "SET INITIAL VALUE",
 
-            payload: location.state.book,
+            payload: clonedBook,
           });
         } else {
           setLodedBook(book);
@@ -179,7 +180,7 @@ const AddBookToLibrary = (props) => {
   let [newBook, newBookDispatch] = useReducer(formReducer, book);
 
   const onInputChange = (data) => {
-    let d = loadedBook;
+    let d = { ...loadedBook };
     d[data.id] = data.value;
     setLodedBook(d);
     newBookDispatch({
@@ -219,12 +220,14 @@ const AddBookToLibrary = (props) => {
       delete b.failure;
       delete b.message;
       delete b.userId;
+      b.price = Number(b.price) || 0;
+      if (b.image == null) b.image = "";
       if (b.shelfId === 0)
         b.shelfId = JSON.parse(sessionStorage.getItem("AddBookUnder")).shelfId;
 
       if (b.purchaseDate && String(b.purchaseDate).trim() !== "") {
         const dateOnly = toDateInput(b.purchaseDate);
-        b["purchaseDate"] = dateOnly ? `${dateOnly}T00:00:00` : null;
+        b["purchaseDate"] = dateOnly ? `${dateOnly}T00:00:00.000Z` : null;
       } else {
         b["purchaseDate"] = null;
       }

@@ -18,6 +18,7 @@ const formatCurrency = (val) =>
 
 const PurchaseList = () => {
   const [books, setBooks] = useState([]);
+  const [draftDates, setDraftDates] = useState({});
   const [activeTab, setActiveTab] = useState("report"); // report | list
   const [groupBy, setGroupBy] = useState("month"); // date | month | year
   const [searchParam, setSearchParam] = useState("");
@@ -63,12 +64,22 @@ const PurchaseList = () => {
     }
   );
 
-  const handleDateChange = (bookId, newDate) => {
+  const handleDateDraft = (bookId, newDate) => {
+    setDraftDates((prev) => ({ ...prev, [bookId]: newDate }));
+  };
+
+  const handleSaveDate = (bookId) => {
+    const newDate = draftDates[bookId] !== undefined ? draftDates[bookId] : "";
     setBooks((prev) =>
       prev.map((b) =>
         b.bookId === bookId ? { ...b, purchaseDate: newDate } : b
       )
     );
+    setDraftDates((prev) => {
+      const next = { ...prev };
+      delete next[bookId];
+      return next;
+    });
     updatePurchaseDate({
       variables: { bookId, purchaseDate: newDate || "" },
     });
@@ -475,14 +486,33 @@ const PurchaseList = () => {
                       {Number(m.price) > 0 ? formatCurrency(m.price) : "-"}
                     </td>
                     <td>
-                      <input
-                        type="date"
-                        className="form-control form-control-sm"
-                        value={m.purchaseDate || ""}
-                        onChange={(e) =>
-                          handleDateChange(m.bookId, e.target.value)
-                        }
-                      />
+                      <div className="d-flex align-items-center gap-2">
+                        <input
+                          type="date"
+                          className="form-control form-control-sm"
+                          value={
+                            draftDates[m.bookId] !== undefined
+                              ? draftDates[m.bookId]
+                              : m.purchaseDate || ""
+                          }
+                          onChange={(e) =>
+                            handleDateDraft(m.bookId, e.target.value)
+                          }
+                        />
+                        {draftDates[m.bookId] !== undefined &&
+                          draftDates[m.bookId] !== (m.purchaseDate || "") && (
+                            <button
+                              type="button"
+                              className="saas-toolbar-btn primary"
+                              style={{ padding: "0.38rem 0.7rem", fontSize: "0.75rem" }}
+                              onClick={() => handleSaveDate(m.bookId)}
+                              title="Save Purchase Date"
+                            >
+                              <i className="fa fa-save"></i>
+                              Save
+                            </button>
+                          )}
+                      </div>
                     </td>
                   </tr>
                 ))}
