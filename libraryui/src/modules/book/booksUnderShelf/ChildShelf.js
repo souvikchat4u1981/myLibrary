@@ -133,31 +133,40 @@ const ChildShelf = (props) => {
   return (
     <Fragment>
       {load && <CustomLoader />}
-      <div className="p-2 pt-3 row col-sm-12">
-        <div className="col-sm-4">
-          <div class="input-group">
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            className="saas-toolbar-btn"
+            onClick={() => navigate("/shelfDetails")}
+            title="Back to Shelf"
+          >
+            <i className="fa fa-arrow-left"></i>
+            Back
+          </button>
+          <h1 className="saas-page-title ms-1">
+            {parentShelf} /{" "}
+            {JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName}
+          </h1>
+        </div>
+
+        <div className="d-flex align-items-center gap-2 flex-wrap flex-grow-1 justify-content-md-end">
+          <div className="input-group saas-search-box">
             <input
               type="text"
-              class="form-control"
-              placeholder="Search By Author or Book"
+              className="form-control"
+              placeholder="Search by author or book..."
               value={searchParam}
               onChange={onFilterChange}
             />
-            <span class="input-group-text" id="basic-addon2">
+            <span className="input-group-text" id="basic-addon2">
               <i className="fa fa-search"></i>
             </span>
           </div>
-        </div>
-      </div>
-      <div className="p-2 pt-3 row d-flex">
-        <div>
-          <i
-            className="fa fa-circle-left fa-2x hand golden-text"
-            onClick={() => navigate("/shelfDetails")}
-            title="back to home"
-          ></i>
-          <i
-            className="fa fa-plus-circle fa-2x hand golden-text ms-2"
+
+          <button
+            type="button"
+            className="saas-toolbar-btn primary"
             onClick={() =>
               navigate("/addBook", {
                 state: {
@@ -167,27 +176,25 @@ const ChildShelf = (props) => {
                 },
               })
             }
-            title="Add New Book"
-          ></i>
+          >
+            <i className="fa fa-plus"></i>
+            Add Book
+          </button>
         </div>
-        <div className="col-sm-12 text-center fs-2">
-          {parentShelf} --{" "}
-          {JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName}
-        </div>
-        <div className="col-sm-12 mt-2 p-2">
-          {books.length > 0 && (
-            <DisplayBooks
-              books={books}
-              refetch={refetch}
-              shelfName={
-                parentShelf +
-                " -> " +
-                JSON.parse(sessionStorage.getItem("currentChildShelf"))
-                  .shelfName
-              }
-            />
-          )}
-        </div>
+      </div>
+
+      <div className="mt-2">
+        {books.length > 0 && (
+          <DisplayBooks
+            books={books}
+            refetch={refetch}
+            shelfName={
+              parentShelf +
+              " -> " +
+              JSON.parse(sessionStorage.getItem("currentChildShelf")).shelfName
+            }
+          />
+        )}
       </div>
     </Fragment>
   );

@@ -1,190 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import "./header.scss";
-import PropTypes from "prop-types";
 import { NavLink, useNavigate } from "react-router-dom";
 import { menuList } from "../../config/AppConfig";
-import { useSelector } from "react-redux";
-import API from "../../utils/API";
-import { postCall } from "../../utils/RestCalls";
+import { ThemeContext } from "./ThemeContext";
+import { useDispatch } from "react-redux";
+import { changeTheme } from "../../store/slices/ThemeSlice";
 
-const Header = (props) => {
-  const [user, setUser] = useState(null);
-  const [pl, setPL] = useState(0);
+const Header = () => {
   const navigate = useNavigate();
-  const profitLoss = useSelector((state) => {
-    if (typeof state.profit != "undefined" && state.profit.value !== 0) {
-      return state.profit.value;
-    }
-  });
+  const { theme, setTheme } = useContext(ThemeContext);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    let ploss = sessionStorage.getItem("pl");
-
-    //console.log("PL:", pl);
-    setPL(+ploss);
-  }, [profitLoss]);
-
-  useEffect(() => {
-    var u = sessionStorage.getItem("user");
-    setUser(JSON.parse(u));
-  }, []);
-
-  const logout = () => {
-    let user = JSON.parse(sessionStorage.getItem("user"));
-    let url = "authentication/logout";
-    //console.log(url);
-
-    postCall({
-      endpoint: url,
-      body: {
-        username: user.userName,
-        broker: user.broker,
-      },
-    }).then((data) => {
-      //console.log(data);
-      if (!data.failure) {
-        navigate("/login");
-      }
-    });
-
-    // //console.log(response);
-    // API.post(url, {
-    //   username: user.userName,
-
-    //   headers: {},
-    // }).then((response) => {
-    //   if (response.status === 200) {
-    //     //console.log(response.data);
-    //     navigate("/login");
-    //   }
-    // });
+  const handleThemeChange = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("default-theme", nextTheme);
+    dispatch(changeTheme(nextTheme));
   };
 
-  const goto = (page) => {
-    navigate(page);
-  };
-
-  const isActive = true;
   return (
-    <nav className="navbar navbar-expand-lg navbar-light nav-back fixed-top">
-      <div className="container-fluid">
-        <a className="navbar-brand hand" onClick={() => navigate("/")}>
-          <img
-            src={`${process.env.PUBLIC_URL}/assets/images/Books.png`}
-            alt="library"
-            width={"32px"}
-            className="me-2"
-          />
-          {window.Configs.applicationName || "My Library"}
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <nav className="navbar navbar-expand-lg nav-back fixed-top">
+      <div className="container-fluid px-3 px-md-4">
+        <span
+          className="navbar-brand hand d-flex align-items-center gap-2"
+          onClick={() => navigate("/")}
         >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            {menuList.map((menu, index) => {
-              return (
-                <li className="nav-item " key={index}>
-                  <NavLink
-                    to={menu.routerLink}
-                    // exact={true}
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    <i className={menu.icon}></i> {menu.menuName}
-                  </NavLink>
-                </li>
-              );
-            })}
+          <span className="brand-logo-wrap">
+            <img
+              src={`${process.env.PUBLIC_URL}/assets/images/Books.png`}
+              alt="library"
+              width="24"
+              height="24"
+            />
+          </span>
+          <span className="brand-title">
+            {window.Configs?.applicationName || "My Library"}
+          </span>
+        </span>
 
-            {/* <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                Dashboard
-              </a>
-            </li> */}
-            {/*<li className="nav-item">
-              <a className="nav-link" href="#">
-                Features
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
-                Pricing
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-              >
-                Disabled
-              </a>
-            </li> */}
+        <div className="d-flex align-items-center gap-2 order-lg-3">
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={handleThemeChange}
+            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <i className="fa-solid fa-sun"></i>
+            ) : (
+              <i className="fa-solid fa-moon"></i>
+            )}
+          </button>
+
+          <button
+            className="navbar-toggler saas-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i className="fa-solid fa-bars"></i>
+          </button>
+        </div>
+
+        <div className="collapse navbar-collapse order-lg-2" id="navbarNav">
+          <ul className="navbar-nav ms-lg-4 gap-1">
+            {menuList.map((menu, index) => (
+              <li className="nav-item" key={index}>
+                <NavLink
+                  to={menu.routerLink}
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
+                  <i className={`${menu.icon} me-2`}></i>
+                  <span>{menu.menuName}</span>
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
-        {/* <form className="d-flex me-4">
-          <div className="d-flex dropdown">
-            <div
-              className="btn btn-sm dropdown-toggle user-panel"
-              type="button"
-              id="dropdownMenuButton1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="fa fa-user-circle me-2"></i>
-              {user && user.userName}
-             
-            </div>
-            <ul
-              className="dropdown-menu dropdown-menu-theme dropdown-menu-end"
-              aria-labelledby="dropdownMenuButton1"
-            >
-              <li>
-                <span
-                  className="dropdown-item headerTextColor"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => goto("/profile")}
-                >
-                  <i className="fa fa-user me-2"></i>
-                  Profile
-                </span>
-              </li>
-              <li>
-                <span
-                  className="dropdown-item headerTextColor"
-                  style={{ cursor: "pointer" }}
-                >
-                  <i className="fa fa-gear me-2"></i>
-                  Setting
-                </span>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <span
-                  className="dropdown-item headerTextColor"
-                  style={{ cursor: "pointer" }}
-                  onClick={logout}
-                >
-                  <i className="fa fa-right-from-bracket me-2"></i>
-                  Logout
-                </span>
-              </li>
-            </ul>
-          </div>
-        </form> */}
       </div>
     </nav>
   );

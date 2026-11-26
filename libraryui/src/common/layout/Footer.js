@@ -1,14 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const Footer = (props) => {
+const Footer = () => {
   return (
-    <div className="fixed-bottom  bg-light">
-      <span className="text-muted ps-2 pe-2" style={{ fontSize: "12px" }}>
-        This is a personal app to maintain library. Please contact
-        souvik.chatterjee1981@gmail.com for any kind of suggestion and query.
-      </span>
-    </div>
+    <footer className="saas-footer fixed-bottom">
+      <div className="container-fluid px-3 px-md-4 d-flex flex-wrap justify-content-between align-items-center py-2">
+        <span className="saas-footer-text">
+          Personal Library Manager
+        </span>
+        <span className="saas-footer-text">
+          Contact: souvik.chatterjee1981@gmail.com
+        </span>
+      </div>
+    </footer>
   );
 };
 

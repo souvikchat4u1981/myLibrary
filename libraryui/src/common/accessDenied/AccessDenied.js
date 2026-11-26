@@ -11,7 +11,7 @@ const AccessDenied = (props) => {
     >
       <Setting />
       <div className="cage"></div>
-      <h1>
+      <h1 className="access-denied-h1">
         <span className="span">403</span>
       </h1>
     </div>

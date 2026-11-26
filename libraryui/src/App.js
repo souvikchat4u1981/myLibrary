@@ -25,9 +25,13 @@ function App() {
     <div className="app">
       <ApolloProvider client={client}>
         <AppContext.Provider value={AppContext}>
-          <ToastContainer autoClose={3000} position="top-right" />
           <ThemeContext.Provider value={{ theme, setTheme }}>
             <div className={`theme-${theme}`}>
+              <ToastContainer
+                autoClose={3000}
+                position="top-right"
+                theme={theme === "dark" ? "dark" : "light"}
+              />
               <div className="app">
                 <RouterProvider />
               </div>

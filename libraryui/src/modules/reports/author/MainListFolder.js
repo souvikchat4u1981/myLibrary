@@ -58,57 +58,32 @@ const MainListFolder = (props) => {
   return (
     <Fragment>
       {data && (
-        <div className="hand mb-4" style={{ width: "10%" }}>
-          <div className="col-sm-12 shelf text-center p-2 shadow">
-            {bookImage === "" && (
-              //   <div style={{ position: "relative", height: "150px" }}>
-              <img
-                src={`${process.env.PUBLIC_URL}/assets/authorImage/${
-                  data.authorImage !== "" ? data.authorImage : "author.png"
-                }`}
-                alt="library"
-                width={"100%"}
-                className="me-2"
-                onClick={() => props.onClickAuthor(data)}
-              />
-              //   </div>
-            )}
-            {bookImage !== "" && (
-              <div style={{ position: "relative", height: "170px" }}>
-                <img
-                  src={`${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`}
-                  alt="library"
-                  width={"60%"}
-                  height={"70%"}
-                  onClick={() => props.onClickAuthor(data)}
-                  style={{
-                    position: "relative",
-                    left: "9%",
-                    zIndex: "2",
-                    top: "13%",
-                  }}
-                />
-                <img
-                  src={`${process.env.PUBLIC_URL}/assets/authorImage/book1.png`}
-                  alt="library"
-                  width={"100%"}
-                  height={"100%"}
-                  onClick={() => props.onClickAuthor(data)}
-                  style={{
-                    position: "relative",
-                    left: "0%",
-                    zIndex: "1",
-                    top: "-125px",
-                  }}
-                />
-              </div>
-            )}
-            <div className="mt-2" onClick={() => props.onClickAuthor(data)}>
-              <b>{data.authorName}</b>
-            </div>
-            <div className="mt-2" onClick={() => props.onClickAuthor(data)}>
-              Books : {data.bookCount}
-            </div>
+        <div
+          className="shelf text-center"
+          onClick={() => props.onClickAuthor(data)}
+        >
+          <div className="saas-card-media">
+            <img
+              src={
+                bookImage !== ""
+                  ? `${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`
+                  : `${process.env.PUBLIC_URL}/assets/authorImage/${
+                      data.authorImage && data.authorImage !== ""
+                        ? data.authorImage
+                        : "author.png"
+                    }`
+              }
+              alt={data.authorName}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = `${process.env.PUBLIC_URL}/assets/authorImage/author.png`;
+              }}
+            />
+          </div>
+          <div className="saas-card-title">{data.authorName}</div>
+          <div className="saas-card-meta">
+            <i className="fa-solid fa-book-open"></i>
+            <span>{data.bookCount} Books</span>
           </div>
         </div>
       )}

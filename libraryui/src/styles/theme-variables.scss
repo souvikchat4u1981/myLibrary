@@ -1,112 +1,174 @@
+// ═══════════════════════════════════════════════════
+//  THEME VARIABLES  —  Crisp Frosted Glass System
+// ═══════════════════════════════════════════════════
+
+.theme-light {
+  --bg:             #eef2ff;
+  --bg-mesh:
+    radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.16) 0px, transparent 50%),
+    radial-gradient(at 88% 15%, rgba(56, 189, 248, 0.16) 0px, transparent 48%),
+    radial-gradient(at 50% 85%, rgba(168, 85, 247, 0.12) 0px, transparent 55%),
+    linear-gradient(180deg, #f4f7ff 0%, #eaeeff 100%);
+
+  --surface:        rgba(255, 255, 255, 0.68);
+  --surface2:       rgba(255, 255, 255, 0.48);
+  --surface3:       rgba(255, 255, 255, 0.85);
+  --glass-hover:    rgba(255, 255, 255, 0.82);
+
+  --card-bg:        rgba(255, 255, 255, 0.66);
+  --card-border:    rgba(255, 255, 255, 0.85);
+  --glass-highlight:rgba(255, 255, 255, 0.95);
+  --border:         rgba(99, 102, 241, 0.16);
+  --border-hover:   rgba(99, 102, 241, 0.45);
+  --nav-bg:         rgba(255, 255, 255, 0.68);
+
+  --text:           #0f172a;
+  --text2:          #334155;
+  --muted:          #64748b;
+
+  --accent:         #4f46e5;
+  --accent2:        #7c3aed;
+  --accent3:        #0ea5e9;
+  --accent-soft:    rgba(79, 70, 229, 0.10);
+  --accent-mid:     rgba(79, 70, 229, 0.24);
+
+  --shadow-sm:      0 2px 10px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --shadow:         0 8px 28px rgba(79, 70, 229, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-lg:      0 18px 42px rgba(79, 70, 229, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-glow:    0 0 28px rgba(99, 102, 241, 0.18);
+
+  --gradient:       linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #0ea5e9 100%);
+  --gradient-soft:  linear-gradient(135deg, rgba(79, 70, 229, 0.09) 0%, rgba(14, 165, 233, 0.09) 100%);
+
+  --green:          #059669;
+  --red:            #dc2626;
+  --orange:         #d97706;
+  --dropdown-arrow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%234f46e5' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>");
+}
+
+.theme-dark {
+  --bg:             #070913;
+  --bg-mesh:
+    radial-gradient(at 12% 12%, rgba(99, 102, 241, 0.22) 0px, transparent 50%),
+    radial-gradient(at 88% 18%, rgba(14, 165, 233, 0.16) 0px, transparent 45%),
+    radial-gradient(at 50% 90%, rgba(168, 85, 247, 0.16) 0px, transparent 55%),
+    linear-gradient(180deg, #070913 0%, #0b0f1e 100%);
+
+  --surface:        rgba(17, 22, 39, 0.62);
+  --surface2:       rgba(24, 31, 54, 0.52);
+  --surface3:       rgba(30, 39, 68, 0.78);
+  --glass-hover:    rgba(26, 33, 58, 0.78);
+
+  --card-bg:        rgba(18, 24, 43, 0.58);
+  --card-border:    rgba(255, 255, 255, 0.11);
+  --glass-highlight:rgba(255, 255, 255, 0.14);
+  --border:         rgba(148, 163, 184, 0.16);
+  --border-hover:   rgba(129, 140, 248, 0.48);
+  --nav-bg:         rgba(10, 14, 28, 0.68);
+
+  --text:           #f1f5f9;
+  --text2:          #cbd5e1;
+  --muted:          #94a3b8;
+
+  --accent:         #818cf8;
+  --accent2:        #a78bfa;
+  --accent3:        #38bdf8;
+  --accent-soft:    rgba(129, 140, 248, 0.14);
+  --accent-mid:     rgba(129, 140, 248, 0.28);
+
+  --shadow-sm:      0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow:         0 8px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  --shadow-lg:      0 20px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-glow:    0 0 36px rgba(129, 140, 248, 0.22);
+
+  --gradient:       linear-gradient(135deg, #818cf8 0%, #a78bfa 55%, #38bdf8 100%);
+  --gradient-soft:  linear-gradient(135deg, rgba(129, 140, 248, 0.12) 0%, rgba(56, 189, 248, 0.10) 100%);
+
+  --green:          #34d399;
+  --red:            #f87171;
+  --orange:         #fbbf24;
+  --dropdown-arrow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23818cf8' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>");
+}
+
+// ── Legacy themify mixin preserved for compatibility ──
 $themes: (
   light: (
-    backGroundColor: #fff,
-    textWhite: #fff,
-    colorText: #000033,
-    colorBackground: #fff,
-    invertedBackground: #737373,
-    shadow: #78787b,
-    colorGreen: #01c302,
-    colorRed: #fe0000,
-    colorBlue: #0d59e8,
-    dropDownArrow:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' ><path fill='none' d='M0 0h24v24H0V0z'/><path fill='rgb(36, 36, 37)' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
-    // "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23242425' stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M0 0h24v24H0V0z'/></svg>"),
-    orangeGradient:
-      linear-gradient(
-        90deg,
-        rgba(185, 107, 169, 1) 0%,
-        rgba(231, 135, 211, 1) 25%,
-        rgba(251, 149, 230, 1) 64%
-      ),
-    redGradient:
-      linear-gradient(
-        90deg,
-        rgba(254, 0, 0, 1) 0%,
-        rgba(247, 65, 65, 1) 25%,
-        rgba(247, 162, 162, 1) 64%
-      ),
-    greenGradient:
-      linear-gradient(
-        90deg,
-        rgba(58, 184, 111, 1) 0%,
-        rgba(73, 232, 140, 1) 25%,
-        rgba(128, 240, 175, 1) 64%
-      ),
-    colorHover: #c9cbd0,
+    backGroundColor: #eef2ff,
+    surfaceColor: #ffffff,
+    surfaceSubtle: #f8f9ff,
+    surfaceElevated: #ffffff,
+    borderColor: rgba(99, 102, 241, 0.14),
+    borderHover: rgba(99, 102, 241, 0.38),
+    navBg: rgba(255, 255, 255, 0.72),
+    textWhite: #ffffff,
+    colorText: #0f172a,
+    mutedText: #64748b,
+    colorBackground: #eef2ff,
+    invertedBackground: #e0e7ff,
+    shadow: 0 4px 16px rgba(15, 23, 42, 0.06),
+    shadowLg: 0 20px 60px rgba(79, 70, 229, 0.16),
+    shadowGlow: 0 0 36px rgba(99, 102, 241, 0.2),
+    colorGreen: #059669,
+    colorRed: #dc2626,
+    colorBlue: #4f46e5,
+    dropDownArrow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z'/><path fill='%234f46e5' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
+    orangeGradient: linear-gradient(135deg, #f59e0b 0%, #f97316 100%),
+    redGradient: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%),
+    greenGradient: linear-gradient(135deg, #10b981 0%, #14b8a6 100%),
+    colorHover: rgba(99, 102, 241, 0.06),
     backgroundImage: url("../../public/assets/images/backGround.jpg"),
-    settingBackground: #737373,
-    golden: #ee0e0e,
-    color2: #000033,
-    createButtonHover: #f09850,
-    gradient: linear-gradient(90deg, #ee0e0e, #d0801f) 0% 0% no-repeat
-      padding-box,
-    accessDenied:
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 80px,
-        #6f7376 80px,
-        #aaa7a7 100px
-      ),
-    accessDeniedBack: radial-gradient(at top center, #eead0e 0%, #ecc35b 100%),
-    accessDeniedBack2: linear-gradient(to top, #eead0e 0%, #ecc35b 100%),
-    navActive: #000033,
+    settingBackground: #e0e7ff,
+    golden: #4f46e5,
+    accentSoft: rgba(99, 102, 241, 0.1),
+    accentMid: rgba(99, 102, 241, 0.2),
+    color2: #ffffff,
+    createButtonHover: #4338ca,
+    gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #0ea5e9 100%),
+    gradientSubtle: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(14, 165, 233, 0.08) 100%),
+    cardGradient: linear-gradient(160deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 244, 255, 0.7) 100%),
+    accessDenied: repeating-linear-gradient(90deg, transparent, transparent 80px, #e0e7ff 80px, #c7d2fe 100px),
+    accessDeniedBack: radial-gradient(at top center, #4f46e5 0%, #7c3aed 100%),
+    accessDeniedBack2: linear-gradient(to top, #4f46e5 0%, #7c3aed 100%),
+    navActive: #0f172a,
   ),
   dark: (
-    backGroundColor: #242425,
-    textWhite: #fff,
-    colorText: #ffffff,
-    colorBackground: #222736,
-    invertedBackground: #fff,
-    shadow: #dcdce2,
-    colorGreen: #01c302,
-    colorRed: #fe0000,
-    colorBlue: #0d59e8,
-    dropDownArrow:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z'/><path fill='rgb(255, 255, 255)' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
-    // "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M2 5l6 6 6-6'/></svg>"),
-    orangeGradient:
-      linear-gradient(
-        90deg,
-        rgba(185, 107, 169, 1) 0%,
-        rgba(231, 135, 211, 1) 25%,
-        rgba(251, 149, 230, 1) 64%
-      ),
-    redGradient:
-      linear-gradient(
-        90deg,
-        rgba(254, 0, 0, 1) 0%,
-        rgba(247, 65, 65, 1) 25%,
-        rgba(247, 162, 162, 1) 64%
-      ),
-    greenGradient:
-      linear-gradient(
-        90deg,
-        rgba(58, 184, 111, 1) 0%,
-        rgba(73, 232, 140, 1) 25%,
-        rgba(128, 240, 175, 1) 64%
-      ),
-    colorHover: #5a5b5e,
+    backGroundColor: #070913,
+    surfaceColor: #111627,
+    surfaceSubtle: #181f36,
+    surfaceElevated: #1e2744,
+    borderColor: rgba(148, 163, 184, 0.16),
+    borderHover: rgba(129, 140, 248, 0.45),
+    navBg: rgba(10, 14, 28, 0.72),
+    textWhite: #ffffff,
+    colorText: #f1f5f9,
+    mutedText: #94a3b8,
+    colorBackground: #070913,
+    invertedBackground: rgba(129, 140, 248, 0.15),
+    shadow: 0 4px 16px rgba(0, 0, 0, 0.45),
+    shadowLg: 0 20px 60px rgba(0, 0, 0, 0.65),
+    shadowGlow: 0 0 40px rgba(129, 140, 248, 0.22),
+    colorGreen: #34d399,
+    colorRed: #f87171,
+    colorBlue: #818cf8,
+    dropDownArrow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z'/><path fill='%23818cf8' d='M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z'/></svg>"),
+    orangeGradient: linear-gradient(135deg, #f59e0b 0%, #f97316 100%),
+    redGradient: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%),
+    greenGradient: linear-gradient(135deg, #10b981 0%, #14b8a6 100%),
+    colorHover: rgba(129, 140, 248, 0.08),
     backgroundImage: url("../../public/assets/images/backGroundDark.jpg"),
-    settingBackground: #ffffff,
-    golden: #ee0e0e,
-    color2: #000033,
-    createButtonHover: #f09850,
-    gradient: linear-gradient(90deg, #ee0e0e, #d0801f) 0% 0% no-repeat
-      padding-box,
-    accessDenied:
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 80px,
-        #6f7376 80px,
-        #181617 100px
-      ),
-    accessDeniedBack: radial-gradient(at top center, #eead0e 0%, #ecc35b 100%),
-    accessDeniedBack2:
-      linear-gradient(to top, rgba(0, 0, 0, 0.1) 0%, rgba(53, 53, 53, 0.6) 100%),
-    navActive: #fff,
+    settingBackground: rgba(129, 140, 248, 0.15),
+    golden: #818cf8,
+    accentSoft: rgba(129, 140, 248, 0.12),
+    accentMid: rgba(129, 140, 248, 0.24),
+    color2: #ffffff,
+    createButtonHover: #6366f1,
+    gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 55%, #38bdf8 100%),
+    gradientSubtle: linear-gradient(135deg, rgba(129, 140, 248, 0.12) 0%, rgba(56, 189, 248, 0.10) 100%),
+    cardGradient: linear-gradient(160deg, rgba(18, 24, 43, 0.7) 0%, rgba(24, 31, 54, 0.65) 100%),
+    accessDenied: repeating-linear-gradient(90deg, transparent, transparent 80px, #1e1e28 80px, #131318 100px),
+    accessDeniedBack: radial-gradient(at top center, #6366f1 0%, #8b5cf6 100%),
+    accessDeniedBack2: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(19, 19, 24, 0.9) 100%),
+    navActive: #f1f5f9,
   ),
 );
 
@@ -114,17 +176,10 @@ $themes: (
   @each $theme, $map in $themes {
     .theme-#{$theme} & {
       $theme-map: () !global;
-
       @each $key, $submap in $map {
         $value: map-get(map-get($themes, $theme), "#{$key}");
-        $theme-map: map-merge(
-          $theme-map,
-          (
-            $key: $value,
-          )
-        ) !global;
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
       }
-
       @content;
       $theme-map: null !global;
     }

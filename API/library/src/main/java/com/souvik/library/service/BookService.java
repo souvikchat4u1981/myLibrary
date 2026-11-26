@@ -29,7 +29,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -315,10 +317,15 @@ public class BookService {
     public BookModel getFirstBookInShelf(@GraphQLArgument(name = "shelfId") int shelfId) {
         BookModel book = new BookModel();
         try {
-            List<Book> bookList = bookRepository.findByShelfIdOrderByBookName(shelfId);
-            book.setBook(bookList.get(0));
-            book.setFailure(false);
-            book.setMessage("SUCCESS");
+            Book found = findFirstBookInShelfOrChildren(shelfId, new HashSet<>());
+            if (found != null) {
+                book.setBook(found);
+                book.setFailure(false);
+                book.setMessage("SUCCESS");
+            } else {
+                book.setFailure(true);
+                book.setMessage("No book found in shelf");
+            }
         } catch (Exception ex) {
             book.setFailure(true);
             book.setMessage(ex.getMessage());
@@ -327,12 +334,45 @@ public class BookService {
         return book;
     }
 
+    private Book findFirstBookInShelfOrChildren(int shelfId, Set<Integer> visited) {
+        if (!visited.add(shelfId)) {
+            return null;
+        }
+        List<Book> bookList = bookRepository.findByShelfIdOrderByBookName(shelfId);
+        if (bookList != null && !bookList.isEmpty()) {
+            for (Book b : bookList) {
+                if (b.getImage() != null && !b.getImage().trim().isEmpty()) {
+                    return b;
+                }
+            }
+        }
+        List<BookShelfs> childShelfs = bookShelfs.findByParentShelfId(shelfId);
+        if (childShelfs != null && !childShelfs.isEmpty()) {
+            for (BookShelfs child : childShelfs) {
+                if (child.getShelfId() != null) {
+                    Book childBook = findFirstBookInShelfOrChildren(child.getShelfId(), visited);
+                    if (childBook != null && childBook.getImage() != null && !childBook.getImage().trim().isEmpty()) {
+                        return childBook;
+                    }
+                }
+            }
+        }
+        if (bookList != null && !bookList.isEmpty()) {
+            return bookList.get(0);
+        }
+        return null;
+    }
+
     @GraphQLQuery(name = "getFirstBookInAuthor")
     public BookModel getFirstBookInAuthor(@GraphQLArgument(name = "author") String author) {
         BookModel book = new BookModel();
         try {
             List<Book> bookList = bookRepository.findByAuthorOrderByBookName(author);
-            book.setBook(bookList.get(0));
+            Book selected = bookList.stream()
+                    .filter(b -> b.getImage() != null && !b.getImage().trim().isEmpty())
+                    .findFirst()
+                    .orElse(bookList.get(0));
+            book.setBook(selected);
             book.setFailure(false);
             book.setMessage("SUCCESS");
         } catch (Exception ex) {

@@ -54,110 +54,114 @@ const BookList = (props) => {
   return (
     <Fragment>
       {loading && <CustomLoader />}
-      <div className="container">
-        <div className="p-2 pt-3 row col-sm-12">
-          <div className="d-flex justify-content-start">
-            <div class="input-group" style={{ width: "30%" }}>
-              <input
-                type="text"
-                class="form-control col-sm-2"
-                placeholder="Search By Author or Book or Shelf"
-                value={searchParam}
-                onChange={onFilterChange}
-              />
-              <span class="input-group-text" id="basic-addon2">
-                <i className="fa fa-search"></i>
-              </span>
-            </div>
-            <div className="ms-2">
-              <Button
-                onClick={() => {
-                  if (showPage !== "pdf") {
-                    setShowpage("pdf");
-                  } else {
-                    setShowpage("mainPage");
-                  }
-                }}
-              >
-                {showPage === "pdf" ? "Hide" : "Show"} PDF
-              </Button>
-            </div>
-          </div>
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-3 flex-wrap">
+          <h1 className="saas-page-title">
+            <i className="fa-solid fa-book golden-text"></i>
+            Book List
+          </h1>
+          <span className="saas-badge">
+            <i className="fa-solid fa-layer-group"></i>
+            {books ? books.length : 0} Books
+          </span>
         </div>
-        <div className="p-2 pt-3 d-flex">
-          <div
-            className="badge rounded-pill bg-primary ms-2"
-            style={{ fontSize: "15px", fontWeight: "normal" }}
-          >
-            Total Books : {books ? books.length : 0}
-          </div>
-        </div>
-        {showPage === "mainPage" && (
-          <div className="p-3 row ">
-            <div className="tableContainer">
-              <table className="table table-stripped table-responsive">
-                <thead>
-                  <tr>
-                    <th className="fixheader" style={{ width: "40%" }}>
-                      Book Name
-                    </th>
-                    <th className="fixheader">Author</th>
-                    <th className="fixheader">Publication</th>
-                    <th className="fixheader">Shelf name</th>
-                    <th className="fixheader" style={{ width: "10%" }}>
-                      Parent Shelf Name
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {books === null && (
-                    <tr>
-                      {" "}
-                      <td colSpan={5} className="text-center">
-                        <img
-                          src={`${process.env.PUBLIC_URL}/assets/images/nobook.png`}
-                          alt="library"
-                          width={"5%"}
-                          className="me-2"
-                        />{" "}
-                        No Books available
-                      </td>
-                    </tr>
-                  )}
-                  {books &&
-                    books.map((m) => {
-                      return (
-                        <tr key={m.bookId}>
-                          <td>
-                            <img
-                              src={`${
-                                process.env.PUBLIC_URL
-                              }/assets/bookImages/${
-                                m.bookImage !== "" ? m.bookImage : "book.png"
-                              }`}
-                              alt="library"
-                              width={"15%"}
-                              className="me-2 img-thumbnail"
-                            />
 
-                            {m.bookName}
-                          </td>
-                          <td>{m.author}</td>
-                          <td>{m.publication}</td>
-                          <td>{m.shelfName}</td>
-                          <td>{m.parentShelfName}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
+        <div className="d-flex align-items-center gap-2 flex-wrap flex-grow-1 justify-content-md-end">
+          <div className="input-group saas-search-box">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by author, book, or shelf..."
+              value={searchParam}
+              onChange={onFilterChange}
+            />
+            <span className="input-group-text" id="basic-addon2">
+              <i className="fa fa-search"></i>
+            </span>
           </div>
-        )}
-        <div className="row">
-          {books && showPage === "pdf" && <BookReportPDF books={books} />}
+
+          <Button
+            onClick={() => {
+              if (showPage !== "pdf") {
+                setShowpage("pdf");
+              } else {
+                setShowpage("mainPage");
+              }
+            }}
+          >
+            <i className="fa-solid fa-file-pdf me-2"></i>
+            {showPage === "pdf" ? "Hide" : "Show"} PDF
+          </Button>
         </div>
       </div>
+
+      {showPage === "mainPage" && (
+        <div className="tableContainer">
+          <table className="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th className="fixheader" style={{ width: "40%" }}>
+                  Book Name
+                </th>
+                <th className="fixheader">Author</th>
+                <th className="fixheader">Publication</th>
+                <th className="fixheader">Shelf Name</th>
+                <th className="fixheader" style={{ width: "14%" }}>
+                  Parent Shelf
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {books === null && (
+                <tr>
+                  <td colSpan={5} className="text-center py-5">
+                    <img
+                      src={`${process.env.PUBLIC_URL}/assets/images/nobook.png`}
+                      alt="library"
+                      width={"48px"}
+                      className="me-2"
+                    />
+                    No Books available
+                  </td>
+                </tr>
+              )}
+              {books &&
+                books.map((m) => (
+                  <tr key={m.bookId}>
+                    <td>
+                      <div className="d-flex align-items-center gap-3">
+                        <img
+                          src={`${process.env.PUBLIC_URL}/assets/bookImages/${
+                            m.bookImage !== "" ? m.bookImage : "book.png"
+                          }`}
+                          alt="library"
+                          style={{
+                            width: "44px",
+                            height: "58px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                          }}
+                          className="border golden-border-color"
+                        />
+                        <span className="fw-medium">{m.bookName}</span>
+                      </div>
+                    </td>
+                    <td>{m.author}</td>
+                    <td>{m.publication}</td>
+                    <td>{m.shelfName}</td>
+                    <td>{m.parentShelfName}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {books && showPage === "pdf" && (
+        <div className="mt-3">
+          <BookReportPDF books={books} />
+        </div>
+      )}
     </Fragment>
   );
 };

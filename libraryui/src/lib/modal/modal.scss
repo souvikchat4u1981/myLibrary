@@ -1,37 +1,31 @@
-@import "../../styles/theme-variables.scss";
-
-.Overlay {
+/* Modal — Crisp Frosted Glass */
+.modal-overlay-cstm {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(89, 88, 90, 0.426);
-  height: 100vh;
-  z-index: 9999;
+  inset: 0;
+  background: rgba(7, 9, 19, 0.52);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-.modalHeader {
-  /* height:50px; 
-    padding-left:5px; */
-  background-color: #006bb6;
-  /* color:#ffffff;
-    border-radius: 10px 10px 0 0 !important; */
+.modal-box-cstm {
+  background-color: var(--surface3);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-lg);
+  color: var(--text);
+  width: 100%;
+  max-width: 540px;
+  animation: modal-in 0.2s ease;
 }
 
-.modalBody {
-  @include themify($themes) {
-    border: none !important;
-    border-radius: 8px !important;
-    background-color: themed("backGroundColor");
-  }
-}
-
-.mbody {
-  padding: 10px;
-}
-
-.modalBorder {
-  border: 1px solid #006bb6;
-  border-radius: 10px;
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }

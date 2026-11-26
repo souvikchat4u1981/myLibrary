@@ -5,46 +5,44 @@ import MainListFolder from "./MainListFolder";
 const MainList = (props) => {
   return (
     <Fragment>
-      <div className="p-2 pt-3 row col-sm-12">
-        <div className="d-flex justify-content-start">
-          <div class="input-group" style={{ width: "30%" }}>
-            <input
-              type="text"
-              class="form-control col-sm-2"
-              placeholder="Search By Author"
-              value={props.searchParam}
-              onChange={props.onFilterChange}
-            />
-            <span class="input-group-text" id="basic-addon2">
-              <i className="fa fa-search"></i>
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-3 flex-wrap">
+          <h1 className="saas-page-title">
+            <i className="fa-solid fa-user-pen golden-text"></i>
+            Authors
+          </h1>
+          {props.author && props.author.length > 0 && (
+            <span className="saas-badge">
+              <i className="fa-solid fa-users"></i>
+              {props.author.length} Authors
             </span>
-          </div>
+          )}
+        </div>
+
+        <div className="input-group saas-search-box">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by author..."
+            value={props.searchParam}
+            onChange={props.onFilterChange}
+          />
+          <span className="input-group-text" id="basic-addon2">
+            <i className="fa fa-search"></i>
+          </span>
         </div>
       </div>
-      <div className="p-2 pt-3 row d-flex">
-        {props.author && props.author.length > 0 && (
-          <div className="row mb-3">
-            <div className="">
-              <div
-                className="badge rounded-pill bg-primary ms-2"
-                style={{ fontSize: "15px", fontWeight: "normal" }}
-              >
-                Total authors {props.author.length}
-              </div>
-            </div>
-          </div>
-        )}
+
+      <div className="saas-grid">
         {props.author &&
           props.author.length > 0 &&
-          props.author.map((m, index) => {
-            return (
-              <MainListFolder
-                key={m.authorName}
-                data={m}
-                onClickAuthor={props.onClickAuthor}
-              />
-            );
-          })}
+          props.author.map((m) => (
+            <MainListFolder
+              key={m.authorName}
+              data={m}
+              onClickAuthor={props.onClickAuthor}
+            />
+          ))}
       </div>
     </Fragment>
   );

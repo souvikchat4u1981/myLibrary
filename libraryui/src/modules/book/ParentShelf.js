@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./book.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -16,113 +16,63 @@ import {
 import Button from "../../lib/button/Button";
 
 const ParentShelf = (props) => {
-  const [width, setWidth] = useState("100%");
-  useEffect(() => {
-    if (window.screen.width < 600) {
-      setWidth("50%");
-    } else {
-      setWidth("12.5%");
-    }
-  }, [props.data]);
-
   const [imageName, setImageName] = useState("shelf1.png");
-
-
-  const generateThumbNail = (imageName) => {
-    if (imageName === "" || imageName === null) {
-      getBookImage({
-        variables: {
-          shelfId: props.data.bookShelfs.shelfId
-            ? props.data.bookShelfs.shelfId
-            : 0,
-        },
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (props.data.bookShelfs.shelfImage === null) {
-      generateThumbNail(props.data.bookShelfs.shelfImage);
-      let min = 1;
-      let max = 10;
-      const rand = min + Math.random() * (max - min);
-
-      let r = 1;
-      if (sessionStorage.getItem("prevRand")) {
-        r = +sessionStorage.getItem("prevRand") + 1;
-
-        if (r > 10) {
-          r = 1;
-        }
-        sessionStorage.setItem("prevRand", r);
-      } else {
-        sessionStorage.setItem("prevRand", r);
-      }
-
-      // console.log(r);
-      setImageName("shelf" + r + ".png");
-    } else {
-      setImageName(props.data.bookShelfs.shelfImage);
-      if (sessionStorage.getItem("currentShelf") !== null)
-        generateThumbNail(props.data.bookShelfs.shelfImage);
-    }
-  }, [props.data]);
-
-  const navigate = useNavigate();
-  const onShelfClickHandle = () => {
-    // console.log(props.data.shelfId);
-    sessionStorage.setItem("shelfId", props.data.bookShelfs.shelfId);
-    if (props.fromChildPage) {
-      sessionStorage.setItem(
-        "currentChildShelf",
-        JSON.stringify(props.data.bookShelfs)
-      );
-      navigate("/childShelf");
-    } else {
-      sessionStorage.setItem(
-        "currentShelf",
-        JSON.stringify(props.data.bookShelfs)
-      );
-      navigate("/shelfDetails");
-    }
-  };
-
   const [bookImage, setBookImage] = useState("");
 
   const [getBookImage] = useLazyQuery(GET_FIRST_BOOK_BY_SHELF, {
     notifyOnNetworkStatusChange: true,
-    // variables: {
-    //   shelfId: JSON.parse(sessionStorage.getItem("currentShelf")).shelfId,
-    // },
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      // setBooks(null);
-      if (!data.getFirstBookInShelf.failure) {
-        if (data.getFirstBookInShelf.book.image !== "") {
-          setBookImage(data.getFirstBookInShelf.book.image);
-          setDynamicImage(data.getFirstBookInShelf.book.image);
-        }
+      if (
+        data?.getFirstBookInShelf &&
+        !data.getFirstBookInShelf.failure &&
+        data.getFirstBookInShelf.book?.image
+      ) {
+        setBookImage(data.getFirstBookInShelf.book.image);
       }
     },
-
-    onError: (data) => {
-      console.log(data);
-    },
+    onError: (data) => { console.log(data); },
   });
 
+  useEffect(() => {
+    setBookImage("");
+    const shelfImg = props.data.bookShelfs.shelfImage;
+    const hasShelfImg =
+      shelfImg &&
+      shelfImg.trim() !== "" &&
+      shelfImg.trim().toLowerCase() !== "null";
+    if (!hasShelfImg) {
+      // Pick a sequential shelf placeholder
+      let r = 1;
+      if (sessionStorage.getItem("prevRand")) {
+        r = +sessionStorage.getItem("prevRand") + 1;
+        if (r > 10) r = 1;
+        sessionStorage.setItem("prevRand", r);
+      } else {
+        sessionStorage.setItem("prevRand", r);
+      }
+      setImageName("shelf" + r + ".png");
 
-  useEffect(() => { }, [imageName]);
+      // Try to get first book cover
+      getBookImage({
+        variables: { shelfId: props.data.bookShelfs.shelfId || 0 },
+      });
+    } else {
+      setImageName(shelfImg);
+    }
+  }, [props.data]);
 
-  const setDynamicImage = (imageName) => {
-    return (
-      <div>
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/bookImages/${imageName}`}
-          alt="library"
-          width={"100%"}
-        />
-      </div>
-    );
+  const navigate = useNavigate();
+
+  const onShelfClickHandle = () => {
+    sessionStorage.setItem("shelfId", props.data.bookShelfs.shelfId);
+    if (props.fromChildPage) {
+      sessionStorage.setItem("currentChildShelf", JSON.stringify(props.data.bookShelfs));
+      navigate("/childShelf");
+    } else {
+      sessionStorage.setItem("currentShelf", JSON.stringify(props.data.bookShelfs));
+      navigate("/shelfDetails");
+    }
   };
 
   const [deleteShelf] = useMutation(DELETE_SHELF, {
@@ -136,112 +86,77 @@ const ParentShelf = (props) => {
         ErrorMessage(data.deleteShelfs.message);
       }
     },
-
-    onError: (data) => {
-      console.log(data);
-    },
+    onError: (data) => { console.log(data); },
   });
 
   const onDeleteShelf = (id) => {
     confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div
-            className="p-2"
-            style={{ border: "1px solid black", borderRadius: "8px" }}
-          >
-            <h1>Confirm to delete</h1>
-            <p>You want to delete this Shelf?</p>
-            <Button onClick={onClose} extraClass={"btn-warning me-2"}>
-              No
-            </Button>
+      customUI: ({ onClose }) => (
+        <div className="saas-confirm-dialog">
+          <h4>Delete Shelf?</h4>
+          <p>Are you sure you want to delete this shelf?</p>
+          <div className="d-flex justify-content-end gap-2">
+            <Button onClick={onClose} extraClass="btn-light border">Cancel</Button>
             <Button
               buttonType="loss"
-              extraClass={"btn-danger"}
-              onClick={() => {
-                deleteShelf({ variables: { shelf: id } });
-                onClose();
-              }}
+              extraClass="btn-danger"
+              onClick={() => { deleteShelf({ variables: { shelf: id } }); onClose(); }}
             >
-              Yes, Delete it!
+              Delete
             </Button>
           </div>
-        );
-      },
+        </div>
+      ),
     });
   };
 
-  return (
-    <div className="hand mb-2" style={{ width: width }}>
-      <div className="col-sm-12 shelf text-center p-2 shadow">
-        <div className="col-sm-12 text-center hand">
-          <i
-            className="fa fa-times-circle hand text-danger float-end ps-2"
-            style={{ position: "relative", top: "-5px", zIndex: "3" }}
-            onClick={() => onDeleteShelf(props.data.bookShelfs.shelfId)}
-            title={"Delete Shelf"}
-          ></i>
-          <i
-            className="fa fa-edit text-success float-end"
-            title="Edit Shelf"
-            style={{ position: "relative", top: "-5px", zIndex: "3" }}
-            onClick={() => {
-              console.log("Book Shelf", props.data.bookShelfs);
-              navigate("/addShelf", {
-                state: {
-                  shelf: props.data.bookShelfs,
-                },
-              });
-            }}
-          ></i>
-        </div>
-        {bookImage === "" && (
-          <img
-            src={`${process.env.PUBLIC_URL}/assets/authorImage/${imageName !== "" ? imageName : "author.png"
-              }`}
-            alt="library"
-            width={"100%"}
-            className="me-2"
-            onClick={onShelfClickHandle}
-          />
+  /* Decide which image to show */
+  const fallbackSrc = `${process.env.PUBLIC_URL}/assets/authorImage/${imageName || "shelf1.png"}`;
+  const imgSrc = bookImage
+    ? `${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`
+    : fallbackSrc;
 
-        )}
-        {bookImage !== "" && (
-          <div style={{ position: "relative", height: "200px" }}>
-            <img
-              src={`${process.env.PUBLIC_URL}/assets/bookImages/${bookImage}`}
-              alt="library"
-              width={"58%"}
-              height={"70%"}
-              onClick={onShelfClickHandle}
-              style={{
-                position: "relative",
-                left: "18%",
-                zIndex: "2",
-                top: "24%",
-              }}
-            />
-            <img
-              src={`${process.env.PUBLIC_URL}/assets/authorImage/book1.png`}
-              alt="library"
-              width={"100%"}
-              height={"100%"}
-              onClick={onShelfClickHandle}
-              style={{
-                position: "relative",
-                left: "0%",
-                zIndex: "1",
-                top: "-125px",
-              }}
-            />
-          </div>
-        )}
-        <div className="mt-2" onClick={onShelfClickHandle}>
-          <b>{props.data.bookShelfs.shelfName}</b>
-        </div>
-        <div className="mt-2" onClick={onShelfClickHandle}>
-          Books : {props.data.bookCount}
-        </div>
+  return (
+    <div className="shelf">
+      {/* Action icons — visible on card hover */}
+      <div className="saas-card-actions">
+        <span
+          className="saas-action-icon text-success hand"
+          title="Edit Shelf"
+          onClick={() => navigate("/addShelf", { state: { shelf: props.data.bookShelfs } })}
+        >
+          <i className="fa fa-pen"></i>
+        </span>
+        <span
+          className="saas-action-icon text-danger hand"
+          title="Delete Shelf"
+          onClick={() => onDeleteShelf(props.data.bookShelfs.shelfId)}
+        >
+          <i className="fa fa-trash"></i>
+        </span>
+      </div>
+
+      {/* Cover image */}
+      <div className="saas-card-media" onClick={onShelfClickHandle}>
+        <img
+          src={imgSrc}
+          alt={props.data.bookShelfs.shelfName}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = fallbackSrc;
+          }}
+        />
+      </div>
+
+      {/* Title */}
+      <div className="saas-card-title" onClick={onShelfClickHandle}>
+        {props.data.bookShelfs.shelfName}
+      </div>
+
+      {/* Meta */}
+      <div className="saas-card-meta" onClick={onShelfClickHandle}>
+        <i className="fa-solid fa-book-open"></i>
+        <span>{props.data.bookCount} Books</span>
       </div>
     </div>
   );

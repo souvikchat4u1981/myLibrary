@@ -101,48 +101,53 @@ const Books = (props) => {
   return (
     <Fragment>
       {load && <CustomLoader />}
-      <div className="p-2 pt-3 row col-sm-12">
-        <div className="col-sm-4">
-          <div class="input-group">
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-3 flex-wrap">
+          <h1 className="saas-page-title">
+            <i className="fa-solid fa-layer-group golden-text"></i>
+            My Shelves
+          </h1>
+          <span className="saas-badge">
+            <i className="fa-solid fa-book"></i>
+            {totalBooks} Books
+          </span>
+        </div>
+
+        <div className="d-flex align-items-center gap-2 flex-wrap flex-grow-1 justify-content-md-end">
+          <div className="input-group saas-search-box">
             <input
               type="text"
-              class="form-control"
-              placeholder="Search By Author or Book"
+              className="form-control"
+              placeholder="Search by author or book..."
               value={searchParam}
               onChange={onFilterChange}
             />
-            <span class="input-group-text" id="basic-addon2">
+            <span className="input-group-text" id="basic-addon2">
               <i className="fa fa-search"></i>
             </span>
           </div>
-        </div>
-      </div>
-      <div className="p-2 pt-3 d-flex">
-        <div>
-          <i
-            className="fa fa-plus-circle fa-2x hand golden-text"
+
+          <button
+            type="button"
+            className="saas-toolbar-btn primary"
             onClick={onAddClick}
-          ></i>
-        </div>
-        <div
-          className="badge rounded-pill bg-primary ms-2"
-          style={{ fontSize: "15px", fontWeight: "normal" }}
-        >
-          Total Books {totalBooks}
+          >
+            <i className="fa fa-plus"></i>
+            New Shelf
+          </button>
         </div>
       </div>
-      <div className="p-2 row">
+
+      <div className="saas-grid">
         {parentShelfs &&
-          parentShelfs.map((m) => {
-            return (
-              <ParentShelf
-                key={m.bookShelfs.shelfId}
-                data={m}
-                count={parentShelfs.length}
-                shelfRefetch={refetch}
-              />
-            );
-          })}
+          parentShelfs.map((m) => (
+            <ParentShelf
+              key={m.bookShelfs.shelfId}
+              data={m}
+              count={parentShelfs.length}
+              shelfRefetch={refetch}
+            />
+          ))}
       </div>
     </Fragment>
   );

@@ -1,466 +1,312 @@
 @import "./styles/theme-variables.scss";
 
-@font-face {
-  font-family: "Arboria-Medium";
-  // src: url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.eot");
-  // src: url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.eot?#iefix")
-  //     format("embedded-opentype"),
-  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.woff2")
-  //     format("woff2"),
-  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.woff")
-  //     format("woff"),
-  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.ttf")
-  //     format("truetype"),
-  //   url("//db.onlinewebfonts.com/t/dda65d7f418f4ab23abf484c807c9f17.svg#Arboria-Medium")
-  //     format("svg");
-  src: url("./../public/assets/fontFamily/Arboria-Medium.ttf");
-}
+/* ══════════════════════════════════════════
+   GLOBAL BASE — CRISP FROSTED GLASS
+══════════════════════════════════════════ */
+*,*::before,*::after { box-sizing: border-box; }
 
-@font-face {
-  font-family: "Arboria-Book";
-  // src: url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.eot");
-  // src: url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.eot?#iefix") format("embedded-opentype"),
-  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.woff2") format("woff2"),
-  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.woff") format("woff"),
-  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.ttf") format("truetype"),
-  //   url("//db.onlinewebfonts.com/t/1c7f14203d028f1c6f8914508f469cb9.svg#Arboria-Book") format("svg");
-  src: url("./../public/assets/fontFamily/Arboria-Book.ttf");
-}
-
-@font-face {
-  font-family: "Arboria-Light";
-  // src: url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.eot");
-  // src: url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.eot?#iefix") format("embedded-opentype"),
-  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.woff2") format("woff2"),
-  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.woff") format("woff"),
-  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.ttf") format("truetype"),
-  //   url("//db.onlinewebfonts.com/t/bf7395f715c4c074d2a39e1c273afbaa.svg#Arboria-Light") format("svg");
-  src: url("./../public/assets/fontFamily/Arboria-Light.ttf");
-}
-
-@font-face {
-  font-family: "Arboria-Black";
-  // src: url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.eot");
-  // src: url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.eot?#iefix") format("embedded-opentype"),
-  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.woff2") format("woff2"),
-  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.woff") format("woff"),
-  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.ttf") format("truetype"),
-  //   url("//db.onlinewebfonts.com/t/a53d51302c583acff4dc73b8aaa134dd.svg#Arboria-Black") format("svg");
-  src: url("./../public/assets/fontFamily/Arboria-Black.ttf");
-}
-
-@font-face {
-  font-family: "Arboria-Bold";
-  // src: url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.eot");
-  // src: url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.eot?#iefix") format("embedded-opentype"),
-  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.woff2") format("woff2"),
-  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.woff") format("woff"),
-  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.ttf") format("truetype"),
-  //   url("//db.onlinewebfonts.com/t/be167b60b37c7f9cd47a1b0fdb248cf5.svg#Arboria-Bold") format("svg");
-  src: url("./../public/assets/fontFamily/Arboria-Bold.ttf");
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  @include themify($themes) {
-    background-color: themed("backGroundColor") !important;
-    height: 100%;
-    margin: 0;
-    font-family: arboria, sans-serif !important;
-
-    height: 100% !important;
-    overflow: hidden !important;
-  }
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  font-size: 14px;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .app {
-  @include themify($themes) {
-    background-color: themed("backGroundColor");
-    height: 100%;
+  background: var(--bg-mesh);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 99px; }
+
+/* ══════════════════════════════════════════
+   FROSTED FORMS & INPUTS
+══════════════════════════════════════════ */
+.form-control, .form-select {
+  background-color: var(--surface) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text) !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px !important;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.9rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+
+  &::placeholder { color: var(--muted) !important; opacity: 1; }
+
+  &:focus {
+    background-color: var(--surface3) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-sm) !important;
+    outline: none;
   }
 }
 
-.login-background {
-  @include themify($themes) {
-    background: themed("backGroundColor");
-  }
+.form-control-sm, .form-select-sm {
+  border-radius: 8px !important;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
 }
 
-.form-control,
 .form-select {
-  @include themify($themes) {
-    background: themed("backGroundColor");
-    color: themed("colorText") !important;
-    border-color: themed("golden");
+  background-image: var(--dropdown-arrow) !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 18px !important;
+}
+
+.input-group {
+  .form-control { border-radius: 12px 0 0 12px !important; }
+  .input-group-text {
+    background-color: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-left: none;
+    border-radius: 0 12px 12px 0;
+    color: var(--muted);
+    padding: 0.55rem 0.85rem;
   }
 }
 
-.form-control-sm,
-.form-select-sm {
-  border-radius: 0.5rem !important;
-  font-family: "Arboria-Book";
+label {
+  color: var(--text2);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
 }
 
-.form-select {
-  @include themify($themes) {
-    background-image: themed("dropDownArrow") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 0.75rem center !important;
-  }
-}
-
-input::-webkit-input-placeholder {
-  @include themify($themes) {
-    color: themed("colorText") !important;
-  }
-}
-
-input:-moz-placeholder {
-  @include themify($themes) {
-    color: themed("colorText") !important;
-  }
-}
-
-textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus,
-select:focus,
-.uneditable-input:focus {
-  @include themify($themes) {
-    border-color: themed("golden");
-    box-shadow: none;
-    /* box-shadow:  0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #e8b43d; */
-    outline: 0 none;
-  }
-}
-
-.hand {
-  cursor: pointer;
-}
-
-.card-header {
-  @include themify($themes) {
-    border: 1px solid themed("golden") !important;
-    background: themed("gradient");
-    font-family: "Arboria-Medium";
-    color: themed("color2");
-  }
-}
-
-.card-body {
-  @include themify($themes) {
-    border: 1px solid themed("golden") !important;
-    border-top: none !important;
-    background-color: themed("backGroundColor");
-    color: themed("colorText");
-    font-family: "Arboria-Book";
-  }
-}
-
-.danger-back {
-  @include themify($themes) {
-    background-color: themed("colorRed");
-  }
-}
-
-.success-back {
-  @include themify($themes) {
-    background-color: themed("colorGreen");
-  }
-}
-
-.loss {
-  @include themify($themes) {
-    color: themed("colorRed") !important;
-  }
-}
-
-.profit {
-  @include themify($themes) {
-    color: themed("colorGreen") !important;
-  }
-}
-
-.profit-dark {
-  color: #046404;
-}
-
-.loss-dark {
-  color: #bd0707;
-}
-
-.running {
-  @include themify($themes) {
-    color: themed("colorBlue");
-  }
-}
-
-.header-profit {
-  font-family: "Arboria-Medium";
-  font-size: 14px;
-}
-
-.fixheader {
-  @include themify($themes) {
-    position: sticky;
-    top: 0;
-    background-color: themed("golden");
-  }
-}
-.tableContainer {
-  width: 100%;
-  height: 70vh;
-  overflow: auto;
+/* ══════════════════════════════════════════
+   FROSTED TABLES
+══════════════════════════════════════════ */
+.tableContainer,
+.table-wrap {
+  background-color: var(--card-bg);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .table {
-  @include themify($themes) {
-    --bs-table-bg: transparent !important;
+  color: var(--text);
+  --bs-table-bg: transparent;
+  margin-bottom: 0;
+  border-color: var(--border);
 
-    thead {
-      font-family: "Arboria-Medium";
-      font-size: 14px;
-      background: themed("golden");
-      color: #fff;
+  thead th {
+    background-color: var(--surface2);
+    color: var(--muted);
+    font-size: 0.73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
 
-      tr {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-      }
-    }
+  tbody td {
+    padding: 0.85rem 1rem;
+    border-color: var(--border);
+    vertical-align: middle;
+    font-size: 0.875rem;
+  }
 
-    tbody {
-      font-family: "Arboria-Book";
-      font-size: 14px;
-    }
+  tbody tr {
+    transition: background-color 0.15s ease;
+    &:hover { background-color: var(--accent-soft); }
   }
 }
 
-.rdt_TableHeadRow {
-  @include themify($themes) {
-    font-family: "Arboria-Medium";
-    font-size: 14px;
-    background: themed("gradient") !important;
+/* ══════════════════════════════════════════
+   BADGES
+══════════════════════════════════════════ */
+.saas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--accent);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════ */
+.saas-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--card-bg);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.saas-page-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  i { color: var(--accent); }
+}
+
+/* ══════════════════════════════════════════
+   SEARCH BOX
+══════════════════════════════════════════ */
+.saas-search-box {
+  max-width: 300px;
+  min-width: 200px;
+}
+
+/* ══════════════════════════════════════════
+   MISC
+══════════════════════════════════════════ */
+.hand { cursor: pointer; }
+
+.golden-text { color: var(--accent); }
+
+.login-background { background: var(--bg-mesh); }
+
+.border-golden,
+.golden-border-color { border-color: var(--border) !important; }
+
+/* Bootstrap overrides */
+.btn-primary {
+  background: var(--gradient) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 16px var(--accent-mid) !important;
+  &:hover { opacity: 0.92; transform: translateY(-1px); }
+}
+
+.btn-outline-secondary {
+  background-color: var(--surface) !important;
+  backdrop-filter: blur(10px);
+  border-color: var(--card-border) !important;
+  color: var(--text) !important;
+  border-radius: 12px !important;
+  &:hover {
+    background-color: var(--glass-hover) !important;
+    border-color: var(--border-hover) !important;
+    color: var(--text) !important;
   }
 }
 
-.rdt_TableCol,
-.rdt_TableHead,
-.rdt_TableRow,
-.rdt_TableCell {
-  height: 25px !important;
-  min-height: 25px !important;
+.btn-danger {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
 }
 
-.link {
-  @include themify($themes) {
-    color: themed("colorBlue");
-    cursor: pointer;
-    text-decoration: underline;
-    font-family: "Arboria-Medium";
-    font-size: 12px;
-  }
+.btn-light {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+  border-radius: 12px !important;
 }
 
-.error-label {
-  font-size: 12px;
-  margin-top: -18px;
-  position: absolute;
-  margin-left: 5px;
-  color: #bd0707;
+/* Card generic */
+.card {
+  background-color: var(--card-bg) !important;
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text) !important;
 }
 
-.golden-border-color {
-  @include themify($themes) {
-    border-color: themed("golden") !important;
-  }
+/* Modal overrides */
+.modal-content {
+  background-color: var(--surface3) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--text) !important;
+}
+.modal-header {
+  border-bottom: 1px solid var(--border) !important;
+  .btn-close { filter: invert(0.5); }
+}
+.modal-footer { border-top: 1px solid var(--border) !important; }
+.modal-backdrop { background-color: rgba(7, 9, 19, 0.55) !important; backdrop-filter: blur(8px); }
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: var(--surface3) !important;
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--text) !important;
+}
+.dropdown-item {
+  color: var(--text) !important;
+  border-radius: 8px !important;
+  &:hover { background-color: var(--accent-soft) !important; }
 }
 
-.golden-tooltip {
-  @include themify($themes) {
-    background-color: themed("golden") !important;
-    color: #000;
-  }
+/* Toast */
+.Toastify__toast-container--top-right {
+  top: 4.75rem !important;
 }
-
-.golden-text {
-  @include themify($themes) {
-    color: themed("golden") !important;
-  }
+.Toastify__toast {
+  background-color: var(--surface3) !important;
+  backdrop-filter: blur(18px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.6) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-lg) !important;
 }
-
-.golden-border-color {
-  @include themify($themes) {
-    border-color: themed("golden") !important;
-  }
+.Toastify__toast-body {
+  color: var(--text) !important;
+  font-weight: 500;
 }
-
-.form-border {
-  @include themify($themes) {
-    border: 1px solid themed("golden");
-    // height: 15%;
-    border-radius: 8px;
-  }
-}
-
-.input-group-text {
-  @include themify($themes) {
-    border: 1px solid themed("golden");
-    // height: 15%;
-    border-radius: 8px;
-    background-color: themed("golden");
-    color: #fff;
-  }
-}
-
-@media only screen and (min-width: 721px) {
-  body {
-    font-size: 8px;
-  }
-
-  .purchase-details {
-    font-size: 8px !important;
-  }
-  .media-font {
-    font-size: 0.75em;
-  }
-
-  .symbol {
-    font-size: 8px;
-  }
-  .small-text {
-    font-size: 8px;
-  }
-  .extra-small-text {
-    font-size: 7px;
-  }
-  .header-text {
-    font-size: 10px;
-    font-family: "Arboria-Bold";
-  }
-
-  .heading-font-size {
-    font-size: 8px;
-  }
-}
-@media only screen and (min-width: 961px) {
-  body {
-    font-size: 12px;
-  }
-
-  .purchase-details {
-    font-size: 10px !important;
-  }
-  .media-font {
-    font-size: 0.75em;
-  }
-  .symbol {
-    font-size: 10px;
-  }
-  .small-text {
-    font-size: 12px;
-  }
-  .extra-small-text {
-    font-size: 10px;
-  }
-  .header-text {
-    font-size: 14px;
-    font-family: "Arboria-Bold";
-  }
-  .heading-font-size {
-    font-size: 8px;
-  }
-}
-
-@media only screen and (min-width: 1124px) {
-  .media-font {
-    font-size: 0.95em;
-  }
-  .small-text {
-    font-size: 12px;
-  }
-
-  .extra-small-text {
-    font-size: 11px;
-  }
-
-  .header-text {
-    font-size: 14px;
-    font-family: "Arboria-Bold";
-  }
-}
-
-@media only screen and (min-width: 1281px) {
-  body {
-    font-size: 14px;
-  }
-
-  .purchase-details {
-    font-size: 0.75em !important;
-  }
-
-  .media-font {
-    font-size: 1.2em;
-  }
-  .symbol {
-    font-size: 14px;
-  }
-
-  .small-text {
-    font-size: 15px;
-  }
-  .extra-small-text {
-    font-size: 13px;
-  }
-  .header-text {
-    font-size: 17px;
-    font-family: "Arboria-Bold";
-  }
-  .heading-font-size {
-    font-size: 12px;
-  }
-}
-
-@media only screen and (min-width: 1921px) {
-  body {
-    font-size: 14px;
-  }
-
-  .purchase-details {
-    font-size: 14px !important;
-  }
-
-  .media-font {
-    font-size: 1em;
-  }
-  .symbol {
-    font-size: 14px;
-  }
-  .small-text {
-    font-size: 15px;
-  }
-
-  .extra-small-text {
-    font-size: 13px;
-  }
-
-  .header-text {
-    font-size: 17px;
-    font-family: "Arboria-Bold";
-  }
-
-  .heading-font-size {
-    font-size: 14px;
-  }
+.Toastify__close-button {
+  color: var(--muted) !important;
+  opacity: 0.8 !important;
 }

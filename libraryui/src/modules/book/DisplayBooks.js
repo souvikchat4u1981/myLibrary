@@ -29,10 +29,7 @@ const DisplayBooks = (props) => {
 
   return (
     <Fragment>
-      <div
-        className="row"
-        style={{ width: "96%", marginLeft: "auto", marginRight: "auto" }}
-      >
+      <div className="saas-grid">
         {!props.books && <div>No Book Present {JSON.parse(props.books)} </div>}
         {props.books &&
           props.books.map((m, index) => {

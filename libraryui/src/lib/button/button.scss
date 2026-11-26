@@ -1,100 +1,41 @@
-@import "../../styles/theme-variables.scss";
+/* Button — Crisp Frosted Glass */
+.btn-cstm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.52rem 1.15rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--card-border);
+  background-color: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  line-height: 1;
 
-.createButtonColor {
-  @include themify($themes) {
-    background: themed("golden") !important;
-    color: themed("textWhite") !important;
-    border-color: transparent !important;
-    border-radius: 10px;
+  &:hover {
+    background-color: var(--glass-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
   }
-}
 
-.createButtonColor:hover {
-  @include themify($themes) {
-    background: themed("createButtonHover") !important;
-    border-color: transparent !important;
+  &.btn-primary-cstm {
+    background: var(--gradient);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 16px var(--accent-mid), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    &:hover { opacity: 0.92; }
   }
-}
 
-.createButtonColor:disabled {
-  @include themify($themes) {
-    background: #c0c0c0c0 !important;
-    border-color: transparent !important;
-  }
-}
-
-.createButtonColor:active {
-  @include themify($themes) {
-    background: themed("blue") !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-  }
-}
-
-.stopLossButtonColor {
-  @include themify($themes) {
-    border-radius: 8px;
-    padding: 0.5rem;
-
-    font-size: 0.7rem;
-    padding: 0.2rem 1rem;
-    font-family: "Arboria-Bold";
-    box-shadow: themed("orangeGradient") !important;
-    border: solid 3px transparent;
-    background-image: themed("orangeGradient"), themed("orangeGradient");
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    box-shadow: 2px 1000px 1px themed("backGroundColor") inset !important;
-    color: themed("invertedBackground");
-  }
-}
-
-.stopLossButtonColor:hover {
-  @include themify($themes) {
-    box-shadow: none !important;
-
-    color: themed("backGroundColor");
-  }
-}
-
-.stopLossButtonColor.button-active {
-  @include themify($themes) {
-    box-shadow: none !important;
-
-    color: themed("backGroundColor");
-  }
-}
-
-.lossButtonColor {
-  @include themify($themes) {
-    border-radius: 8px;
-    padding: 0.5rem;
-
-    font-size: 0.7rem;
-    padding: 0.2rem 1rem;
-    font-family: "Arboria-Bold";
-    box-shadow: themed("redGradient") !important;
-    border: solid 3px transparent;
-    background-image: themed("redGradient"), themed("redGradient");
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    box-shadow: 2px 1000px 1px themed("backGroundColor") inset !important;
-    color: themed("invertedBackground");
-  }
-}
-
-.lossButtonColor:hover {
-  @include themify($themes) {
-    box-shadow: none !important;
-
-    color: themed("backGroundColor");
-  }
-}
-
-.lossButtonColor.button-active {
-  @include themify($themes) {
-    box-shadow: none !important;
-
-    color: themed("backGroundColor");
+  &.btn-danger-cstm {
+    background-color: var(--red);
+    border-color: transparent;
+    color: #fff;
+    &:hover { opacity: 0.9; }
   }
 }

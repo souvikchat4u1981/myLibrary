@@ -57,25 +57,24 @@ const BooksByAuthor = (props) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <div
-            className="p-2"
-            style={{ border: "1px solid black", borderRadius: "8px" }}
-          >
-            <h1>Confirm to delete</h1>
-            <p>You want to delete this book?</p>
-            <Button onClick={onClose} extraClass={"btn-warning me-2"}>
-              No
-            </Button>
-            <Button
-              buttonType="loss"
-              extraClass={"btn-danger"}
-              onClick={() => {
-                deleteBook({ variables: { bookId: id } });
-                onClose();
-              }}
-            >
-              Yes, Delete it!
-            </Button>
+          <div className="saas-confirm-dialog">
+            <h4>Delete Book?</h4>
+            <p>Are you sure you want to delete this book?</p>
+            <div className="d-flex justify-content-end gap-2">
+              <Button onClick={onClose} extraClass={"btn-light border"}>
+                Cancel
+              </Button>
+              <Button
+                buttonType="loss"
+                extraClass={"btn-danger"}
+                onClick={() => {
+                  deleteBook({ variables: { bookId: id } });
+                  onClose();
+                }}
+              >
+                Delete
+              </Button>
+            </div>
           </div>
         );
       },
@@ -111,184 +110,149 @@ const BooksByAuthor = (props) => {
   const [showImage, setShowImage] = useState(true);
   return (
     <Fragment>
-      <div className="container-fluid">
-        <div className="p-2 pt-3 row col-sm-12">
-          <div className="col-sm-4">
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search By Book"
-                value={props.bookSearchParam}
-                onChange={props.onBookFilterChange}
-              />
-              <span class="input-group-text" id="basic-addon2">
-                <i className="fa fa-search"></i>
-              </span>
-            </div>
-          </div>
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            className="saas-toolbar-btn"
+            onClick={() => props.setVisibleArea("main")}
+            title="Back to Authors"
+          >
+            <i className="fa fa-arrow-left"></i>
+            Back
+          </button>
+          <h1 className="saas-page-title ms-1">{props.author}</h1>
+          <span className="saas-badge">
+            <i className="fa-solid fa-book"></i>
+            {props.books ? props.books.length : 0} Books
+          </span>
         </div>
-        <div className="pt-3 row col-sm-12">
-          <div className="justify-content-start">
-            <div className="d-flex  pt-3 mb-3">
-              <div>
-                <i
-                  className="fa fa-circle-left fa-2x hand golden-text"
-                  onClick={() => props.setVisibleArea("main")}
-                ></i>
-              </div>
-              <div
-                className="badge rounded-pill bg-primary ms-2"
-                style={{ fontSize: "15px", fontWeight: "normal" }}
-              >
-                Total books of {props.author} :{" "}
-                {props.books ? props.books.length : 0}
-              </div>
-            </div>
-            <div
-              className="row"
-              style={{
-                width: "96%",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              {props.books &&
-                props.books.map((m, index) => {
-                  return (
-                    <div
-                      className="hand mb-4"
-                      key={props.books.bookId}
-                      style={{ width: width }}
+
+        <div className="input-group saas-search-box">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by book..."
+            value={props.bookSearchParam}
+            onChange={props.onBookFilterChange}
+          />
+          <span className="input-group-text" id="basic-addon2">
+            <i className="fa fa-search"></i>
+          </span>
+        </div>
+      </div>
+
+      <div className="saas-grid">
+        {props.books &&
+          props.books.map((m, index) => (
+            <div className="shelf text-center" key={m.bookId || index}>
+              <div className="saas-card-actions">
+                <div className="d-flex align-items-center gap-1">
+                  <span
+                    className="saas-action-icon text-danger hand"
+                    title="Delete Book"
+                    onClick={() => onDeleteBook(m.bookId)}
+                  >
+                    <i className="fa fa-trash"></i>
+                  </span>
+                  {m.digitalFileName !== "" && m.digitalFileName !== null && (
+                    <span
+                      className="saas-action-icon text-success hand"
+                      title="Read Book"
+                      onClick={() =>
+                        navigate("/readBook", {
+                          state: {
+                            data: m,
+                          },
+                        })
+                      }
                     >
-                      <div className="col-sm-12 shelf text-center p-2 shadow">
-                        <div className="col-sm-12 text-center">
-                          <i
-                            className="fa fa-times-circle text-danger float-start hand"
-                            title="Delete Book"
-                            style={{ position: "relative", top: "-5px" }}
-                            onClick={() => onDeleteBook(m.bookId)}
-                          ></i>
-                          {m.digitalFileName !== "" &&
-                            m.digitalFileName !== null && (
-                              <i
-                                className="fa fa-book-open-reader text-success float-start hand ms-2"
-                                title="Read Book"
-                                style={{ position: "relative", top: "-5px" }}
-                                onClick={() =>
-                                  navigate("/readBook", {
-                                    state: {
-                                      data: m,
-                                    },
-                                  })
-                                }
-                              ></i>
-                            )}
-                          <i
-                            className="fa fa-edit text-success float-end hand"
-                            title="Edit Book"
-                            style={{ position: "relative", top: "-5px" }}
-                            onClick={() =>
-                              navigate("/addBookToLibrary", {
-                                state: {
-                                  book: {
-                                    author: m.author,
-                                    bookId: m.bookId,
-                                    bookName: m.bookName,
-                                    bookNameInEnglish: m.bookNameInEnglish,
-                                    description: m.description,
-                                    format: m.format,
-                                    language: m.language,
-                                    publicastion: m.publication,
-                                    image: m.bookImage,
-                                    shelfId: m.shelfId,
-                                    digitalFileName: m.digitalFileName,
-                                    isbn: m.isbn,
-                                    price: m.price,
-                                    publishigYear: m.publishing_year,
-                                  },
-                                  edit: true,
-                                },
-                              })
-                            }
-                          ></i>
-                          <i
-                            className="fa fa-copy text-primary float-end hand me-2"
-                            title="Copy Book"
-                            style={{ position: "relative", top: "-5px" }}
-                            onClick={() => copyBook(m)}
-                          ></i>
-                        </div>
-                        <div
-                          className="d-flex justify-content-center"
-                          style={{ width: "100%" }}
-                          onClick={() =>
-                            navigate("/borrow", {
-                              state: {
-                                book: {
-                                  bookId: m.bookId,
-                                  bookName: m.bookName,
-                                  authorName: m.author,
-                                  bookImage: m.bookImage,
-                                  description: m.description,
-                                  shelfName:
-                                    m.parentShelfName + " -> " + m.shelfName,
-                                },
-                              },
-                            })
-                          }
-                        >
-                          <SideBySideMagnifier
-                            imageSrc={`${
-                              process.env.PUBLIC_URL
-                            }/assets/bookImages/${
-                              m.bookImage !== "" ? m.bookImage : "book.png"
-                            }`}
-                            imageAlt="library"
-                            largeImageSrc={`${
-                              process.env.PUBLIC_URL
-                            }/assets/bookImages/${
-                              m.bookImage !== "" ? m.bookImage : "book.png"
-                            }`} // Optional
-                            // magnifierSize={"50%"}
-                            alwaysInPlace={false}
-                            fillAvailableSpace={true}
-                            switchSides={switchSide(index + 1)}
-                            magnifierBorderColor="rgba(255, 255, 255, .5)"
-                            zoomContainerBorder="1px solid #ccc"
-                            zoomContainerBoxShadow="0 4px 8px rgba(0,0,0,.5)"
-                          />
+                      <i className="fa fa-book-open-reader"></i>
+                    </span>
+                  )}
+                </div>
 
-                          {/* <img
-                            src={`${process.env.PUBLIC_URL}/assets/bookImages/${
-                              m.bookImage !== "" ? m.bookImage : "book.png"
-                            }`}
-                            alt="library"
-                            width={"100%"}
-                            className="img-fluid rounded"
-                            key={Math.random()}
+                <div className="d-flex align-items-center gap-1">
+                  <span
+                    className="saas-action-icon text-primary hand"
+                    title="Copy Book"
+                    onClick={() => copyBook(m)}
+                  >
+                    <i className="fa fa-copy"></i>
+                  </span>
+                  <span
+                    className="saas-action-icon text-success hand"
+                    title="Edit Book"
+                    onClick={() =>
+                      navigate("/addBookToLibrary", {
+                        state: {
+                          book: {
+                            author: m.author,
+                            bookId: m.bookId,
+                            bookName: m.bookName,
+                            bookNameInEnglish: m.bookNameInEnglish,
+                            description: m.description,
+                            format: m.format,
+                            language: m.language,
+                            publicastion: m.publication,
+                            image: m.bookImage,
+                            shelfId: m.shelfId,
+                            digitalFileName: m.digitalFileName,
+                            isbn: m.isbn,
+                            price: m.price,
+                            publishigYear: m.publishing_year,
+                          },
+                          edit: true,
+                        },
+                      })
+                    }
+                  >
+                    <i className="fa fa-pen"></i>
+                  </span>
+                </div>
+              </div>
 
-                            //   onClick={onShelfClickHandle}
-                          /> */}
-                        </div>
-                        <div className="mt-2">
-                          <b>{m.bookName}</b>
-                        </div>
-                        <div className="mt-2">
-                          <b>
-                            {m.parentShelfName !== ""
-                              ? m.parentShelfName + " -> "
-                              : ""}{" "}
-                            {m.shelfName}
-                          </b>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div
+                className="saas-card-media saas-magnifier-wrap"
+                onClick={() =>
+                  navigate("/borrow", {
+                    state: {
+                      book: {
+                        bookId: m.bookId,
+                        bookName: m.bookName,
+                        authorName: m.author,
+                        bookImage: m.bookImage,
+                        description: m.description,
+                        shelfName: m.parentShelfName + " -> " + m.shelfName,
+                      },
+                    },
+                  })
+                }
+              >
+                <SideBySideMagnifier
+                  imageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${
+                    m.bookImage !== "" ? m.bookImage : "book.png"
+                  }`}
+                  imageAlt="library"
+                  largeImageSrc={`${process.env.PUBLIC_URL}/assets/bookImages/${
+                    m.bookImage !== "" ? m.bookImage : "book.png"
+                  }`}
+                  alwaysInPlace={false}
+                  fillAvailableSpace={true}
+                  switchSides={switchSide(index + 1)}
+                  magnifierBorderColor="rgba(255, 255, 255, .5)"
+                  zoomContainerBorder="1px solid #e2e8f0"
+                  zoomContainerBoxShadow="0 12px 24px rgba(15, 23, 42, .2)"
+                />
+              </div>
+
+              <div className="saas-card-title">{m.bookName}</div>
+              <div className="saas-card-meta">
+                {m.parentShelfName !== "" ? m.parentShelfName + " -> " : ""}
+                {m.shelfName}
+              </div>
             </div>
-          </div>
-        </div>
+          ))}
       </div>
     </Fragment>
   );

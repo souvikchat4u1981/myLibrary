@@ -1,10 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { Provider } from "react-redux";
-import PropTypes from "prop-types";
 import store from "../../store/Store";
 import AppContext from "../../utils/AppContext";
 import Header from "./Header";
-import Setting from "./Setting";
 import "./appLayout.scss";
 import Footer from "./Footer";
 
@@ -19,33 +17,17 @@ const AppLayout = (props) => {
     <Fragment>
       <Provider store={store}>
         <AppContext.Provider value={context}>
-          <main
-            className="container-fluid p-0 body-font"
-            id="main"
-            style={{ height: "100%", overflow: "hidden" }}
-          >
+          <div className="saas-shell body-font" id="main">
             <header>
               <Header />
             </header>
 
-            <Setting />
-            <main
-              className="container-fluid p-0"
-              style={{ height: "90%", marginTop: "57px", marginBottom: "24px" }}
-            >
-              <div style={{ height: "90%" }}>
-                <div
-                  className="container-fluid m-0 p-0"
-                  style={{ minHeight: "90vh" }}
-                >
-                  {props.children}
-                </div>
-              </div>
+            <main className="saas-main container-fluid px-3 px-md-4">
+              {props.children}
             </main>
-            <footer className="footer">
-              <Footer></Footer>
-            </footer>
-          </main>
+
+            <Footer />
+          </div>
         </AppContext.Provider>
       </Provider>
     </Fragment>

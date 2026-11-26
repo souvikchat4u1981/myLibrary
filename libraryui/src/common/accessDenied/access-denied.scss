@@ -13,7 +13,7 @@
     }
 }
 
-h1 {
+.access-denied-h1 {
     @include themify($themes) {
         position: fixed;
         z-index: 1;

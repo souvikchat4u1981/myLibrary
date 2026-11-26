@@ -190,13 +190,28 @@ const ShelfDetails = (props) => {
   return (
     <Fragment>
       {load && <CustomLoader />}
-      <div className="p-2 pt-3 row col-sm-12">
-        <div className="col-sm-4">
-          <div className="input-group">
+      <div className="saas-page-header">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            className="saas-toolbar-btn"
+            onClick={() => navigate("/")}
+            title="Back to Shelves"
+          >
+            <i className="fa fa-arrow-left"></i>
+            Back
+          </button>
+          <h1 className="saas-page-title ms-1">
+            {JSON.parse(sessionStorage.getItem("currentShelf")).shelfName}
+          </h1>
+        </div>
+
+        <div className="d-flex align-items-center gap-2 flex-wrap flex-grow-1 justify-content-md-end">
+          <div className="input-group saas-search-box">
             <input
               type="text"
               className="form-control"
-              placeholder="Search By Author or Book"
+              placeholder="Search by author or book..."
               value={searchParam}
               onChange={onFilterChange}
             />
@@ -204,17 +219,10 @@ const ShelfDetails = (props) => {
               <i className="fa fa-search"></i>
             </span>
           </div>
-        </div>
-      </div>
-      <div className="p-2 pt-3 row d-flex">
-        <div>
-          <i
-            className="fa fa-circle-left fa-2x hand golden-text"
-            onClick={() => navigate("/")}
-            title="back to home"
-          ></i>
-          <i
-            className="fa fa-plus-circle fa-2x hand text-success ms-2"
+
+          <button
+            type="button"
+            className="saas-toolbar-btn"
             onClick={() =>
               navigate("/addShelf", {
                 state: {
@@ -230,10 +238,14 @@ const ShelfDetails = (props) => {
                 },
               })
             }
-            title="Add Child Shelf"
-          ></i>
-          <i
-            className="fa fa-plus-circle fa-2x hand golden-text ms-2"
+          >
+            <i className="fa fa-folder-plus golden-text"></i>
+            Child Shelf
+          </button>
+
+          <button
+            type="button"
+            className="saas-toolbar-btn primary"
             onClick={() =>
               navigate("/addBook", {
                 state: {
@@ -241,43 +253,43 @@ const ShelfDetails = (props) => {
                 },
               })
             }
-            title="Add New Book"
-          ></i>
+          >
+            <i className="fa fa-plus"></i>
+            Add Book
+          </button>
         </div>
-        <div className="col-sm-12 text-center fs-2">
-          {JSON.parse(sessionStorage.getItem("currentShelf")).shelfName}
+      </div>
+
+      {childShelfs && childShelfs.length > 0 && (
+        <div className="mb-4 pb-4 border-bottom golden-border-color">
+          <div className="saas-grid">
+            {childShelfs.map((m) => (
+              <ParentShelf
+                key={m.bookShelfs.shelfName}
+                data={m}
+                count={childShelfs.length}
+                fromChildPage={true}
+                shelfRefetch={shelfRefetch}
+              />
+            ))}
+          </div>
         </div>
-        <div className="border-bottom golden-border-color row mb-2">
-          {childShelfs &&
-            childShelfs.map((m, index) => {
-              return (
-                <ParentShelf
-                  key={m.bookShelfs.shelfName}
-                  data={m}
-                  count={childShelfs.length}
-                  fromChildPage={true}
-                  shelfRefetch={shelfRefetch}
-                />
-              );
-            })}
-        </div>
-        <div className="row mt-2">
-          {books &&
-            books.map((m, index) => {
-              return (
-                <DisplayBook
-                  key={m.bookId}
-                  data={m}
-                  shelfs={allShelfs}
-                  refetch={refetch}
-                  index={index + 1}
-                  shelfName={
-                    JSON.parse(sessionStorage.getItem("currentShelf")).shelfName
-                  }
-                />
-              );
-            })}
-        </div>
+      )}
+
+      <div className="saas-grid">
+        {books &&
+          books.map((m, index) => (
+            <DisplayBook
+              key={m.bookId}
+              data={m}
+              shelfs={allShelfs}
+              refetch={refetch}
+              index={index + 1}
+              shelfName={
+                JSON.parse(sessionStorage.getItem("currentShelf")).shelfName
+              }
+            />
+          ))}
       </div>
     </Fragment>
   );

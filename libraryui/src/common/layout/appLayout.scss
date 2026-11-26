@@ -1,8 +1,30 @@
-@import '../../styles/theme-variables.scss';
+/* ══════════════════════════════════════════
+   APP SHELL / LAYOUT
+══════════════════════════════════════════ */
+.saas-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  color: var(--text);
+}
 
-.body-font {
-    @include themify($themes) {
-        font-family: "Arboria-Medium";
-        color: themed('colorText')
-    }
+.saas-main {
+  flex: 1;
+  padding-top: 84px;      /* below fixed frosted nav */
+  padding-bottom: 2.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* ── Frosted Footer ── */
+.saas-footer {
+  border-top: 1px solid var(--card-border);
+  background-color: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0.8rem 1.5rem;
+  text-align: center;
 }
