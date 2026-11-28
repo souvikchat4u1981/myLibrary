@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="saas-footer fixed-bottom">
+    <footer className="saas-footer">
       <div className="container-fluid px-3 px-md-4 d-flex flex-wrap justify-content-between align-items-center py-2">
         <span className="saas-footer-text">
           Personal Library Manager

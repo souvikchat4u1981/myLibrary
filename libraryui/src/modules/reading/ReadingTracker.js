@@ -2,6 +2,7 @@ import React, { Fragment, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import Chart from "react-apexcharts";
 import { pdf } from "@react-pdf/renderer";
 import {
   DELETE_READING_LOG,
@@ -33,6 +34,7 @@ const ReadingTracker = () => {
   const [activeMonth, setActiveMonth] = useState(todayStr().slice(0, 7)); // YYYY-MM
   const [selectedDay, setSelectedDay] = useState(""); // YYYY-MM-DD or ""
   const [showAllMonths, setShowAllMonths] = useState(false);
+  const [searchParam, setSearchParam] = useState("");
   const [exporting, setExporting] = useState(false);
 
   // Entry form state
@@ -164,12 +166,23 @@ const ReadingTracker = () => {
   }, [logs]);
 
   const visibleLogs = useMemo(() => {
+    const q = searchParam.trim().toLowerCase();
     return logs.filter((l) => {
-      if (selectedDay) return l.readingDate === selectedDay;
-      if (showAllMonths) return true;
-      return (l.readingDate || "").startsWith(activeMonth);
+      if (selectedDay && l.readingDate !== selectedDay) return false;
+      if (!selectedDay && !showAllMonths && !(l.readingDate || "").startsWith(activeMonth)) {
+        return false;
+      }
+      if (!q) return true;
+      return (
+        (l.bookName || "").toLowerCase().includes(q) ||
+        (l.bookNameInEnglish || "").toLowerCase().includes(q) ||
+        (l.author || "").toLowerCase().includes(q) ||
+        (l.publication || "").toLowerCase().includes(q) ||
+        (l.status || "").toLowerCase().includes(q) ||
+        (l.notes || "").toLowerCase().includes(q)
+      );
     });
-  }, [logs, selectedDay, showAllMonths, activeMonth]);
+  }, [logs, selectedDay, showAllMonths, activeMonth, searchParam]);
 
   const monthLabel = useMemo(() => {
     if (selectedDay) return selectedDay;
@@ -180,6 +193,60 @@ const ReadingTracker = () => {
       year: "numeric",
     });
   }, [activeMonth, selectedDay, showAllMonths]);
+
+  const readingChartData = useMemo(() => {
+    const monthMap = {};
+    logs.forEach((l) => {
+      if (!l.readingDate) return;
+      const ym = l.readingDate.slice(0, 7);
+      if (!monthMap[ym]) monthMap[ym] = { completed: 0, reading: 0 };
+      if (l.status === "Completed") monthMap[ym].completed += 1;
+      else monthMap[ym].reading += 1;
+    });
+    const months = Object.keys(monthMap).sort().slice(-12);
+    return {
+      months,
+      series: [
+        {
+          name: "Completed",
+          data: months.map((m) => monthMap[m].completed),
+        },
+        {
+          name: "Reading",
+          data: months.map((m) => monthMap[m].reading),
+        },
+      ],
+      options: {
+        chart: {
+          type: "bar",
+          stacked: true,
+          toolbar: { show: false },
+          background: "transparent",
+          fontFamily: "Inter, sans-serif",
+        },
+        colors: ["#10b981", "#6366f1"],
+        plotOptions: {
+          bar: { borderRadius: 6, columnWidth: "48%" },
+        },
+        dataLabels: { enabled: false },
+        xaxis: {
+          categories: months,
+          labels: { style: { colors: "#94a3b8", fontSize: "11px" } },
+        },
+        yaxis: {
+          allowDecimals: false,
+          title: { text: "Books", style: { color: "#94a3b8" } },
+          labels: {
+            style: { colors: "#94a3b8" },
+            formatter: (v) => Math.round(v),
+          },
+        },
+        grid: { borderColor: "rgba(148,163,184,0.15)" },
+        legend: { labels: { colors: "#94a3b8" } },
+        tooltip: { theme: "dark" },
+      },
+    };
+  }, [logs]);
 
   const handleExportPDF = async () => {
     if (visibleLogs.length === 0) {
@@ -267,7 +334,28 @@ const ReadingTracker = () => {
             </div>
           </div>
 
-          <div className="d-flex align-items-center gap-2 flex-wrap justify-content-lg-end">
+          <div className="d-flex align-items-center gap-2 flex-wrap justify-content-lg-end w-100">
+            <div className="glass-search-wrap">
+              <i className="fa fa-search glass-search-icon"></i>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search book, author, publisher..."
+                value={searchParam}
+                onChange={(e) => setSearchParam(e.target.value)}
+              />
+              {searchParam && (
+                <button
+                  type="button"
+                  className="glass-search-clear"
+                  onClick={() => setSearchParam("")}
+                  title="Clear search"
+                >
+                  <i className="fa fa-times"></i>
+                </button>
+              )}
+            </div>
+
             <input
               type="month"
               className="form-control"
@@ -399,6 +487,27 @@ const ReadingTracker = () => {
         </form>
       )}
 
+      {/* ── Reading Graph (Monthly Progress) ── */}
+      {readingChartData.months.length > 0 && (
+        <div className="card p-3 mb-4">
+          <div className="d-flex justify-content-between align-items-center mb-2 px-2">
+            <h6 className="mb-0 fw-bold">
+              <i className="fa-solid fa-chart-simple me-2 golden-text"></i>
+              Monthly Reading Progress
+            </h6>
+            <span className="saas-badge">
+              {readingChartData.months.length} Month(s)
+            </span>
+          </div>
+          <Chart
+            options={readingChartData.options}
+            series={readingChartData.series}
+            type="bar"
+            height={230}
+          />
+        </div>
+      )}
+
       {/* ── Display Screen: Calendar + Monthly Book List ── */}
       <div className="row g-4">
         <div className="col-lg-4">
@@ -449,7 +558,7 @@ const ReadingTracker = () => {
         </div>
 
         <div className="col-lg-8">
-          <div className="tableContainer">
+          <div className="tableContainer table-scroll-fixed">
             <table className="table table-hover align-middle">
               <thead>
                 <tr>
